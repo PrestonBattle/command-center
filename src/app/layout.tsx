@@ -1,7 +1,7 @@
 import { bricolageGrotesque, redditSans } from "@/global/styles/fonts";
 import "@/global/styles/globals.css";
-import { theme, cssVariablesResolver } from "@/global/styles/mantine-theme";
-import { MantineProvider } from "@mantine/core";
+import { theme } from "@/global/styles/mantine-theme";
+import { Button, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import { Notifications } from "@mantine/notifications";
@@ -24,9 +24,9 @@ export default async function RootLayout({
       <body
         className={`relative ${bricolageGrotesque.variable} ${redditSans.variable}`}
       >
-        <MantineProvider theme={theme} cssVariablesResolver={cssVariablesResolver}>
-          
+        <MantineProvider theme={theme}>
             <Notifications />
+            <Button>Test Button</Button>
             <div className="relative z-10 flex flex-col overflow-hidden">
               <main className="flex-1">{children}</main>
             </div>
