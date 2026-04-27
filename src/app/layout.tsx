@@ -1,3 +1,4 @@
+import { Background } from "@/global/components/background";
 import { bricolageGrotesque, redditSans } from "@/global/styles/fonts";
 import "@/global/styles/globals.css";
 import { theme } from "@/global/styles/mantine-theme";
@@ -26,7 +27,7 @@ export default async function RootLayout({
       >
         <MantineProvider theme={theme}>
             <Notifications />
-            <Button>Test Button</Button>
+            <Background />
             <div className="relative z-10 flex flex-col overflow-hidden">
               <main className="flex-1">{children}</main>
             </div>
