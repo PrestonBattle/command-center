@@ -1,8 +1,9 @@
 @import "tailwindcss";
+@import '@mantine/core/styles.css';
+
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+
 }
 
 @theme inline {
@@ -12,15 +13,23 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  width: 100%;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  background: transparent !important;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
   font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(336deg, rgba(125, 121, 185, 1) 45%, rgba(96, 92, 172, 1) 78%, rgba(70, 67, 136, 1) 95%) !important;
+  background-size: 300% 300% !important;
+}
+@keyframes rotate {
+  from { background-position: 0% 100%; }
+  to { background-position: 100% 0%; }
 }
