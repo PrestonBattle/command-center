@@ -10,7 +10,6 @@ export async function getLead(
   campaignId?: string | string[],
   leadId?: string | string[]
 ): Promise<LeadRow[]> {
-
   const supabase = await createClient();
   let query = supabase.from(TABLE).select("*");
 
@@ -27,7 +26,35 @@ export async function getLead(
   else if (Array.isArray(leadId)) query = query.in("lead_id", leadId);
 
   const { data, error } = await query;
-
   if (error) throw new Error(`Failed to fetch leads: ${error.message}`);
   return (data || []) as LeadRow[];
+}
+
+export async function insertLead(
+  lead: Omit<LeadRow, "lead_id" | "created_at">
+): Promise<LeadRow> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from(TABLE).insert(lead).select().single();
+  if (error) throw new Error(`Failed to insert lead: ${error.message}`);
+  return data as LeadRow;
+}
+
+export async function updateLead(
+  leadId: string,
+  updates: Partial<Omit<LeadRow, "lead_id" | "created_at">>
+): Promise<LeadRow> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from(TABLE).update(updates).eq("lead_id", leadId).select().single();
+  if (error) throw new Error(`Failed to update lead: ${error.message}`);
+  return data as LeadRow;
+}
+
+export async function deleteLead(leadId: string | string[]): Promise<void> {
+  if (Array.isArray(leadId) && leadId.length === 0) return;
+  const supabase = await createClient();
+  let query = supabase.from(TABLE).delete();
+  if (typeof leadId === "string") query = query.eq("lead_id", leadId);
+  else if (Array.isArray(leadId)) query = query.in("lead_id", leadId);
+  const { error } = await query;
+  if (error) throw new Error(`Failed to delete lead: ${error.message}`);
 }
