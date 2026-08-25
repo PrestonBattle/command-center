@@ -16,6 +16,7 @@
     "@mantine/hooks": "^9.0.2",
     "@mantine/modals": "^9.0.2",
     "@mantine/notifications": "^9.0.2",
+    "@mawtech/glass-ui": "^0.2.1",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.104.0",
     "@tabler/icons-react": "^3.41.1",
