@@ -1,3 +1,4 @@
+"use client"
 import type { ComponentPropsWithoutRef } from "react";
 
 type PanelProps = ComponentPropsWithoutRef<"div"> & {

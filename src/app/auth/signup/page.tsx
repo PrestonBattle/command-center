@@ -149,7 +149,7 @@ export default function SignUpPage() {
                 {...form.getInputProps("confirmPassword")}
               />
 
-              <Button type="submit" fullWidth mt="sm" loading={isPending}>
+              <Button type="submit" color="purple.4" fullWidth mt="sm" loading={isPending}>
                 Create account
               </Button>
             </Stack>
