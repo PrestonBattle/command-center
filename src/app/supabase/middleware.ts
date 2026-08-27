@@ -23,7 +23,30 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  // getUser(), not getSession() — the verification round-trip is what
+  // actually refreshes an expiring token. getSession() decodes the cookie
+  // locally and trusts it, so it neither verifies nor rotates.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { pathname } = request.nextUrl;
+  // startsWith("/auth") covers login, signup, and callback in one check.
+  const isAuthRoute = pathname.startsWith('/auth');
+
+  if (!user && !isAuthRoute) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/auth/login';
+    return NextResponse.redirect(url);
+  }
+
+  // Signed in but sitting on login/signup — send them to the dashboard.
+  // /auth/callback is excluded: it has to run its code exchange first.
+  if (user && isAuthRoute && !pathname.startsWith('/auth/callback')) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/';
+    return NextResponse.redirect(url);
+  }
 
   return supabaseResponse;
 }

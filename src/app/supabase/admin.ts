@@ -1,22 +1,22 @@
-"use server";
+import "server-only";
 
 import { createClient } from "@supabase/supabase-js";
 
 /**
- * Creates a Supabase admin client using the service role key.
- * Use ONLY in server actions that require admin-level auth operations
- * (e.g. banning users, managing auth identities).
+ * Supabase admin client (service role key).
  *
- * Requires SUPABASE_SERVICE_ROLE_KEY in the environment.
+ * `import "server-only"` — NOT `"use server"`. The latter marks every
+ * export as a server ACTION, which Next publishes as a POST endpoint the
+ * browser can invoke by ID. That's the opposite of what a service-role
+ * factory wants. `server-only` is a build-time error if it's ever imported
+ * from client code, which is the actual guarantee you're after.
  */
-export async function createAdminClient() {
+export function createAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceRoleKey) {
-    throw new Error(
-      "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"
-    );
+    throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
   }
 
   return createClient(url, serviceRoleKey, {

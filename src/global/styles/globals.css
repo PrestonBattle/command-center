@@ -13,6 +13,38 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@theme {
+  --color-purple-50:  #f1f1ff;
+  --color-purple-100: #e0dff2;
+  --color-purple-200: #bfbdde;
+  --color-purple-300: #9b98ca;
+  --color-purple-400: #7d79b9;
+  --color-purple-500: #6a66af;
+  --color-purple-600: #605cac;
+  --color-purple-700: #504c97;
+  --color-purple-800: #464388;
+  --color-purple-900: #3b3979;
+
+  --color-brass-300: #E3C078;
+  --color-brass-400: #D4A857;
+  --color-brass-500: #C08F3C;
+  --color-brass-600: #A8762B;
+
+  --color-paper:      #FAF7F0;
+  --color-paper-dim:  #F1EDE2;
+  --color-paper-edge: #E3DED0;
+
+  --color-ink:        #24223F;
+  --color-ink-muted:  #5D5B7A;
+  --color-ink-subtle: #85839C;
+
+  --color-positive: #2E7D6B;
+  --color-caution:  #B07A2B;
+  --color-negative: #B34A48;
+
+  --radius-panel: 14px;
+}
+
 html {
   width: 100%;
   overflow-x: hidden;
