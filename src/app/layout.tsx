@@ -24,20 +24,16 @@ export default function RootLayout({
       <body
         className={`relative ${bricolageGrotesque.variable} ${redditSans.variable}`}
       >
-        {/* forceColorScheme="light" because the gradient IS the dark
-            surface. Letting Mantine flip to dark gives you dark text on
-            dark cards inside the cream panels. */}
         <MantineProvider theme={theme} forceColorScheme="light">
           <Notifications />
           <Background />
-          {/* No <main> here -- (app)/layout.tsx supplies it, and nesting
-              two gives you duplicate landmarks. No overflow-hidden either,
-              or the content sheet can't scroll. */}
-          <div id="inner-body" className="relative z-10">
+          <div className="relative z-10 flex gap-3 p-3 sm:p-4">
             <Navbar />
-            {children}
+            <main className="flex-1">
+              {children}
+            </main>
           </div>
-          
+
         </MantineProvider>
       </body>
     </html>
