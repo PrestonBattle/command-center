@@ -3,7 +3,7 @@ export function Background() {
     <div 
       className="fixed inset-0 overflow-hidden -z-10 pointer-events-none"
       style={{
-        background: "linear-gradient(287deg, rgba(70,67,136,1) 9%, rgba(140,138,184,1) 75%, rgba(224,223,242,1) 100%)",
+        background: "linear-gradient(287deg, rgba(224,223,242,1) 9%, rgba(140,138,184,1) 75%, rgba(224,223,242,1) 100%)",
         backgroundSize: "300% 300%",
         animation: "rotate 20s alternate infinite",
       }}
