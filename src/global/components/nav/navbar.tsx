@@ -20,7 +20,7 @@ export function Navbar() {
   return (
     <nav
       aria-label="Main"
-      className="fixed left-3 top-3 bottom-3 z-50 hidden w-48 flex-col justify-start gap-1 rounded-panel border border-purple-800/20 bg-paper px-3 py-4 sm:flex"
+      className="sticky top-4 hidden h-[calc(100dvh-2rem)] w-48 shrink-0 flex-col rounded-panel border border-purple-800/20 bg-paper px-3 py-4 sm:flex"
     >
       <div className="mb-4 flex items-center gap-2.5 px-3">
         <IconBrain size={22} stroke={1.6} className="shrink-0 text-purple-700" />

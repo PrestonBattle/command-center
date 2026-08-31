@@ -2,9 +2,7 @@
 @import '@mantine/core/styles.css';
 
 
-:root {
-
-}
+:root {}
 
 @theme inline {
   --color-background: var(--background);
@@ -14,7 +12,7 @@
 }
 
 @theme {
-  --color-purple-50:  #f1f1ff;
+  --color-purple-50: #f1f1ff;
   --color-purple-100: #e0dff2;
   --color-purple-200: #bfbdde;
   --color-purple-300: #9b98ca;
@@ -30,17 +28,17 @@
   --color-brass-500: #C08F3C;
   --color-brass-600: #A8762B;
 
-  --color-paper:      #FAF7F0;
-  --color-paper-dim:  #F1EDE2;
+  --color-paper: #FAF7F0;
+  --color-paper-dim: #F1EDE2;
   --color-paper-edge: #E3DED0;
 
-  --color-ink:        #24223F;
-  --color-ink-muted:  #5D5B7A;
+  --color-ink: #24223F;
+  --color-ink-muted: #5D5B7A;
   --color-ink-subtle: #85839C;
 
-  --color-positive: #2E7D6B;
-  --color-caution:  #B07A2B;
   --color-negative: #B34A48;
+  --color-caution: #B07A2B;
+  --color-positive: #2E7D6B;
 
   --radius-panel: 14px;
 }
@@ -61,7 +59,13 @@ body {
   background: linear-gradient(336deg, rgba(125, 121, 185, 1) 45%, rgba(96, 92, 172, 1) 78%, rgba(70, 67, 136, 1) 95%) !important;
   background-size: 300% 300% !important;
 }
+
 @keyframes rotate {
-  from { background-position: 0% 100%; }
-  to { background-position: 100% 0%; }
+  from {
+    background-position: 0% 100%;
+  }
+
+  to {
+    background-position: 100% 0%;
+  }
 }
