@@ -20,7 +20,6 @@ export type ClientStatus = "active" | "paused" | "churned";
 export interface ClientRow {
   id: string;
   org_id: string;
-  created_at: string;
   name: string;
   email?: string;
   phone?: string;

@@ -1,3 +1,4 @@
+"use server"
 import { createClient } from "@/app/supabase/server";
 import { APPCONFIG } from "../config/config";
 import { ClientRow } from "../types/supabase/types";
@@ -73,8 +74,15 @@ export async function getClientsByOrg(orgId: string): Promise<ClientRow[]> {
   const { data, error } = await supabase
     .from(TABLE)
     .select("*")
-    .eq("org_id", orgId)
-    .order("name");
+    .eq("org_id", orgId);
+    
+
+  console.log("[getClientsByOrg]", {
+    table: TABLE,
+    orgId,
+    rows: data?.length ?? null,
+    error: error?.message ?? null,
+  });
 
   if (error) throw new Error(`Failed to fetch clients: ${error.message}`);
   return (data || []) as ClientRow[];
