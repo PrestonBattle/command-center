@@ -66,3 +66,16 @@ export async function deleteClient(id: string | string[]): Promise<void> {
 
   if (error) throw new Error(`Failed to delete client: ${error.message}`);
 }
+
+export async function getClientsByOrg(orgId: string): Promise<ClientRow[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from(TABLE)
+    .select("*")
+    .eq("org_id", orgId)
+    .order("name");
+
+  if (error) throw new Error(`Failed to fetch clients: ${error.message}`);
+  return (data || []) as ClientRow[];
+}

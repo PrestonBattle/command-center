@@ -54,6 +54,7 @@ export async function getDataLayer() {
     },
     clients: {
       getClients: clients.getClients,
+      getClientsByOrg: clients.getClientsByOrg,
       insertClient: clients.insertClient,
       updateClient: clients.updateClient,
       deleteClient: clients.deleteClient,

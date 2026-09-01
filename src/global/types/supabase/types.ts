@@ -14,18 +14,22 @@ export interface MembersRow {
   org_id?: string;
 }
 
+export type PaymentCycle = "monthly" | "quarterly" | "annually" | "one_time";
+export type ClientStatus = "active" | "paused" | "churned";
+
 export interface ClientRow {
   id: string;
   org_id: string;
+  created_at: string;
   name: string;
-  signed: string;
-  phone?: string;
   email?: string;
-  payment_cylce?: string;
-  billing_date?: string;
+  phone?: string;
+  signed?: string;
+  payment_cycle?: PaymentCycle;
   cycle_value?: number;
-  mrr?: number;
-
+  /** Day of the month, 1-31. */
+  billing_date?: number;
+  status: ClientStatus;
 }
 
 export interface CampaignRow {
