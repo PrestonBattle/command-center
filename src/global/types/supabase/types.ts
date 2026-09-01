@@ -16,20 +16,16 @@ export interface MembersRow {
 
 export interface ClientRow {
   id: string;
+  org_id: string;
   name: string;
   signed: string;
   phone?: string;
   email?: string;
-}
-
-export interface OrgClientRow {
-  org_id: string;
-  client_id: string;
-  signed: string;
   payment_cylce?: string;
   billing_date?: string;
   cycle_value?: number;
   mrr?: number;
+
 }
 
 export interface CampaignRow {

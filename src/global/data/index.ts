@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { isAuthenticated } from "./user";
+import { getCurrentMember } from "./user";
 import * as campaigns from "./campaign";
 import * as clients from "./clients";
 import * as leads from "./leads";
@@ -9,25 +9,43 @@ import * as org from "./org";
 
 /**
  * Returns the application data layer — a typed facade over all authenticated
- * Supabase data modules. Always call this from server components, server
- * actions, or API routes that require an authenticated user.
+ * Supabase data modules, plus the resolved caller context.
+ *
+ * Two guards, two destinations:
+ *   - no member row  -> /auth/login   (not signed in, or signup never finished)
+ *   - no org_id      -> /onboarding   (signed in, business not set up yet)
+ *
+ * `orgId` is resolved here rather than passed in by each caller, so no page
+ * can accidentally query the wrong tenant — which was possible when callers
+ * hand-rolled the lookup or passed a user id by mistake.
+ *
+ * getCurrentMember is memoized with React cache(), so calling getDataLayer()
+ * from the layout, the page, and an action in the same request costs one
+ * network round trip, not three.
  *
  * For public (unauthenticated) reads, use `getOpenData()` from
  * `@/global/open` instead.
  *
  * ---
  *
- * **Caching note:** `getDataLayer` internally calls `createClient()` which
- * reads cookies. It must not be called inside a `"use cache"` boundary.
- * For cached data fetching, use `createClient(accessToken)` directly and
- * query Supabase without going through this layer.
- * See `src/app/supabase/server.ts` for the token-based client pattern.
+ * **Do not call from /auth/* or /onboarding.** Those routes are where this
+ * function redirects to; calling it there loops. Use getCurrentMember()
+ * directly in them.
+ *
+ * **Caching note:** this reads cookies via createClient(). It must not be
+ * called inside a `"use cache"` boundary. For cached data fetching, use
+ * createClient(accessToken) directly and query Supabase without going
+ * through this layer. See `src/app/supabase/server.ts`.
  */
 export async function getDataLayer() {
-  const authed = await isAuthenticated();
-  if (!authed) redirect("/auth/login");
+  const member = await getCurrentMember();
+  if (!member) redirect("/auth/login");
+  if (!member.org_id) redirect("/onboarding");
 
   return {
+    member,
+    orgId: member.org_id,
+
     campaigns: {
       getCampaign: campaigns.getCampaign,
       insertCampaign: campaigns.insertCampaign,
