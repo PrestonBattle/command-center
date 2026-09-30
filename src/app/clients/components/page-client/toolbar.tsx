@@ -2,8 +2,9 @@
 
 import type { Signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
-import { Button, TextInput } from "@mantine/core";
+import { TextInput } from "@mantine/core";
 import { IconPlus, IconSearch } from "@tabler/icons-react";
+import Button from "@/global/components/buttons/button";
 
 type ClientsToolbarProps = {
   searchQuery: Signal<string>;
@@ -25,9 +26,7 @@ export function ClientsToolbar({ searchQuery, total }: ClientsToolbarProps) {
         onChange={(e) => (searchQuery.value = e.currentTarget.value)}
       />
 
-      <Button leftSection={<IconPlus size={16} stroke={1.6} />}>
-        Add client
-      </Button>
+      <Button text="add"/>
     </div>
   );
 }
