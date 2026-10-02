@@ -1,87 +1,70 @@
 import "server-only";
+
+import { redirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { ClientTagRow } from "../types/supabase/types";
+import { createClient } from "@/app/supabase/server";
+import type {
+  ActivityRow,
+  ClientRow,
+  ClientServiceRow,
+  ContactRow,
+  ExpenseRow,
+  FileRow,
+  LeadRow,
+  PaymentRow,
+  SourceRow,
+  TagRow,
+} from "../types/supabase/types";
+import { createClientTags } from "./client-tags";
+import { createCrud } from "./crud";
+import { createMembers } from "./members";
+import { createOrg } from "./org";
 import { TABLES } from "./tables";
+import { getCurrentMember } from "./user";
 
 /**
- * Which clients have which tags. Not generic CRUD, on purpose:
- * this join table has no `id` column — a row IS the (client_id, tag_id)
- * pair — so get(id) / update(id) / remove(id) don't apply. And there's
- * nothing to "update": a client either has a tag or it doesn't.
+ * Builds the data layer for one org. Tests call this directly with their
+ * own Supabase client; the app uses getDataLayer() below.
  */
-export function createClientTags(orgId: string, supabase: SupabaseClient) {
-  function query() {
-    return supabase.from(TABLES.client_tags).select("*").eq("org_id", orgId);
-  }
-
+export function createDataLayer(supabase: SupabaseClient, orgId: string, memberId: string) {
   return {
-    /** The tag links for one client. */
-    async listForClient(clientId: string): Promise<ClientTagRow[]> {
-      const { data, error } = await query().eq("client_id", clientId);
-      if (error) throw new Error(`list client tags failed: ${error.message}`);
-      return data as ClientTagRow[];
-    },
+    orgId,
 
-    /** Every client link for one tag — "which clients are tagged upsell?" */
-    async listForTag(tagId: string): Promise<ClientTagRow[]> {
-      const { data, error } = await query().eq("tag_id", tagId);
-      if (error) throw new Error(`list tagged clients failed: ${error.message}`);
-      return data as ClientTagRow[];
-    },
+    // Tables with their own rules
+    org: createOrg(orgId, supabase),
+    members: createMembers(memberId, orgId, supabase),
+    clientTags: createClientTags(orgId, supabase),
 
-    /** Tag a client. Adding a tag it already has does nothing (no error). */
-    async add(clientId: string, tagId: string): Promise<void> {
-      const { error } = await supabase
-        .from(TABLES.client_tags)
-        .upsert(
-          { org_id: orgId, client_id: clientId, tag_id: tagId },
-          { onConflict: "client_id,tag_id", ignoreDuplicates: true },
-        );
-      if (error) throw new Error(`add client tag failed: ${error.message}`);
-    },
-
-    /** Untag a client. Removing a tag it doesn't have does nothing (no error). */
-    async remove(clientId: string, tagId: string): Promise<void> {
-      const { error } = await supabase
-        .from(TABLES.client_tags)
-        .delete()
-        .eq("org_id", orgId)
-        .eq("client_id", clientId)
-        .eq("tag_id", tagId);
-      if (error) throw new Error(`remove client tag failed: ${error.message}`);
-    },
-
-    /**
-     * Make a client's tags exactly `tagIds` — what a tag multi-select saves.
-     * Works out what to add and what to remove, so unchanged tags are untouched.
-     */
-    async set(clientId: string, tagIds: string[]): Promise<void> {
-      const current = await this.listForClient(clientId);
-      const have = new Set(current.map((row) => row.tag_id));
-      const want = new Set(tagIds);
-
-      const toAdd = [...want].filter((id) => !have.has(id));
-      const toRemove = [...have].filter((id) => !want.has(id));
-
-      if (toAdd.length > 0) {
-        const { error } = await supabase
-          .from(TABLES.client_tags)
-          .upsert(
-            toAdd.map((tag_id) => ({ org_id: orgId, client_id: clientId, tag_id })),
-            { onConflict: "client_id,tag_id", ignoreDuplicates: true },
-          );
-        if (error) throw new Error(`set client tags (add) failed: ${error.message}`);
-      }
-
-      if (toRemove.length > 0) {
-        const { error } = await supabase
-          .from(TABLES.client_tags)
-          .delete()
-          .eq("org_id", orgId)
-          .eq("client_id", clientId)
-          .in("tag_id", toRemove);
-        if (error) throw new Error(`set client tags (remove) failed: ${error.message}`);
-      }
-    },
+    // Tables that fit the generic factory
+    activities: createCrud<ActivityRow>(TABLES.activities, orgId, supabase),
+    clientServices: createCrud<ClientServiceRow>(TABLES.client_services, orgId, supabase),
+    clients: createCrud<ClientRow>(TABLES.clients, orgId, supabase),
+    contacts: createCrud<ContactRow>(TABLES.contacts, orgId, supabase),
+    expenses: createCrud<ExpenseRow>(TABLES.expenses, orgId, supabase),
+    files: createCrud<FileRow>(TABLES.files, orgId, supabase),
+    leads: createCrud<LeadRow>(TABLES.leads, orgId, supabase),
+    payments: createCrud<PaymentRow>(TABLES.payments, orgId, supabase),
+    sources: createCrud<SourceRow>(TABLES.sources, orgId, supabase),
+    tags: createCrud<TagRow>(TABLES.tags, orgId, supabase),
   };
 }
+
+export type DataLayer = ReturnType<typeof createDataLayer>;
+
+/**
+ * The data layer for the signed-in user. Redirects to login if there isn't one.
+ *
+ * Do not call from /auth/* (it redirects there, so it would loop). Not usable
+ * inside "use cache" — it reads cookies.
+ */
+export async function getDataLayer() {
+  const member = await getCurrentMember();
+  if (!member) redirect("/auth/login");
+
+  const supabase = await createClient();
+  return { member, ...createDataLayer(supabase, member.org_id, member.id) };
+}
+
+/** Re-exported so callers can `import { DbError } from "@/global/data"`. */
+export { DbError } from "./errors";
+export type { DbErrorType } from "./errors";

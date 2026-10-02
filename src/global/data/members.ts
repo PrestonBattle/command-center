@@ -1,6 +1,8 @@
 import "server-only";
+
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { MemberRow } from "../types/supabase/types";
+import { DbError, toDbError } from "./errors";
 import { TABLES } from "./tables";
 
 /** The only member fields a person can change about themselves. */
@@ -22,14 +24,14 @@ export function createMembers(memberId: string, orgId: string, supabase: Supabas
     /** Everyone in your org. */
     async list(): Promise<MemberRow[]> {
       const { data, error } = await query();
-      if (error) throw new Error(`list members failed: ${error.message}`);
+      if (error) throw toDbError(error, "list members");
       return data as MemberRow[];
     },
 
     /** One member of your org by id, or null. */
     async get(id: string): Promise<MemberRow | null> {
       const { data, error } = await query().eq("id", id).maybeSingle();
-      if (error) throw new Error(`get member failed: ${error.message}`);
+      if (error) throw toDbError(error, "get member");
       return data as MemberRow | null;
     },
 
@@ -50,8 +52,8 @@ export function createMembers(memberId: string, orgId: string, supabase: Supabas
         .select()
         .maybeSingle();
 
-      if (error) throw new Error(`update member failed: ${error.message}`);
-      if (!data) throw new Error(`update member failed: no member ${memberId}`);
+      if (error) throw toDbError(error, "update member");
+      if (!data) throw new DbError("db.not_found", "update member", `no member ${memberId}`);
       return data as MemberRow;
     },
   };

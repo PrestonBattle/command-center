@@ -1,6 +1,8 @@
 import "server-only";
+
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ClientTagRow } from "../types/supabase/types";
+import { toDbError } from "./errors";
 import { TABLES } from "./tables";
 
 /**
@@ -18,14 +20,14 @@ export function createClientTags(orgId: string, supabase: SupabaseClient) {
     /** The tag links for one client. */
     async listForClient(clientId: string): Promise<ClientTagRow[]> {
       const { data, error } = await query().eq("client_id", clientId);
-      if (error) throw new Error(`list client tags failed: ${error.message}`);
+      if (error) throw toDbError(error, "list client tags");
       return data as ClientTagRow[];
     },
 
     /** Every client link for one tag — "which clients are tagged upsell?" */
     async listForTag(tagId: string): Promise<ClientTagRow[]> {
       const { data, error } = await query().eq("tag_id", tagId);
-      if (error) throw new Error(`list tagged clients failed: ${error.message}`);
+      if (error) throw toDbError(error, "list tagged clients");
       return data as ClientTagRow[];
     },
 
@@ -37,7 +39,7 @@ export function createClientTags(orgId: string, supabase: SupabaseClient) {
           { org_id: orgId, client_id: clientId, tag_id: tagId },
           { onConflict: "client_id,tag_id", ignoreDuplicates: true },
         );
-      if (error) throw new Error(`add client tag failed: ${error.message}`);
+      if (error) throw toDbError(error, "add client tag");
     },
 
     /** Untag a client. Removing a tag it doesn't have does nothing (no error). */
@@ -48,7 +50,7 @@ export function createClientTags(orgId: string, supabase: SupabaseClient) {
         .eq("org_id", orgId)
         .eq("client_id", clientId)
         .eq("tag_id", tagId);
-      if (error) throw new Error(`remove client tag failed: ${error.message}`);
+      if (error) throw toDbError(error, "remove client tag");
     },
 
     /**
@@ -70,7 +72,7 @@ export function createClientTags(orgId: string, supabase: SupabaseClient) {
             toAdd.map((tag_id) => ({ org_id: orgId, client_id: clientId, tag_id })),
             { onConflict: "client_id,tag_id", ignoreDuplicates: true },
           );
-        if (error) throw new Error(`set client tags (add) failed: ${error.message}`);
+        if (error) throw toDbError(error, "set client tags (add)");
       }
 
       if (toRemove.length > 0) {
@@ -80,7 +82,7 @@ export function createClientTags(orgId: string, supabase: SupabaseClient) {
           .eq("org_id", orgId)
           .eq("client_id", clientId)
           .in("tag_id", toRemove);
-        if (error) throw new Error(`set client tags (remove) failed: ${error.message}`);
+        if (error) throw toDbError(error, "set client tags (remove)");
       }
     },
   };

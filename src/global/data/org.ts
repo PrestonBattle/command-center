@@ -1,6 +1,8 @@
 import "server-only";
+
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { OrgRow } from "../types/supabase/types";
+import { DbError, toDbError } from "./errors";
 import { TABLES } from "./tables";
 
 /** Org fields the app can change. id and created_at are never editable. */
@@ -16,7 +18,7 @@ export type OrgUpdate = Partial<Omit<OrgRow, "id" | "created_at">>;
  */
 export function createOrg(orgId: string, supabase: SupabaseClient) {
   return {
-    /** Your org. Throws if it can't be read (it always exists once signed up). */
+    /** Your org. Throws DbError("db.not_found") if it can't be read. */
     async get(): Promise<OrgRow> {
       const { data, error } = await supabase
         .from(TABLES.orgs)
@@ -24,8 +26,8 @@ export function createOrg(orgId: string, supabase: SupabaseClient) {
         .eq("id", orgId)
         .maybeSingle();
 
-      if (error) throw new Error(`get org failed: ${error.message}`);
-      if (!data) throw new Error(`get org failed: no org ${orgId}`);
+      if (error) throw toDbError(error, "get org");
+      if (!data) throw new DbError("db.not_found", "get org", `no org ${orgId}`);
       return data as OrgRow;
     },
 
@@ -38,22 +40,22 @@ export function createOrg(orgId: string, supabase: SupabaseClient) {
         .select()
         .maybeSingle();
 
-      if (error) throw new Error(`update org failed: ${error.message}`);
-      if (!data) throw new Error(`update org failed: no org ${orgId}`);
+      if (error) throw toDbError(error, "update org");
+      if (!data) throw new DbError("db.not_found", "update org", `no org ${orgId}`);
       return data as OrgRow;
     },
 
     /** Monthly floor in cents. The math lives in SQL: org_floor_cents(). */
     async floorCents(): Promise<number> {
       const { data, error } = await supabase.rpc("org_floor_cents", { p_org: orgId });
-      if (error) throw new Error(`org floor failed: ${error.message}`);
+      if (error) throw toDbError(error, "org floor");
       return Number(data ?? 0);
     },
 
     /** Monthly-equivalent revenue in cents. SQL: org_monthly_revenue_cents(). */
     async monthlyRevenueCents(): Promise<number> {
       const { data, error } = await supabase.rpc("org_monthly_revenue_cents", { p_org: orgId });
-      if (error) throw new Error(`org revenue failed: ${error.message}`);
+      if (error) throw toDbError(error, "org revenue");
       return Number(data ?? 0);
     },
   };
