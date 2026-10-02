@@ -6,6 +6,10 @@ import * as leads from "./leads";
 import * as members from "./members";
 import * as orgClients from "./org-client";
 import * as org from "./org";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { createCrud } from "./crud";
+import { ActivityRow, ClientRow, ClientServiceRow, ContactRow, ExpenseRow, FileRow, LeadRow, PaymentRow, SourceRow, TagRow } from "../types/supabase/types";
+import { TABLES } from "./tables";
 
 /**
  * Returns the application data layer — a typed facade over all authenticated
@@ -23,6 +27,23 @@ import * as org from "./org";
  * query Supabase without going through this layer.
  * See `src/app/supabase/server.ts` for the token-based client pattern.
  */
+
+export function CreateDataLayer(supabase: SupabaseClient, orgId: string) {
+
+  return {
+    orgId,
+    activities: createCrud<ActivityRow>(TABLES.activities, orgId, supabase),
+    clientServices: createCrud<ClientServiceRow>(TABLES.client_services, orgId, supabase),
+    clients: createCrud<ClientRow>(TABLES.clients, orgId, supabase),
+    contacts: createCrud<ContactRow>(TABLES.contacts, orgId, supabase),
+    expenses: createCrud<ExpenseRow>(TABLES.expenses, orgId, supabase),
+    files: createCrud<FileRow>(TABLES.files, orgId, supabase),
+    leads: createCrud<LeadRow>(TABLES.leads, orgId, supabase),
+    payments: createCrud<PaymentRow>(TABLES.payments, orgId, supabase),
+    sources: createCrud<SourceRow>(TABLES.sources, orgId, supabase),
+    tags: createCrud<TagRow>(TABLES.tags, orgId, supabase),
+  }
+}
 export async function getDataLayer() {
   const authed = await isAuthenticated();
   if (!authed) redirect("/auth/login");
