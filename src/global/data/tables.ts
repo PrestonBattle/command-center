@@ -13,4 +13,4 @@ export const TABLES = {
   payments: "payments",
   sources: "sources",
   tags: "tags"
-}
+} as const
