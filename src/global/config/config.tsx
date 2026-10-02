@@ -9,14 +9,6 @@ export interface NavbarItem {
 
 export const APPCONFIG = {
 
-  table: {
-    members: "Members",
-    org: "Org",
-    clients: "Client",
-    org_client: "Org_Client",
-    lead: "Lead",
-    campaign: "Campaign",
-  },
   hiddenRoutes: ["/auth", ],
   
   navbar: [

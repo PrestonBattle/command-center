@@ -1,68 +1,70 @@
+import "server-only";
+
 import { redirect } from "next/navigation";
-import { isAuthenticated } from "./user";
-import * as campaigns from "./campaign";
-import * as clients from "./clients";
-import * as leads from "./leads";
-import * as members from "./members";
-import * as orgClients from "./org-client";
-import * as org from "./org";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@/app/supabase/server";
+import type {
+  ActivityRow,
+  ClientRow,
+  ClientServiceRow,
+  ContactRow,
+  ExpenseRow,
+  FileRow,
+  LeadRow,
+  PaymentRow,
+  SourceRow,
+  TagRow,
+} from "../types/supabase/types";
+import { createClientTags } from "./client-tags";
+import { createCrud } from "./crud";
+import { createMembers } from "./members";
+import { createOrg } from "./org";
+import { TABLES } from "./tables";
+import { getCurrentMember } from "./user";
 
 /**
- * Returns the application data layer — a typed facade over all authenticated
- * Supabase data modules. Always call this from server components, server
- * actions, or API routes that require an authenticated user.
- *
- * For public (unauthenticated) reads, use `getOpenData()` from
- * `@/global/open` instead.
- *
- * ---
- *
- * **Caching note:** `getDataLayer` internally calls `createClient()` which
- * reads cookies. It must not be called inside a `"use cache"` boundary.
- * For cached data fetching, use `createClient(accessToken)` directly and
- * query Supabase without going through this layer.
- * See `src/app/supabase/server.ts` for the token-based client pattern.
+ * Builds the data layer for one org. Tests call this directly with their
+ * own Supabase client; the app uses getDataLayer() below.
  */
-export async function getDataLayer() {
-  const authed = await isAuthenticated();
-  if (!authed) redirect("/auth/login");
-
+export function createDataLayer(supabase: SupabaseClient, orgId: string, memberId: string) {
   return {
-    campaigns: {
-      getCampaign: campaigns.getCampaign,
-      insertCampaign: campaigns.insertCampaign,
-      updateCampaign: campaigns.updateCampaign,
-      deleteCampaign: campaigns.deleteCampaign,
-    },
-    clients: {
-      getClients: clients.getClients,
-      insertClient: clients.insertClient,
-      updateClient: clients.updateClient,
-      deleteClient: clients.deleteClient,
-    },
-    leads: {
-      getLead: leads.getLead,
-      insertLead: leads.insertLead,
-      updateLead: leads.updateLead,
-      deleteLead: leads.deleteLead,
-    },
-    members: {
-      getMembers: members.getMembers,
-      insertMember: members.insertMember,
-      updateMember: members.updateMember,
-      deleteMember: members.deleteMember,
-    },
-    orgClients: {
-      getOrgClient: orgClients.getOrgClient,
-      insertOrgClient: orgClients.insertOrgClient,
-      updateOrgClient: orgClients.updateOrgClient,
-      deleteOrgClient: orgClients.deleteOrgClient,
-    },
-    org: {
-      getOrg: org.getOrg,
-      insertOrg: org.insertOrg,
-      updateOrg: org.updateOrg,
-      deleteOrg: org.deleteOrg,
-    },
+    orgId,
+
+    // Tables with their own rules
+    org: createOrg(orgId, supabase),
+    members: createMembers(memberId, orgId, supabase),
+    clientTags: createClientTags(orgId, supabase),
+
+    // Tables that fit the generic factory
+    activities: createCrud<ActivityRow>(TABLES.activities, orgId, supabase),
+    clientServices: createCrud<ClientServiceRow>(TABLES.client_services, orgId, supabase),
+    clients: createCrud<ClientRow>(TABLES.clients, orgId, supabase),
+    contacts: createCrud<ContactRow>(TABLES.contacts, orgId, supabase),
+    expenses: createCrud<ExpenseRow>(TABLES.expenses, orgId, supabase),
+    files: createCrud<FileRow>(TABLES.files, orgId, supabase),
+    leads: createCrud<LeadRow>(TABLES.leads, orgId, supabase),
+    payments: createCrud<PaymentRow>(TABLES.payments, orgId, supabase),
+    sources: createCrud<SourceRow>(TABLES.sources, orgId, supabase),
+    tags: createCrud<TagRow>(TABLES.tags, orgId, supabase),
   };
 }
+
+export type DataLayer = ReturnType<typeof createDataLayer>;
+
+/**
+ * The data layer for the signed-in user. Redirects to login if there isn't one.
+ *
+ * Do not call from /auth/* (it redirects there, so it would loop). Not usable
+ * inside "use cache" — it reads cookies.
+ */
+export async function getDataLayer() {
+  const member = await getCurrentMember();
+  if (!member) redirect("/auth/login");
+
+  const supabase = await createClient();
+  return { member, ...createDataLayer(supabase, member.org_id, member.id) };
+}
+
+/** Re-exported so callers can `import { DbError } from "@/global/data"`. */
+export { DbError } from "./errors";
+export type { DbErrorType } from "./errors";
