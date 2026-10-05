@@ -1,4 +1,5 @@
 
+import { BackButton } from "@/global/components/back-button";
 import { Text, Title } from "@mantine/core";
 import Link from "next/link";
 
@@ -10,7 +11,7 @@ interface showcase_card {
 
 const SHOWCASE_CARDS = [
   {
-    
+
   }
 ];
 

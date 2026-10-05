@@ -1,0 +1,52 @@
+@layer components {
+  .glass {
+    position: relative;
+    border-radius: var(--default-glass-radius);
+    /* Keeps the negative z-index layers below inside this card
+       instead of falling behind the page background. */
+    isolation: isolate;
+  }
+
+  /* Border layer — extends 2px beyond the container.
+     The foreground sits flush with the container, so the 2px
+     ring of this layer visible around it = the "border". */
+  .glass__background {
+    position: absolute;
+    pointer-events: none;
+    inset: -2px;
+    z-index: -10;
+    background: rgb(255 255 255 / 0.3);
+    backdrop-filter: blur(12px) brightness(150%);
+    border-radius: inherit;
+  }
+
+  /* Content layer — sits at container bounds (inset: 0).
+     The 2px gap between this edge and __background's -2px edge
+     creates the visible glass border. */
+  .glass__foreground {
+    position: absolute;
+    pointer-events: none;
+    inset: 0;
+    z-index: -8;
+    backdrop-filter: blur(16px);
+    border-radius: inherit;
+    background: color-mix(in srgb, var(--mantine-color-blue-8) 50%, transparent);
+  }
+
+  /* -- Performant mode: no backdrop-filter, solid colors instead -- */
+
+  .glass--performant {
+    --glass-perf-bg: hsl(215 33% 22% / 0.92);
+    --glass-perf-fg: hsl(215 33% 18% / 0.85);
+  }
+
+  .glass--performant .glass__background {
+    backdrop-filter: none;
+    background: var(--glass-perf-bg);
+  }
+
+  .glass--performant .glass__foreground {
+    backdrop-filter: none;
+    background: var(--glass-perf-fg);
+  }
+}
