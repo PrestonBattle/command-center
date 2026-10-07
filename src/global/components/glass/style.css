@@ -1,52 +1,47 @@
 @layer components {
+  [data-mantine-color-scheme="light"] {
+    --glass-tint: #ffffff;
+    --glass-tint-amount: 8%;
+    --glass-gloss: rgb(255 255 255 / 0.28);
+    --glass-saturate: 170%;
+    --glass-edge: rgb(255 255 255 / 0.9);
+    --glass-shadow: 0 10px 40px -8px rgb(124 45 18 / 0.18), 0 2px 6px rgb(124 45 18 / 0.06);
+    --glass-ring: linear-gradient(160deg,
+      rgb(255 255 255 / 0.9),
+      rgb(255 255 255 / 0.25) 40%,
+      rgb(255 255 255 / 0.15) 70%,
+      rgb(255 255 255 / 0.6));
+  }
+
   .glass {
     position: relative;
     border-radius: var(--default-glass-radius);
-    /* Keeps the negative z-index layers below inside this card
-       instead of falling behind the page background. */
     isolation: isolate;
+    box-shadow: var(--glass-shadow, none);
   }
 
-  /* Border layer — extends 2px beyond the container.
-     The foreground sits flush with the container, so the 2px
-     ring of this layer visible around it = the "border". */
   .glass__background {
     position: absolute;
-    pointer-events: none;
-    inset: -2px;
+    inset: -1px;
     z-index: -10;
-    background: rgb(255 255 255 / 0.3);
-    backdrop-filter: blur(12px) brightness(150%);
+    pointer-events: none;
     border-radius: inherit;
+    background: var(--glass-ring);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
-  /* Content layer — sits at container bounds (inset: 0).
-     The 2px gap between this edge and __background's -2px edge
-     creates the visible glass border. */
   .glass__foreground {
     position: absolute;
-    pointer-events: none;
     inset: 0;
     z-index: -8;
-    backdrop-filter: blur(16px);
+    pointer-events: none;
     border-radius: inherit;
-    background: color-mix(in srgb, var(--mantine-color-blue-8) 50%, transparent);
-  }
-
-  /* -- Performant mode: no backdrop-filter, solid colors instead -- */
-
-  .glass--performant {
-    --glass-perf-bg: hsl(215 33% 22% / 0.92);
-    --glass-perf-fg: hsl(215 33% 18% / 0.85);
-  }
-
-  .glass--performant .glass__background {
-    backdrop-filter: none;
-    background: var(--glass-perf-bg);
-  }
-
-  .glass--performant .glass__foreground {
-    backdrop-filter: none;
-    background: var(--glass-perf-fg);
+    background:
+      linear-gradient(180deg, var(--glass-gloss) 0%, transparent 45%),
+      color-mix(in srgb, var(--glass-tint) var(--glass-tint-amount), transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate, 100%));
+    backdrop-filter: blur(18px) saturate(var(--glass-saturate, 100%));
+    box-shadow: inset 0 1px 0 var(--glass-edge, transparent);
   }
 }

@@ -1,5 +1,6 @@
 
 import { BackButton } from "@/global/components/back-button";
+import Glass from "@/global/components/glass/glass";
 import { Text, Title } from "@mantine/core";
 import Link from "next/link";
 
@@ -11,7 +12,9 @@ interface showcase_card {
 
 const SHOWCASE_CARDS = [
   {
-
+    href: "dev/panel",
+    title: "Glass Panel",
+    description: "A panel with a glass look"
   }
 ];
 

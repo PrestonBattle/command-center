@@ -1,16 +1,17 @@
 export function Background() {
   return (
-    <div 
-      className="fixed inset-0 overflow-hidden -z-10 pointer-events-none"
-      style={{
-        background: "linear-gradient(287deg, rgba(224,223,242,1) 9%, rgba(140,138,184,1) 75%, rgba(224,223,242,1) 100%)",
-        backgroundSize: "300% 300%",
-        animation: "rotate 20s alternate infinite",
-      }}
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#fff3ec]"
     >
-      {/* <div className="[clip-path:polygon(0_0,100%_0,100%_80%,20%_40%,0_80%)] bg-(--mantine-color-purple-7) h-96"></div>
-      <div id="background-shape-1" className="w-9/12 h-10/12 bottom-6/12 right-6/12 bg-(--mantine-color-purple-7) rounded-full absolute opacity-30"></div> */}
-      <div className="absolute inset-0 backdrop-blur-xl"></div>
+      <div className="absolute -left-40 -top-52 size-[760px] rounded-full bg-[#fdba74] opacity-85 blur-[110px]" />
+      <div className="absolute -top-28 left-[68%] size-[560px] rounded-full bg-[#f9a8d4] opacity-70 blur-[110px]" />
+      <div className="absolute left-[45%] top-[45%] size-[820px] rounded-full bg-[#fb923c] opacity-55 blur-[110px]" />
+      <div className="absolute -left-16 top-[60%] size-[480px] rounded-full bg-[#fecaca] opacity-90 blur-[110px]" />
+      <div className="absolute left-[78%] top-[62%] size-[420px] rounded-full bg-[#fde68a] opacity-80 blur-[110px]" />
+
+      {/* soft diagonal shine */}
+      <div className="absolute inset-0 bg-[linear-gradient(125deg,rgb(255_255_255/0.5)_0%,transparent_35%,transparent_65%,rgb(255_255_255/0.3)_100%)]" />
     </div>
-  )
+  );
 }
