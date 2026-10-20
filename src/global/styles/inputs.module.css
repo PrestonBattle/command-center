@@ -1,0 +1,78 @@
+/*
+ * The look of every Mantine input (TextInput, NumberInput, Select, …).
+ * Applied once through the theme in mantine-theme.ts, never per use.
+ * Unlayered, so it beats Mantine's layered defaults.
+ */
+
+.input {
+  min-height: 48px;
+  border-radius: 12px;
+  font-size: 16px; /* 16px+ stops iPhone Safari zooming in on focus */
+  color: var(--text);
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition: border-color 150ms, box-shadow 150ms, background 150ms;
+}
+
+.input::placeholder {
+  color: var(--text-faint);
+  opacity: 0.8;
+}
+
+.input:hover {
+  background: var(--field-bg-hover);
+}
+
+.input:focus,
+.input:focus-within {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* Mantine sets these data attributes itself. */
+.input[data-error] {
+  border-color: var(--bad);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bad) 15%, transparent);
+}
+
+.input[data-disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.section {
+  color: var(--text-muted);
+}
+
+.label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.description {
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.error {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bad);
+}
+
+.required {
+  color: var(--bad);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input {
+    transition: none;
+  }
+}

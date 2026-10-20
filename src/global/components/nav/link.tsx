@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link";
 
 type NavbarLinkProps = {
@@ -33,7 +32,8 @@ export function NavbarLink({
       aria-current={active ? "page" : undefined}
       data-active={active || undefined}
       className={[
-        "group flex items-center gap-3 rounded-lg px-3 py-2",
+        "group flex min-h-11 items-center gap-3 rounded-lg px-3 py-2",
+        "focus-visible:outline-2 focus-visible:outline-[var(--accent)]",
         "text-sm transition-colors",
         nested ? "pl-11" : "",
         active
@@ -43,6 +43,7 @@ export function NavbarLink({
     >
       {leftSection && (
         <span
+          aria-hidden
           className={[
             "shrink-0 transition-colors",
             active ? "text-[var(--accent)]" : "text-[var(--text-faint)] group-hover:text-[var(--text)]",

@@ -24,22 +24,22 @@ Keep items small: one PR each, under ~400 changed lines.
   `primaryColor: "orange"`, `primaryShade: 9`; remove the custom purple
   palette. Replace hard-coded colors in existing components with variables.
 
-- [ ] **F2 · Glass and background, Sunset** · `ready` · after F1
+- [x] **F2 · Glass and background, Sunset** · `ready` · after F1
   Update `glass/style.css` to the tuned light values (8% tint,
   `saturate(170%)`, gradient ring, inner top edge, soft shadow, optional
   `--glass-outline`). Update `Background` to the Sunset blobs. Remove the
   unused commented-out shapes.
 
-- [ ] **F3 · Input styling** · `ready` · after F1
+- [x] **F3 · Input styling** · `ready` · after F1
   `global/styles/inputs.module.css` and `Input` / `InputWrapper` theme
   overrides so every Mantine input gets the glass field look. Delete the
   empty `inputs/text-input.tsx`.
 
-- [ ] **F4 · Domain inputs** · `ready` · after F3
+- [x] **F4 · Domain inputs** · `ready` · after F3
   `MoneyInput`, `PercentInput`, `IntervalSelect`, `BusinessTypeSelect` in
   `global/components/inputs/`, plus `index.ts`. Add each to `/dev`.
 
-- [ ] **F5 · Layout building blocks** · `ready` · after F2
+- [x] **F5 · Layout building blocks** · `ready` · after F2
   `StepHeader`, `FormSection`, `FieldGrid`, `Callout`, `FormActions`.
   Add each to `/dev`.
 
@@ -48,11 +48,11 @@ Keep items small: one PR each, under ~400 changed lines.
   `attempt`). `global/lib/money.ts` (cents↔dollars, `formatMoney`).
   Update `onboarding/action.ts` to import them instead of defining its own.
 
-- [ ] **F7 · Navbar** · `ready` · after F2
+- [x] **F7 · Navbar** · `ready` · after F2
   Glass sidebar per the review: layout classes on `Glass`, theme colors,
   `aria-current` in `NavbarLink`, one-line title.
 
-- [ ] **F8 · Mobile navigation** · `ready` · after F7
+- [x] **F8 · Mobile navigation** · `ready` · after F7
   Bottom tab bar below `sm` using the same `APPCONFIG.navbar` items.
 
 - [x] **F9 · CI and scripts** · `ready`

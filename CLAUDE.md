@@ -55,8 +55,13 @@ hook or helper. Reuse or extend it. If you'd paste the same logic a second
 time, extract it instead. Known building blocks:
 
 - `Glass`, `GlassPanel` — every card and surface.
-- `global/components/inputs/*` — `MoneyInput`, `PercentInput`,
-  `IntervalSelect`, … Never style a raw `<input>`.
+- `global/components/inputs` — `MoneyInput`, `PercentInput`,
+  `IntervalSelect`. Plain text fields are Mantine `TextInput`; the theme
+  styles every Mantine input, so never style a raw `<input>`.
+- `global/components/layout` — `PageHeader`, `FormSection`, `FieldGrid`,
+  `Callout`, `FormActions`, `StatusBadge`, `Stat`, `EmptyState`.
+- `global/hooks/use-is-active.ts` — which nav link is current.
+- `global/lib/intervals.ts` — billing interval options and labels.
 - `useOnboardingForm` pattern — form + zod resolver + action + pending.
 - `global/lib/money.ts` — `dollarsToCents`, `centsToDollars`, `formatDollars`,
   `formatCents`. All money conversion and display.
