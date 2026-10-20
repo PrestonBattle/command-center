@@ -34,7 +34,10 @@ export async function updateSession(request: NextRequest) {
   // startsWith("/auth") covers login, signup, and callback in one check.
   const isAuthRoute = pathname.startsWith('/auth');
 
-  if (!user && !isAuthRoute) {
+  const isDevRoute =
+  process.env.NODE_ENV === 'development' && pathname.startsWith('/dev');
+
+  if (!user && !isAuthRoute && !isDevRoute) {
     const url = request.nextUrl.clone();
     url.pathname = '/auth/login';
     return NextResponse.redirect(url);
