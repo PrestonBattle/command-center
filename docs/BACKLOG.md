@@ -140,7 +140,7 @@ Keep items small: one PR each, under ~400 changed lines.
   Generate expected `payments` rows ahead of time, or compute on the fly?
   Preston decides; then this becomes `preston` or `ready`.
 
-- [ ] **P6 · Money page** · `ready` · after P5
+- [x] **P6 · Money page** · `ready` · after P5
   This month's payments, collected vs expected bar, "Mark paid" action.
 
 - [ ] **P7 · Life vest page** · `ready` · after O4a

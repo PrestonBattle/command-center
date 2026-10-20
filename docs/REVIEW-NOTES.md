@@ -191,3 +191,24 @@ as a button.
   shows "View client".
 - **Look at:** sources (where leads come from) aren't wired up yet; the
   table and data-layer CRUD exist, but there's no UI to pick one.
+
+---
+
+## 7. Money
+
+- **`/money?month=YYYY-MM`**: one month's expected payments, worked out from
+  services (see §2), with a Collected / Overdue / Still-expected bar and a
+  written legend, so color is never the only signal. Month arrows are plain
+  links, so they work without JavaScript and can be bookmarked.
+- **"Still unpaid from earlier months"** appears on the current month and
+  looks back 3 months (`OVERDUE_LOOKBACK_MONTHS`). Without it, a payment
+  missed in September would quietly disappear on October 1.
+- **Mark paid** records today as the paid date. The server reads the
+  client and amount from the service, never from the browser, and upserts
+  on `(service_id, due_on)`, so a double click can't record it twice.
+  **Undo** deletes the payment row.
+- **Look at:** marking something paid always uses the service's *current*
+  amount and *today's* date. A partial payment, or a different paid date,
+  would need a small "Record payment" dialog. Worth doing once it's real.
+- The bar's segment widths are inline `style` because they're computed
+  values; that's the one place inline styles are right.
