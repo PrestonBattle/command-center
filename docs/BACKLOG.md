@@ -1,8 +1,9 @@
 # Backlog
 
 The bot takes the **first unchecked item whose status is `ready`** and whose
-`after` items are all checked, and opens one PR for it against `bot/dev`. Preston checks the box
-when he merges the PR.
+`after` items are all checked, and opens one PR for it against `bot/dev`. Each PR ticks its own
+box, so merging the PR marks the item done. An item with an open `bot/<ID>-…`
+PR is in progress and is skipped.
 
 Status:
 - `ready`: the bot can build it.
