@@ -132,7 +132,7 @@ Keep items small: one PR each, under ~400 changed lines.
 - [x] **P3 · Add / edit client** · `ready` · after P1
   Form + actions for client, primary contact, first service.
 
-- [ ] **P4 · Leads board** · `ready` · after O1
+- [x] **P4 · Leads board** · `ready` · after O1
   Kanban by stage, move stage via action (keyboard-accessible move, not
   drag-only).
 

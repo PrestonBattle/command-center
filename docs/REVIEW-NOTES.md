@@ -174,3 +174,20 @@ as a button.
   yet, only add, end and delete. That's the next obvious gap.
 - **Look at:** `addContact` lists every contact to check for a primary.
   Fine at this size; a filtered query in the data layer would be cleaner.
+
+---
+
+## 6. Leads
+
+- **Board** (`/leads`): five columns (New, Contacted, Proposal, Won, Lost),
+  each a labelled `<section>` with a count. Leads that haven't moved in 14
+  days get a "Stale" badge (`_lib/stages.ts`, `STALE_AFTER_DAYS`).
+- **Moving a lead is a select, not drag-and-drop.** The mockup had dragging;
+  a select works by keyboard and screen reader, and on phones. Drag can be
+  added on top later (e.g. `@dnd-kit`), keeping the select as the fallback.
+- **"Make client"** on won leads creates the client (with a monthly service
+  at the lead's estimate, if it has one), links the lead to it via
+  `converted_client_id`, and opens the client's page. Afterwards the card
+  shows "View client".
+- **Look at:** sources (where leads come from) aren't wired up yet; the
+  table and data-layer CRUD exist, but there's no UI to pick one.
