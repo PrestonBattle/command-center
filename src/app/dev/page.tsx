@@ -25,7 +25,7 @@ const SHOWCASE_CARDS: ShowcaseCard[] = [
 export default function DevPage() {
   return (
     <div className="w-full p-8 grid">
-      <BackButton href="/" text="Home" />
+      <BackButton href="/" text="Home" className="mb-4" />
       <Title order={1} className="text-white">
         Dev Showcases
       </Title>

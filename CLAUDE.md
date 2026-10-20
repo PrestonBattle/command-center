@@ -66,7 +66,20 @@ time, extract it instead. Known building blocks:
 - `global/lib/billing.ts` — `monthlyCents`, `dueDateInMonth`,
   `monthlyRevenueCents`, `scheduleForMonth`, `scheduleTotals`.
 - `global/lib/dates.ts` — "YYYY-MM-DD" helpers, month params, formatting.
-- `useOnboardingForm` pattern — form + zod resolver + action + pending.
+- `global/hooks/use-action-form.ts` — `useActionForm`: Mantine form + the
+  action's zod schema + server errors + pending. Every form uses it.
+- `global/hooks/use-action-button.ts` — `useActionButton` for one-click
+  actions (Skip, Finish, Mark paid, Delete).
+- `global/lib/schemas/fields.ts` — shared zod fields (`money`,
+  `positiveMoney`, `requiredText`, `optionalEmail`, `intervalMonths`, …).
+- `global/lib/schemas/floor.ts`, `schemas/client.ts` — schemas used by more
+  than one feature.
+- `global/components/floor/` — `FloorForm` (expenses + live floor summary),
+  used by onboarding and Life vest.
+- `global/lib/save-floor.ts`, `create-clients.ts` — server-only writes
+  shared by more than one action.
+- `global/lib/parse-csv.ts` — CSV file → headers + rows.
+- `global/components/stepper` — `Stepper`; `BackButton`.
 - `global/lib/money.ts` — `dollarsToCents`, `centsToDollars`, `formatDollars`,
   `formatCents`. All money conversion and display.
 - `global/lib/action-result.ts` — `ActionResult`, `invalid()`, `toFieldErrors()`.

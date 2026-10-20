@@ -74,7 +74,7 @@ Keep items small: one PR each, under ~400 changed lines.
   Move dashboard panels from `Panel` (paper) to `GlassPanel`; delete
   `panel/panel.tsx` once nothing uses it.
 
-- [ ] **C3 · Names and typos** · `ready`
+- [x] **C3 · Names and typos** · `ready`
   `floor/_componets` → `_components`; `global/lib/parse.csv.tsx` →
   `parse-csv.ts`; nav "Campaigns" label matches the Sources page decision;
   `onboarding/utils/` → `onboarding/_lib/`.
@@ -90,16 +90,16 @@ Keep items small: one PR each, under ~400 changed lines.
   `getDataLayer()` → org; redirect to `/onboarding` if not finished; render
   Navbar + `<main>`. Root layout keeps only providers and background.
 
-- [ ] **O2 · Onboarding gate and progress** · `ready` · after O1
+- [x] **O2 · Onboarding gate and progress** · `ready` · after O1
   `onboarding/layout.tsx` (finished → `/`), `onboarding/page.tsx` (redirect
   to current step), `requireStep()` helper, `OnboardingProgress` wrapping
   the shared `Stepper` (fix `window` shadowing, drop `completedSteps`, add
   `aria-current`, focus styles, theme colors).
 
-- [ ] **O3 · Step 1: business** · `ready` · after O2, F4, F5
+- [x] **O3 · Step 1: business** · `ready` · after O2, F4, F5
   Page + form using `useOnboardingForm`, `businessSchema`, `saveBusiness`.
 
-- [ ] **O4 · Step 2: floor form** · `ready` · after O3
+- [x] **O4 · Step 2: floor form** · `ready` · after O3
   Personal and business `FormSection`s from `EXPENSE_CATEGORIES`,
   tax and estimated revenue, "Finish later" (`skipFloor`). Summary panel
   shows totals as the user types. Uses `calculateFloor` from O4a.
@@ -108,16 +108,16 @@ Keep items small: one PR each, under ~400 changed lines.
   `global/lib/floor.ts`: `business + personal / (1 − taxRate)`, matching the
   SQL `org_floor_cents`, plus tests.
 
-- [ ] **O5 · Step 3: clients, manual entry** · `ready` · after O3
+- [x] **O5 · Step 3: clients, manual entry** · `ready` · after O3
   Editable rows (name, email, amount, interval), add/remove row, running
   total vs floor, "Skip for now", using `saveClients`.
 
-- [ ] **O6 · Step 3: CSV import** · `ready` · after O5
+- [x] **O6 · Step 3: CSV import** · `ready` · after O5
   `papaparse` (needs Preston's OK to add the dependency), column-mapping
   step, preview rows into the manual table, 500-row limit, template
   download.
 
-- [ ] **O7 · Done step** · `ready` · after O5
+- [x] **O7 · Done step** · `ready` · after O5
   Summary of what was set up, `finishOnboarding` button.
 
 ## App pages

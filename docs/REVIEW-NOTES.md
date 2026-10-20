@@ -104,3 +104,50 @@ jumps past the nav. Standard accessibility, invisible otherwise.
 
 **`/dev`.** You'd already added the dev-only exception in the middleware.
 `dev/layout.tsx` adds `notFound()` in production as a second lock.
+
+---
+
+## 4. Onboarding, end to end
+
+The flow: `/onboarding` → your current step → business → floor → clients →
+done → dashboard. The layout sends finished users to `/`; each page calls
+`requireStep(n)` so typing a later step's URL sends you back to where you are.
+Finished steps in the progress bar are clickable so people can go back and edit.
+
+**Folder renames (C3).** `utils/` → `_lib/`, `schema.ts` → `schemas.ts`,
+`action.ts` → `actions.ts`, the `_componets` typo is gone, and the empty
+`parse.csv.tsx` became `global/lib/parse-csv.ts`.
+
+**Moved to `global/`** because Life vest uses them too: expense categories
+(`lib/expense-categories.ts`), the floor schema (`lib/schemas/floor.ts`), the
+client-row schema (`lib/schemas/client.ts`), and shared zod fields
+(`lib/schemas/fields.ts`). Business types and the steps list stay in
+onboarding; nothing else needs them.
+
+**Two hooks every form uses.** `useActionForm` (form + schema + action +
+server errors + pending) and `useActionButton` (one-click actions). These
+replace the `useOnboardingForm` idea from before, made general.
+
+**Step 2** uses `FloorForm` from `components/floor/`, the same one Life
+vest uses. It's in Mantine's *controlled* mode so the summary updates as you
+type; the summary is `aria-live="polite"` so screen readers hear the new
+total. "Finish later" skips without saving.
+
+**Step 3.** Type rows or import a CSV (Papa Parse, the new dependency you
+OK'd in the backlog). The import guesses which column is which from the
+headers (`csv-columns.ts`, with tests), lets you correct it, then drops the
+rows into the table for review; nothing saves until you press Save. Blank
+rows are ignored. A running total compares against the floor.
+- **Look at:** on desktop, only the first row shows labels; later rows hide
+  theirs visually (`sm:sr-only`) but screen readers still read them.
+- **Known limit:** errors are matched to rows by position. If someone leaves
+  a blank row *between* filled rows and a later row has an error, the error
+  can show one row off. Rare; fix by removing blank rows on blur if it bites.
+
+**Saving clients** (`lib/create-clients.ts`) is shared with the Add client
+page: client + primary contact (if email) + one service named "Services",
+started today. Three inserts, with cleanup if a later one fails.
+
+**`BackButton` fix.** It rendered a `<button>` inside a `<Link>`, which is
+invalid HTML and read twice by screen readers. Now it's a single link styled
+as a button.

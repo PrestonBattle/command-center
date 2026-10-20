@@ -1,120 +1,75 @@
 "use client";
 
-import { Fragment, useMemo } from "react";
 import { IconCheck } from "@tabler/icons-react";
 
-export interface StepperProps {
+export type StepperProps = {
   labels: string[];
+  /** Index of the step being shown (0-based). */
   current: number;
+  /** Furthest step reached (0-based). Steps up to it are done and clickable. */
   highest: number;
-  completedSteps: Set<number>;
-  onStepClick: (step: number) => void;
-  /** Max steps visible on mobile before scrolling window kicks in */
-  mobileVisible?: number;
-}
+  onStepClick: (index: number) => void;
+};
 
-function getVisibleWindow(
-  total: number,
-  current: number,
-  windowSize: number
-): { start: number; end: number } {
-  if (total <= windowSize) return { start: 0, end: total };
-  let start = current - Math.floor(windowSize / 2);
-  start = Math.max(0, Math.min(start, total - windowSize));
-  return { start, end: start + windowSize };
-}
+const DOT = {
+  done: "bg-[var(--accent)] text-white border-[var(--accent)]",
+  active: "bg-white/70 text-[var(--accent)] border-[var(--accent)]",
+  todo: "bg-white/30 text-[var(--text-faint)] border-[var(--divider)]",
+} as const;
 
-export function Stepper({
-  labels,
-  current,
-  highest,
-  completedSteps,
-  onStepClick,
-  mobileVisible = 4,
-}: StepperProps) {
-  const window = useMemo(
-    () => getVisibleWindow(labels.length, current, mobileVisible),
-    [labels.length, current, mobileVisible]
-  );
-
+/**
+ * A row of numbered steps. Finished steps are buttons you can go back to;
+ * the current and future steps aren't. Phones show "Step 2 of 4 · Your
+ * floor" under the dots, since the labels don't fit.
+ */
+export function Stepper({ labels, current, highest, onStepClick }: StepperProps) {
   return (
-    <div className="flex items-start overflow-hidden">
-      {labels.map((label, i) => {
-        const isCompleted = completedSteps.has(i);
-        const isActive = i === current;
-        const isClickable = i <= highest && i !== current;
-        const inWindow = i >= window.start && i < window.end;
-
-        return (
-          <Fragment key={i}>
-            <div
-              className={[
-                "flex flex-col items-center gap-1.5 shrink-0",
-                inWindow ? "" : "hidden sm:flex",
-              ].join(" ")}
-            >
-              <button
-                type="button"
-                onClick={() => isClickable && onStepClick(i)}
-                disabled={!isClickable}
-                className={[
-                  "w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold",
-                  "transition-all duration-200 outline-none",
-                  isClickable ? "cursor-pointer" : "cursor-default",
-                ].join(" ")}
-                style={{
-                  background: isCompleted
-                    ? "var(--mantine-color-blue-6)"
-                    : isActive
-                    ? "rgba(255,255,255,0.18)"
-                    : "rgba(255,255,255,0.06)",
-                  border: isActive
-                    ? "1.5px solid rgba(255,255,255,0.5)"
-                    : isCompleted
-                    ? "1.5px solid var(--mantine-color-blue-5)"
-                    : "1.5px solid rgba(255,255,255,0.12)",
-                  color:
-                    isActive || isCompleted ? "white" : "rgba(255,255,255,0.3)",
-                  backdropFilter: "blur(8px)",
-                }}
-              >
-                {isCompleted ? (
-                  <IconCheck size={14} strokeWidth={2.5} />
-                ) : (
-                  i + 1
-                )}
-              </button>
-              <span
-                className="text-xs font-medium tracking-wide hidden sm:block"
-                style={{
-                  color: isActive
-                    ? "rgba(255,255,255,0.9)"
-                    : isCompleted
-                    ? "rgba(255,255,255,0.5)"
-                    : "rgba(255,255,255,0.25)",
-                }}
-              >
-                {label}
-              </span>
-            </div>
-
-            {i < labels.length - 1 && (
-              <div
-                className={[
-                  "flex-1 h-px mt-4 mx-1",
-                  inWindow && i + 1 < window.end ? "" : "hidden sm:block",
-                ].join(" ")}
-                style={{
-                  background: isCompleted
-                    ? "var(--mantine-color-blue-6)"
-                    : "rgba(255,255,255,0.1)",
-                  transition: "background 0.3s ease",
-                }}
-              />
-            )}
-          </Fragment>
-        );
-      })}
+    <div className="flex flex-col gap-2">
+      <ol className="flex items-start">
+        {labels.map((label, i) => {
+          const state = i === current ? "active" : i < highest ? "done" : "todo";
+          const clickable = i <= highest && i !== current;
+          return (
+            <li key={label} className="flex flex-1 items-start last:flex-none">
+              <div className="flex flex-col items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => onStepClick(i)}
+                  disabled={!clickable}
+                  aria-current={i === current ? "step" : undefined}
+                  aria-label={`Step ${i + 1}: ${label}${state === "done" ? " (done)" : ""}`}
+                  className={[
+                    "flex size-9 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
+                    "disabled:cursor-default enabled:hover:scale-105",
+                    DOT[state],
+                  ].join(" ")}
+                >
+                  {state === "done" ? <IconCheck size={16} stroke={3} aria-hidden /> : i + 1}
+                </button>
+                <span
+                  className={`hidden whitespace-nowrap text-xs font-semibold sm:block ${
+                    state === "todo" ? "text-[var(--text-faint)]" : "text-[var(--text)]"
+                  }`}
+                >
+                  {label}
+                </span>
+              </div>
+              {i < labels.length - 1 && (
+                <span
+                  aria-hidden
+                  className={`mx-2 mt-[18px] h-0.5 flex-1 rounded ${
+                    i < highest ? "bg-[var(--accent)]" : "bg-[var(--divider)]"
+                  }`}
+                />
+              )}
+            </li>
+          );
+        })}
+      </ol>
+      <p className="text-sm font-semibold sm:hidden">
+        Step {current + 1} of {labels.length} · {labels[current]}
+      </p>
     </div>
   );
 }

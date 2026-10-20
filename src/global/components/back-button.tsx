@@ -1,56 +1,44 @@
-'use client';
+"use client";
 
-import { Button } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { Button } from "@mantine/core";
+import { IconArrowLeft } from "@tabler/icons-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export interface BackButtonProps {
   text?: string;
+  /** Where to go. Without it, goes back in history (or to fallbackHref). */
   href?: string;
   fallbackHref?: string;
   className?: string;
 }
 
-export function BackButton({ text = 'Go back', href, fallbackHref = '/', className }: BackButtonProps) {
+/**
+ * A "← Back" control. With `href` it renders a real link (Button styled,
+ * `component={Link}`), never a button inside a link, which is invalid HTML
+ * and announced twice by screen readers.
+ */
+export function BackButton({ text = "Back", href, fallbackHref = "/", className }: BackButtonProps) {
   const router = useRouter();
-
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push(fallbackHref);
-    }
-  };
+  const icon = <IconArrowLeft size={16} aria-hidden />;
 
   if (href) {
     return (
-      <Link href={href}>
-        <Button
-          variant="subtle"
-          leftSection={<IconArrowLeft size={16} />}
-          size="sm"
-          className={`${className ?? ""} mb-4`.trim()}
-        >
-          {text}
-        </Button>
-      </Link>
+      <Button component={Link} href={href} variant="subtle" color="dark" leftSection={icon} className={className}>
+        {text}
+      </Button>
     );
   }
 
   return (
     <Button
       variant="subtle"
-      leftSection={<IconArrowLeft size={16} />}
-      size="sm"
-      onClick={handleBack}
-      className={`${className ?? ""} mb-4`.trim()}
+      color="dark"
+      leftSection={icon}
+      className={className}
+      onClick={() => (window.history.length > 1 ? router.back() : router.push(fallbackHref))}
     >
       {text}
     </Button>
   );
 }
-
-
-
-
