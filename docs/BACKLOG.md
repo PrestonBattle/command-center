@@ -143,7 +143,7 @@ Keep items small: one PR each, under ~400 changed lines.
 - [x] **P6 · Money page** · `ready` · after P5
   This month's payments, collected vs expected bar, "Mark paid" action.
 
-- [ ] **P7 · Life vest page** · `ready` · after O4a
+- [x] **P7 · Life vest page** · `ready` · after O4a
   Coverage vs floor and what-if sliders using `calculateFloor`.
 
 - [ ] **P8 · Dashboard on real data** · `ready` · after P6, P7

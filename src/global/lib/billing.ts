@@ -51,6 +51,25 @@ export function monthlyRevenueCents(
     .reduce((sum, s) => sum + monthlyCents(s), 0);
 }
 
+/** Monthly revenue per billable client, biggest first. */
+export function revenueByClient(
+  clients: Pick<ClientRow, "id" | "name" | "status">[],
+  services: ClientServiceRow[],
+  onDate: string,
+): { id: string; name: string; monthlyCents: number }[] {
+  return clients
+    .filter((c) => BILLABLE_STATUSES.includes(c.status))
+    .map((c) => ({
+      id: c.id,
+      name: c.name,
+      monthlyCents: services
+        .filter((s) => s.client_id === c.id && isServiceActive(s, onDate))
+        .reduce((t, s) => t + monthlyCents(s), 0),
+    }))
+    .filter((c) => c.monthlyCents > 0)
+    .sort((a, b) => b.monthlyCents - a.monthlyCents);
+}
+
 /** Where a payment stands. */
 export type PaymentStatus = "paid" | "overdue" | "due" | "upcoming";
 

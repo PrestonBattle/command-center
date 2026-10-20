@@ -64,7 +64,8 @@ time, extract it instead. Known building blocks:
 - `global/lib/intervals.ts` — billing interval options and labels.
 - `global/lib/floor.ts` — `calculateFloorCents`, `floorBreakdown`, `sumExpenses`.
 - `global/lib/billing.ts` — `monthlyCents`, `dueDateInMonth`,
-  `monthlyRevenueCents`, `scheduleForMonth`, `scheduleTotals`.
+  `monthlyRevenueCents`, `revenueByClient`, `scheduleForMonth`, `scheduleTotals`.
+- `global/lib/payment-status.ts` — payment status labels and badge tones.
 - `global/lib/dates.ts` — "YYYY-MM-DD" helpers, month params, formatting.
 - `global/hooks/use-action-form.ts` — `useActionForm`: Mantine form + the
   action's zod schema + server errors + pending. Every form uses it.

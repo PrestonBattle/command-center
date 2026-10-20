@@ -212,3 +212,21 @@ as a button.
   would need a small "Record payment" dialog. Worth doing once it's real.
 - The bar's segment widths are inline `style` because they're computed
   values; that's the one place inline styles are right.
+
+---
+
+## 8. Life vest
+
+- **Coverage** (`/life-vest`): revenue as a % of the floor, a bar with a
+  dashed floor marker (scaled to 150% of the floor so being over still shows
+  headroom), the cushion or shortfall, and how much the biggest client is of
+  revenue. Until clients exist it uses the onboarding revenue estimate, and
+  says so.
+- **What if…**: lose a client (picked from your real clients), land new
+  work, personal costs up or down. Nothing saves; the result is announced
+  politely to screen readers as it changes. Logic is in
+  `_lib/what-if.ts` with tests.
+- **Editing costs** reuses `FloorForm` from onboarding with a different
+  action (`updateFloor`), which shares `saveFloorData` with onboarding.
+- **Look at:** the what-if ranges (up to $5,000 new work, −$1,000 to
+  +$2,000 personal) are guesses; tune them to your users.
