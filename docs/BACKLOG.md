@@ -104,7 +104,7 @@ Keep items small: one PR each, under ~400 changed lines.
   tax and estimated revenue, "Finish later" (`skipFloor`). Summary panel
   shows totals as the user types. Uses `calculateFloor` from O4a.
 
-- [ ] **O4a · Floor calculation** · `preston`
+- [x] **O4a · Floor calculation** · `preston` (drafted by Claude, review it)
   `global/lib/floor.ts`: `business + personal / (1 − taxRate)`, matching the
   SQL `org_floor_cents`, plus tests.
 
@@ -136,7 +136,7 @@ Keep items small: one PR each, under ~400 changed lines.
   Kanban by stage, move stage via action (keyboard-accessible move, not
   drag-only).
 
-- [ ] **P5 · Payment schedule** · `decision`
+- [x] **P5 · Payment schedule** · `decision` (computed on the fly; see REVIEW-NOTES §2)
   Generate expected `payments` rows ahead of time, or compute on the fly?
   Preston decides; then this becomes `preston` or `ready`.
 

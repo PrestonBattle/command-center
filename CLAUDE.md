@@ -62,6 +62,10 @@ time, extract it instead. Known building blocks:
   `Callout`, `FormActions`, `StatusBadge`, `Stat`, `EmptyState`.
 - `global/hooks/use-is-active.ts` — which nav link is current.
 - `global/lib/intervals.ts` — billing interval options and labels.
+- `global/lib/floor.ts` — `calculateFloorCents`, `floorBreakdown`, `sumExpenses`.
+- `global/lib/billing.ts` — `monthlyCents`, `dueDateInMonth`,
+  `monthlyRevenueCents`, `scheduleForMonth`, `scheduleTotals`.
+- `global/lib/dates.ts` — "YYYY-MM-DD" helpers, month params, formatting.
 - `useOnboardingForm` pattern — form + zod resolver + action + pending.
 - `global/lib/money.ts` — `dollarsToCents`, `centsToDollars`, `formatDollars`,
   `formatCents`. All money conversion and display.
@@ -140,9 +144,10 @@ time, extract it instead. Known building blocks:
 ```bash
 npm run lint
 npm run typecheck
+npm test
 ```
 
-Both must pass with no new warnings.
+All three must pass with no new warnings.
 
 ## Pull requests
 

@@ -9,6 +9,13 @@ type Protected = "id" | "org_id" | "created_at";
 export type Update<T> = Partial<Omit<T, Protected>>;
 
 /**
+ * What callers may set when creating a row. Like Update<T>, but `id` is
+ * allowed: pass your own (crypto.randomUUID()) when child rows need to point
+ * at a parent before the insert comes back.
+ */
+export type Insert<T> = Partial<Omit<T, "org_id" | "created_at">>;
+
+/**
  * Generic CRUD for any org-owned table (one with `id` and `org_id` columns).
  *
  * The table and org are fixed when the factory is built, so callers never
@@ -19,6 +26,11 @@ export type Update<T> = Partial<Omit<T, Protected>>;
  * `e.userMessage` to people, log `e.message`.
  */
 export function createCrud<T>(table: string, orgId: string, supabase: SupabaseClient) {
+  /** Stamps this org's id on a row. Callers can never choose the org. */
+  function withOrg(values: Insert<T>): Record<string, unknown> {
+    return { ...(values as Record<string, unknown>), org_id: orgId };
+  }
+
   /** Base query: this table, this org. Not executed until awaited. */
   function query() {
     return supabase.from(table).select("*").eq("org_id", orgId);
@@ -60,15 +72,40 @@ export function createCrud<T>(table: string, orgId: string, supabase: SupabaseCl
     },
 
     /** Create a row in this org. org_id is always set here, never by the caller. */
-    async insert(values: Update<T>): Promise<T> {
+    async insert(values: Insert<T>): Promise<T> {
       const { data, error } = await supabase
         .from(table)
-        .insert({ ...(values as Record<string, unknown>), org_id: orgId })
+        .insert(withOrg(values))
         .select()
         .single();
 
       if (error) throw toDbError(error, `insert ${table}`);
       return data as T;
+    },
+
+    /**
+     * Create many rows in one request. All or nothing. Don't rely on the
+     * returned order; set ids yourself if you need to match rows up.
+     */
+    async insertMany(values: Insert<T>[]): Promise<T[]> {
+      if (values.length === 0) return [];
+      const { data, error } = await supabase.from(table).insert(values.map(withOrg)).select();
+      if (error) throw toDbError(error, `insert ${table}`);
+      return data as T[];
+    },
+
+    /**
+     * Insert rows, or update the ones that already exist. `onConflict` names
+     * the columns of a unique index, e.g. "org_id,category". All or nothing.
+     */
+    async upsert(values: Insert<T>[], onConflict: string): Promise<T[]> {
+      if (values.length === 0) return [];
+      const { data, error } = await supabase
+        .from(table)
+        .upsert(values.map(withOrg), { onConflict })
+        .select();
+      if (error) throw toDbError(error, `upsert ${table}`);
+      return data as T[];
     },
 
     /** Delete one or more rows. Deleting a row that's already gone is not an error. */

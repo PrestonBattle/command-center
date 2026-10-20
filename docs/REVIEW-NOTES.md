@@ -43,3 +43,45 @@ rings, icons hidden from screen readers (the label says it). New
   layout, so it never needs to hide itself on /auth or /onboarding.
 - **Look at:** sign out isn't in the mobile tab bar (5 slots are full). It
   should live on a future Settings page.
+
+---
+
+## 2. Data layer and money logic
+
+**CRUD factory** (`data/crud.ts`). Added `insertMany` and `upsert`, plus an
+`Insert<T>` type that allows passing your own `id`. A private `withOrg()`
+stamps `org_id` on every row so callers can never pick the org.
+
+**Floor** (`lib/floor.ts`). `business + personal / (1 − taxRate)`, same as
+`org_floor_cents()` in SQL. Your backlog marked this as yours (O4a); I wrote
+it so the app works end to end. **Review it closely** and rewrite it if you
+want the practice; the tests in `floor.test.ts` will tell you if you broke it.
+
+**Payment schedule: decision made for you (P5), easy to reverse.**
+Expected payments are **computed on the fly** from `client_services`, never
+stored. Only "Mark paid" writes a `payments` row (keyed by service + due
+date, which the schema already makes unique). Why this way:
+- changing a service's amount or interval just works; there's nothing to
+  regenerate or clean up
+- no scheduled job needed to create next month's rows
+- "overdue" stays derived, per your rule about not storing derived values
+
+The trade-off: a one-off payment with no service won't appear in the
+schedule. If you want one-off invoices, add them as `payments` rows with
+`service_id = null` and list them alongside.
+
+**Billing rules** (`lib/billing.ts`). A service bills every
+`interval_months` counting from its start month, on `billing_day` or the
+start date's day; a day past month end falls on the last day (31 → Feb 28).
+Only `active` and `onboarding` clients count, matching the SQL.
+
+**Dates** (`lib/dates.ts`). Dates are "YYYY-MM-DD" strings, like Postgres
+`date` columns, to avoid timezone bugs.
+
+**Tests.** Added Vitest (`npm test`, also in CI) with 13 tests for floor,
+billing and money. These are the functions where a bug costs a user real
+money, so they're the ones worth testing first.
+
+**Schema** (`supabase/schema.sql`). The v1 schema plus the onboarding
+columns, in the repo so it's versioned with the code. **Run it on your
+Supabase project before using the app**, if you haven't already.
