@@ -1,4 +1,5 @@
 import { Panel } from "../../panel/panel";
+import { formatDollars as money } from "@/global/lib/money";
 import { WaterLineTank } from "./water-tank";
 
 type WaterLinePanelProps = {
@@ -159,12 +160,6 @@ function Stat({
   );
 }
 
-const money = (n: number) =>
-  n.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
 
 /**
  * Coverage as a date rather than a fraction. "71%" is abstract; "the money

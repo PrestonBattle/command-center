@@ -58,7 +58,11 @@ time, extract it instead. Known building blocks:
 - `global/components/inputs/*` — `MoneyInput`, `PercentInput`,
   `IntervalSelect`, … Never style a raw `<input>`.
 - `useOnboardingForm` pattern — form + zod resolver + action + pending.
-- `global/lib/money.ts` — all cents↔dollars and currency formatting.
+- `global/lib/money.ts` — `dollarsToCents`, `centsToDollars`, `formatDollars`,
+  `formatCents`. All money conversion and display.
+- `global/lib/action-result.ts` — `ActionResult`, `invalid()`, `toFieldErrors()`.
+- `global/lib/attempt.ts` — `attempt(label, work)`: the write step of every
+  action, turning `DbError`s into a friendly `formError`.
 - `getDataLayer()` — all reads and writes.
 
 ## Data and actions

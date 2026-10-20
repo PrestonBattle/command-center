@@ -43,7 +43,7 @@ Keep items small: one PR each, under ~400 changed lines.
   `StepHeader`, `FormSection`, `FieldGrid`, `Callout`, `FormActions`.
   Add each to `/dev`.
 
-- [ ] **F6 · Shared action plumbing** · `ready`
+- [x] **F6 · Shared action plumbing** · `ready`
   `global/lib/action-result.ts` (`ActionResult`, `toFieldErrors`,
   `attempt`). `global/lib/money.ts` (cents↔dollars, `formatMoney`).
   Update `onboarding/action.ts` to import them instead of defining its own.
