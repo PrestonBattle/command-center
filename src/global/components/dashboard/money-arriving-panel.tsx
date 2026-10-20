@@ -20,14 +20,14 @@ export function MoneyArrivingPanel({ style }: { style?: React.CSSProperties }) {
   return (
     <Panel plain style={style} className="flex flex-col">
       <div className="mb-3 flex items-baseline justify-between">
-        <p className="text-xs font-medium uppercase tracking-wider text-ink-subtle">
+        <p className="text-xs font-medium uppercase tracking-wider text-[var(--text-faint)]">
           Money arriving
         </p>
-        <p className="text-sm tabular-nums text-ink-muted">{money(total)}</p>
+        <p className="text-sm tabular-nums text-[var(--text-muted)]">{money(total)}</p>
       </div>
 
       {items.length === 0 ? (
-        <p className="py-4 text-sm text-ink-subtle">
+        <p className="py-4 text-sm text-[var(--text-faint)]">
           No billing dates recorded yet.
         </p>
       ) : (
@@ -38,16 +38,16 @@ export function MoneyArrivingPanel({ style }: { style?: React.CSSProperties }) {
               <li
                 key={item.id}
                 className="flex items-center justify-between gap-3 border-b
-                           border-paper-edge py-2.5 last:border-0"
+                           border-[var(--divider)] py-2.5 last:border-0"
               >
                 {/* Dimmed once the date has passed -- the distinction that
                     matters is what's still coming, not what's on the list. */}
                 <span
-                  className={`truncate text-sm ${passed ? "text-ink-subtle" : "text-ink"}`}
+                  className={`truncate text-sm ${passed ? "text-[var(--text-faint)]" : "text-[var(--text)]"}`}
                 >
                   {item.client}
                 </span>
-                <span className="shrink-0 text-sm tabular-nums text-ink-muted">
+                <span className="shrink-0 text-sm tabular-nums text-[var(--text-muted)]">
                   {ordinal(item.day)} · {money(item.amount)}
                 </span>
               </li>

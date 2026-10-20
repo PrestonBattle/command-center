@@ -13,20 +13,20 @@ export function PipelinePanel({ style }: { style?: React.CSSProperties }) {
 
   return (
     <Panel plain style={style} className="flex flex-col justify-center">
-      <p className="mb-2 text-xs font-medium uppercase tracking-wider text-ink-subtle">
+      <p className="mb-2 text-xs font-medium uppercase tracking-wider text-[var(--text-faint)]">
         Pipeline
       </p>
 
       {openLeads === 0 ? (
-        <p className="text-sm text-ink-subtle">
+        <p className="text-sm text-[var(--text-faint)]">
           No open leads. Nothing in flight to close the gap.
         </p>
       ) : (
         <>
-          <p className="text-2xl font-medium leading-tight text-ink">
+          <p className="text-2xl font-medium leading-tight text-[var(--text)]">
             {money(expected)}
           </p>
-          <p className="mt-1 text-sm text-ink-muted">
+          <p className="mt-1 text-sm text-[var(--text-muted)]">
             {openLeads} open leads at your {Math.round(closeRate * 100)}% close
             rate and {money(avgClientMrr)} average.
           </p>

@@ -23,23 +23,23 @@ type WaterLinePanelProps = {
 const STATE = {
   under: {
     label: "Underwater",
-    chip: "bg-negative/12 text-negative",
-    figure: "text-negative",
+    chip: "bg-[var(--bad)]/12 text-[var(--bad)]",
+    figure: "text-[var(--bad)]",
   },
   treading: {
     label: "Treading water",
-    chip: "bg-caution/12 text-caution",
-    figure: "text-caution",
+    chip: "bg-[var(--warn)]/12 text-[var(--warn)]",
+    figure: "text-[var(--warn)]",
   },
   afloat: {
     label: "Afloat",
-    chip: "bg-positive/12 text-positive",
-    figure: "text-ink",
+    chip: "bg-[var(--ok)]/12 text-[var(--ok)]",
+    figure: "text-[var(--text)]",
   },
   clear: {
     label: "Clear",
-    chip: "bg-positive/12 text-positive",
-    figure: "text-ink",
+    chip: "bg-[var(--ok)]/12 text-[var(--ok)]",
+    figure: "text-[var(--text)]",
   },
 } as const;
 
@@ -89,7 +89,7 @@ export function WaterLinePanel({
       <div>
 
         <div className="mb-3 flex items-center gap-2 justify-between">
-          <p className="mb-3 text-lg font-medium uppercase tracking-wider text-ink-subtle">
+          <p className="mb-3 text-lg font-medium uppercase tracking-wider text-[var(--text-faint)]">
             Snapshot
           </p>
 
@@ -99,8 +99,8 @@ export function WaterLinePanel({
           {money(Math.abs(gap))}{" "}
           <span className="text-3xl">{short ? "short" : "clear"}</span>
         </p>
-        <span className="text-xs text-ink-subtle">Floor · {money(floor)}</span>
-        <p className="mt-2 text-sm text-ink-muted">
+        <span className="text-xs text-[var(--text-faint)]">Floor · {money(floor)}</span>
+        <p className="mt-2 text-sm text-[var(--text-muted)]">
           Revenue is {money(revenue)} — {Math.round(coverage * 100)}% of what
           you need.
         </p>
@@ -124,8 +124,8 @@ export function WaterLinePanel({
         </div>
 
         {taxUncovered && (
-          <div className="mt-3 rounded-lg bg-caution/10 p-3">
-            <p className="text-sm text-ink">
+          <div className="mt-3 rounded-lg bg-[var(--warn)]/10 p-3">
+            <p className="text-sm text-[var(--text)]">
               You&apos;re paying yourself and running the business, but nothing
               is going aside for taxes.
             </p>
@@ -151,10 +151,10 @@ function Stat({
   hint: string;
 }) {
   return (
-    <div className="rounded-lg bg-paper-dim p-3">
-      <p className="text-xs text-ink-subtle">{label}</p>
-      <p className="mt-0.5 text-lg font-medium tabular-nums text-ink">{value}</p>
-      <p className="mt-0.5 truncate text-xs text-ink-subtle">{hint}</p>
+    <div className="rounded-lg bg-[var(--surface-inset)] p-3">
+      <p className="text-xs text-[var(--text-faint)]">{label}</p>
+      <p className="mt-0.5 text-lg font-medium tabular-nums text-[var(--text)]">{value}</p>
+      <p className="mt-0.5 truncate text-xs text-[var(--text-faint)]">{hint}</p>
     </div>
   );
 }

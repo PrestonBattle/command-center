@@ -1,17 +1,5 @@
 @layer components {
-  [data-mantine-color-scheme="light"] {
-    --glass-tint: #ffffff;
-    --glass-tint-amount: 8%;
-    --glass-gloss: rgb(255 255 255 / 0.28);
-    --glass-saturate: 170%;
-    --glass-edge: rgb(255 255 255 / 0.9);
-    --glass-shadow: 0 10px 40px -8px rgb(124 45 18 / 0.18), 0 2px 6px rgb(124 45 18 / 0.06);
-    --glass-ring: linear-gradient(160deg,
-      rgb(255 255 255 / 0.9),
-      rgb(255 255 255 / 0.25) 40%,
-      rgb(255 255 255 / 0.15) 70%,
-      rgb(255 255 255 / 0.6));
-  }
+  /* Glass variables (--glass-*) live in global/styles/globals.css. */
 
   .glass {
     position: relative;

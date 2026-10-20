@@ -61,7 +61,7 @@ export default function LoginPage() {
     <div className="flex min-h-dvh items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <header className="mb-8 text-center">
-          <Text size="sm" className="text-paper/70">
+          <Text size="sm" className="text-[var(--text-muted)]">
             Welcome back. Sign in to your command center.
           </Text>
         </header>
@@ -94,7 +94,6 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                color="purple.4"
                 size="lg"
                 fullWidth
                 mt="sm"
@@ -106,13 +105,13 @@ export default function LoginPage() {
           </form>
         </Panel>
 
-        <Text className="mt-6 text-center text-paper/70" size="sm">
+        <Text className="mt-6 text-center text-[var(--text-muted)]" size="sm">
           Don&apos;t have an account?{" "}
           <Anchor
             component={Link}
             href="/auth/signup"
             size="sm"
-            className="text-paper underline"
+            className="text-[var(--text)] underline"
           >
             Sign up
           </Anchor>

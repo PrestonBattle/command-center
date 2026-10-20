@@ -10,9 +10,9 @@ import { AttentionItem, getAttention, getTaxStatus, money } from "@/app/data";
 
 
 const SEVERITY = {
-  good: { bar: "bg-positive", icon: "text-positive" },
-  caution: { bar: "bg-caution", icon: "text-caution" },
-  urgent: { bar: "bg-negative", icon: "text-negative" },
+  good: { bar: "bg-[var(--ok)]", icon: "text-[var(--ok)]" },
+  caution: { bar: "bg-[var(--warn)]", icon: "text-[var(--warn)]" },
+  urgent: { bar: "bg-[var(--bad)]", icon: "text-[var(--bad)]" },
 } as const;
 
 /** Four rows: tax, then the three most urgent of everything else. */
@@ -53,14 +53,14 @@ export function NeedsAttentionPanel({ style }: { style?: React.CSSProperties }) 
   return (
     <Panel plain style={style} className="flex flex-col">
       <div className="mb-3 flex items-center justify-between">
-        <p className="text-xs font-medium uppercase tracking-wider text-ink-subtle">
+        <p className="text-xs font-medium uppercase tracking-wider text-[var(--text-faint)]">
           Needs attention
         </p>
         {hidden > 0 && (
           <Link
             href="/attention"
-            className="flex items-center gap-1 text-xs text-ink-muted
-                       transition-colors hover:text-ink"
+            className="flex items-center gap-1 text-xs text-[var(--text-muted)]
+                       transition-colors hover:text-[var(--text)]"
           >
             {hidden} more
             <IconArrowRight size={13} stroke={1.6} />
@@ -93,20 +93,20 @@ function Row({ item, isTax = false }: { item: AttentionItem; isTax?: boolean }) 
       <span className={`mt-1 h-4 w-0.5 shrink-0 rounded-full ${tone.bar}`} />
       <Icon size={16} stroke={1.6} className={`mt-0.5 shrink-0 ${tone.icon}`} />
       <div className="min-w-0">
-        <p className="text-sm text-ink">{item.title}</p>
+        <p className="text-sm text-[var(--text)]">{item.title}</p>
         {item.detail && (
-          <p className="mt-0.5 text-xs text-ink-subtle">{item.detail}</p>
+          <p className="mt-0.5 text-xs text-[var(--text-faint)]">{item.detail}</p>
         )}
       </div>
     </div>
   );
 
   return (
-    <li className="border-b border-paper-edge last:border-0">
+    <li className="border-b border-[var(--divider)] last:border-0">
       {item.href ? (
         <Link
           href={item.href}
-          className="-mx-2 block rounded-lg px-2 transition-colors hover:bg-paper-dim"
+          className="-mx-2 block rounded-lg px-2 transition-colors hover:bg-[var(--surface-inset)]"
         >
           {body}
         </Link>

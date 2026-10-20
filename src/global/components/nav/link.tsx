@@ -37,15 +37,15 @@ export function NavbarLink({
         "text-sm transition-colors",
         nested ? "pl-11" : "",
         active
-          ? "bg-purple-100 font-medium text-purple-900"
-          : "text-ink-muted hover:bg-purple-50 hover:text-ink",
+          ? "bg-[var(--accent)]/12 font-medium text-[var(--text)]"
+          : "text-[var(--text-muted)] hover:bg-[var(--accent)]/8 hover:text-[var(--text)]",
       ].join(" ")}
     >
       {leftSection && (
         <span
           className={[
             "shrink-0 transition-colors",
-            active ? "text-purple-700" : "text-ink-subtle group-hover:text-ink",
+            active ? "text-[var(--accent)]" : "text-[var(--text-faint)] group-hover:text-[var(--text)]",
           ].join(" ")}
         >
           {leftSection}
@@ -60,8 +60,8 @@ export function NavbarLink({
           className={[
             "shrink-0 rounded-md px-1.5 py-0.5 text-xs tabular-nums",
             active
-              ? "bg-purple-200 text-purple-900"
-              : "bg-purple-50 text-ink-subtle",
+              ? "bg-[var(--accent)]/20 text-[var(--text)]"
+              : "bg-[var(--accent)]/8 text-[var(--text-faint)]",
           ].join(" ")}
         >
           {count}

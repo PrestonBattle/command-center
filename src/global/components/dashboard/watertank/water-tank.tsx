@@ -18,15 +18,15 @@ export function WaterLineTank({ coverage }: WaterLineTankProps) {
 
   return (
     <div className="relative h-full w-full" aria-hidden>
-      <div className="absolute inset-0 overflow-hidden rounded-full bg-paper-dim">
+      <div className="absolute inset-0 overflow-hidden rounded-full bg-[var(--surface-inset)]">
         <div
-          className="absolute inset-x-0 bottom-0 bg-purple-700 transition-[height] duration-500"
+          className="absolute inset-x-0 bottom-0 bg-[var(--accent)] transition-[height] duration-500"
           style={{ height: `${belowLine}%` }}
         />
         {/* Only renders when clear. Purple is money doing a job; teal is
             money that's free. */}
         <div
-          className="absolute inset-x-0 bg-positive transition-[height] duration-500"
+          className="absolute inset-x-0 bg-[var(--ok)] transition-[height] duration-500"
           style={{ bottom: `${LINE_AT}%`, height: `${aboveLine}%` }}
         />
       </div>
@@ -34,7 +34,7 @@ export function WaterLineTank({ coverage }: WaterLineTankProps) {
       {/* Overhangs both edges so it reads as a threshold drawn across the
           strip, not a band inside it. */}
       <div
-        className="absolute -inset-x-1 h-0.5 bg-ink"
+        className="absolute -inset-x-1 h-0.5 bg-[var(--text)]"
         style={{ bottom: `${LINE_AT}%` }}
       />
     </div>
