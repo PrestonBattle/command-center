@@ -14,10 +14,10 @@ type PanelProps = ComponentPropsWithoutRef<"div"> & {
 };
 
 const TONE_RULE = {
-  neutral: "before:bg-purple-300/55",
-  positive: "before:bg-positive/70",
-  caution: "before:bg-caution/70",
-  negative: "before:bg-negative/70",
+  neutral: "before:bg-[var(--accent)]/30",
+  positive: "before:bg-[var(--ok)]/70",
+  caution: "before:bg-[var(--warn)]/70",
+  negative: "before:bg-[var(--bad)]/70",
 } as const;
 
 /**
@@ -28,7 +28,7 @@ const TONE_RULE = {
  * the background. Opaque paper reads as a record with weight, which is
  * what this app is actually about.
  *
- * The signature is the hairline purple rule inset from the left edge -- a
+ * The signature is the hairline accent rule inset from the left edge -- a
  * margin rule, like a ledger or an index card. It's a pseudo-element so
  * padding changes on the panel can't knock it out of alignment.
  */
@@ -54,8 +54,8 @@ export function Panel({
   return (
     <div
       className={[
-        "relative rounded-panel border border-purple-800/20",
-        "bg-paper text-ink p-6",
+        "relative rounded-panel border border-[var(--divider)]",
+        "bg-[var(--surface)] text-[var(--text)] p-6",
         rule,
         // className last so callers can override -- later utilities win.
         className,

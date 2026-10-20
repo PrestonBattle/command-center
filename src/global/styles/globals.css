@@ -2,7 +2,60 @@
 @import '@mantine/core/styles.css';
 
 
-:root {}
+:root {
+  /*
+   * Sunset theme. Every color in a component comes from one of these.
+   * Text shades are dark warm browns, not grey: grey on orange glass reads
+   * dirty. Each text shade holds 4.5:1 on the warmest blob behind light
+   * glass (~#fdba74); --text-muted holds it even on the hottest spot.
+   */
+  --text: #431407;
+  --text-muted: #6c2b12;
+  --text-faint: #7a3519;
+
+  /* Icons, active nav, focus. Darker than Mantine orange-9 so it still
+     clears 3:1 as a UI edge on the orange parts of the background. */
+  --accent: #9a3412;
+
+  /* Status colors carry meaning (paid / at risk / overdue). Not decoration. */
+  --ok: #166534;
+  --warn: #92400e;
+  --bad: #991b1b;
+
+  /* Inputs. The border is opaque so the field edge clears 3:1 on glass. */
+  --field-bg: rgb(255 255 255 / 0.6);
+  --field-bg-hover: rgb(255 255 255 / 0.75);
+  --field-border: #b4693f;
+
+  /* Surfaces inside cards: hairline dividers, inset tiles, and the opaque
+     paper still used by Panel and the navbar until they move to Glass. */
+  --divider: rgb(124 45 18 / 0.15);
+  --surface: #fffaf5;
+  --surface-inset: rgb(255 255 255 / 0.45);
+
+  /* Glass. Consumed by global/components/glass/style.css. */
+  --glass-tint: #ffffff;
+  --glass-tint-amount: 8%;
+  --glass-gloss: rgb(255 255 255 / 0.28);
+  --glass-saturate: 170%;
+  --glass-edge: rgb(255 255 255 / 0.9);
+  --glass-shadow: 0 10px 40px -8px rgb(124 45 18 / 0.18), 0 2px 6px rgb(124 45 18 / 0.06);
+  --glass-ring: linear-gradient(160deg,
+      rgb(255 255 255 / 0.9),
+      rgb(255 255 255 / 0.25) 40%,
+      rgb(255 255 255 / 0.15) 70%,
+      rgb(255 255 255 / 0.6));
+
+  /* The blurred blobs behind everything (see Background). */
+  --sunset-base: #fff3ec;
+  --sunset-peach: #fdba74;
+  --sunset-pink: #f9a8d4;
+  --sunset-orange: #fb923c;
+  --sunset-rose: #fecaca;
+  --sunset-gold: #fde68a;
+  --sunset-shine: rgb(255 255 255 / 0.5);
+  --sunset-shine-soft: rgb(255 255 255 / 0.3);
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -12,34 +65,6 @@
 }
 
 @theme {
-  --color-purple-50: #f1f1ff;
-  --color-purple-100: #e0dff2;
-  --color-purple-200: #bfbdde;
-  --color-purple-300: #9b98ca;
-  --color-purple-400: #7d79b9;
-  --color-purple-500: #6a66af;
-  --color-purple-600: #605cac;
-  --color-purple-700: #504c97;
-  --color-purple-800: #464388;
-  --color-purple-900: #3b3979;
-
-  --color-brass-300: #E3C078;
-  --color-brass-400: #D4A857;
-  --color-brass-500: #C08F3C;
-  --color-brass-600: #A8762B;
-
-  --color-paper: #FAF7F0;
-  --color-paper-dim: #F1EDE2;
-  --color-paper-edge: #E3DED0;
-
-  --color-ink: #24223F;
-  --color-ink-muted: #5D5B7A;
-  --color-ink-subtle: #85839C;
-
-  --color-negative: #B34A48;
-  --color-caution: #B07A2B;
-  --color-positive: #2E7D6B;
-
   --radius-panel: 14px;
 }
 
@@ -56,16 +81,5 @@ body {
   overflow-y: auto;
   position: relative;
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(336deg, rgba(125, 121, 185, 1) 45%, rgba(96, 92, 172, 1) 78%, rgba(70, 67, 136, 1) 95%) !important;
-  background-size: 300% 300% !important;
-}
-
-@keyframes rotate {
-  from {
-    background-position: 0% 100%;
-  }
-
-  to {
-    background-position: 100% 0%;
-  }
+  background: var(--sunset-base);
 }

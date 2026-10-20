@@ -2,22 +2,13 @@
 
 import { createTheme } from "@mantine/core";
 
+/**
+ * Mantine theme for the Sunset look. Mantine's built-in orange is the
+ * primary; shade 9 is the darkest, so filled buttons keep their white label
+ * readable. Every other color comes from the CSS variables in globals.css.
+ */
 export const theme = createTheme({
-  primaryColor: "purple",
+  primaryColor: "orange",
+  primaryShade: 9,
   defaultRadius: "md",
-
-  colors: {
-    purple: [
-      "#f1f1ff",
-      "#e0dff2",
-      "#bfbdde",
-      "#9b98ca",
-      "#7d79b9",
-      "#6a66af",
-      "#605cac",
-      "#504c97",
-      "#464388",
-      "#3b3979"
-    ]
-  }
-})
+});

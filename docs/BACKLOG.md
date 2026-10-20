@@ -17,7 +17,7 @@ Keep items small: one PR each, under ~400 changed lines.
 
 ## Foundations
 
-- [ ] **F1 · Theme variables** · `ready`
+- [x] **F1 · Theme variables** · `ready`
   Add the Sunset CSS variables to `globals.css` (`--text`, `--text-muted`,
   `--text-faint`, `--accent`, `--ok`, `--warn`, `--bad`, `--field-bg`,
   `--field-bg-hover`, `--field-border`, `--glass-*`). Mantine theme:

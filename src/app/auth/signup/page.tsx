@@ -78,7 +78,7 @@ export default function SignUpPage() {
         <header className="mb-8 text-center">
           <Text
             size="sm"
-            className="uppercase tracking-[0.18em] text-paper/70"
+            className="uppercase tracking-[0.18em] text-[var(--text-muted)]"
           >
             Ready to take command of your business? signup now
           </Text>
@@ -148,7 +148,7 @@ export default function SignUpPage() {
                 {...form.getInputProps("confirmPassword")}
               />
 
-              <Button type="submit" color="purple.4" fullWidth mt="sm" loading={isPending}>
+              <Button type="submit" fullWidth mt="sm" loading={isPending}>
                 Create account
               </Button>
             </Stack>
@@ -156,13 +156,13 @@ export default function SignUpPage() {
           
         </Panel>
 
-        <Text className="mt-6 text-center text-paper/70" size="sm">
+        <Text className="mt-6 text-center text-[var(--text-muted)]" size="sm">
           Already have an account?{" "}
           <Anchor
             component={Link}
             href="/auth/login"
             size="sm"
-            className="text-paper underline"
+            className="text-[var(--text)] underline"
           >
             Log in
           </Anchor>

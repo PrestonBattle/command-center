@@ -15,8 +15,8 @@ const PAYMENTS = [
 ];
 
 const STATUS_STYLE: Record<string, string> = {
-  Paid: "bg-[#047857]/10 text-[#047857]",
-  Overdue: "bg-[#b91c1c]/10 text-[#b91c1c]",
+  Paid: "bg-[var(--ok)]/10 text-[var(--ok)]",
+  Overdue: "bg-[var(--bad)]/10 text-[var(--bad)]",
   Expected: "bg-white/50 text-[var(--text-muted)]",
 };
 
