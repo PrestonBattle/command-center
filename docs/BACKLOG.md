@@ -79,7 +79,7 @@ Keep items small: one PR each, under ~400 changed lines.
   `parse-csv.ts`; nav "Campaigns" label matches the Sources page decision;
   `onboarding/utils/` → `onboarding/_lib/`.
 
-- [ ] **C4 · README** · `ready`
+- [x] **C4 · README** · `ready`
   Replace the create-next-app README: what the app is, setup, env vars
   needed (names only), scripts, folder map (link to `CLAUDE.md`).
 

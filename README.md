@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Command Center
 
-## Getting Started
+A subscription app for one-person businesses. It replaces scattered folders and
+spreadsheets with one place for clients, money coming in, leads, and the
+**Life Vest**: the monthly revenue the owner needs to cover their life, their
+business and their taxes, and how close they are to it.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, Turbopack) and **React 19**
+- **TypeScript**, strict
+- **Mantine 9** components, **Tailwind 4** utilities
+- **Supabase**: Postgres with row-level security, and auth
+- **zod 4** for validation, shared by forms and server actions
+
+## Getting started
 
 ```bash
+npm install
+# create .env.local with the variables below
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Name | What it is |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon (public) key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service-role key. Server only; never expose it to the browser |
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command | Does |
+|---|---|
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript, no output |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+CI runs `lint` and `typecheck` on every pull request.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project layout
 
-## Deploy on Vercel
+```
+src/
+  app/            routes: (app) signed-in pages, onboarding, auth, dev showcase
+  global/
+    components/   shared UI (Glass, inputs, nav, …)
+    data/         data layer: the only code that talks to Supabase
+    lib/          pure helpers (money, action results, …)
+    types/        database row types
+    styles/       globals, theme, CSS modules
+  proxy.ts        auth middleware
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The full conventions (file size, server actions, hooks, styling, accessibility)
+are in [CLAUDE.md](./CLAUDE.md). Read it before contributing; the same rules
+apply to people and to the backlog bot.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## How work flows
+
+- `dev` is the integration branch. Feature branches merge into it by PR.
+- `bot/dev` is where the backlog bot works. It opens one small PR per item in
+  [docs/BACKLOG.md](./docs/BACKLOG.md); those merge into `bot/dev`, and
+  `bot/dev` merges into `dev` when a batch is ready.
+
+## Money
+
+All amounts are stored as **integer cents**. People type dollars; the zod
+schemas convert. Values that can be calculated (the floor, monthly revenue,
+overdue status) are never stored, so they can't go stale.
