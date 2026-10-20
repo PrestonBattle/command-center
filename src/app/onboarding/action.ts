@@ -1,51 +1,33 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import type { z } from "zod";
-import { DbError, getDataLayer } from "@/global/data";
+import { getDataLayer } from "@/global/data";
+import { invalid, type ActionResult } from "@/global/lib/action-result";
+import { attempt } from "@/global/lib/attempt";
 import { ONBOARDING_STEPS } from "./utils/constants";
 import { businessSchema } from "./utils/schema";
 
-export type ActionResult =
-  | { ok: true }
-  | { ok: false; formError?: string; fieldErrors?: Record<string, string> };
+/*
+ * Onboarding server actions. Each one: validate → load the data layer →
+ * write inside attempt() → redirect to the next step (outside attempt,
+ * because redirect works by throwing).
+ */
 
-/* ---------- helpers (not exported: "use server" files only export async functions) ---------- */
-
-/** Zod issues → { "name": "Required", "expenses.housing": "..." }, first message per field. */
-function toFieldErrors(error: z.ZodError): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const issue of error.issues) {
-    const key = issue.path.join(".");
-    out[key] ??= issue.message;
-  }
-  return out;
-}
-
-/** URL for a step number, from the constants list. */
+/** URL for a step number. Steps are fixed in ONBOARDING_STEPS, so a miss is a bug. */
 function pathForStep(step: number): string {
-  return ONBOARDING_STEPS.find((s) => s.step === step)!.path;
+  const match = ONBOARDING_STEPS.find((s) => s.step === step);
+  if (!match) throw new Error(`No onboarding step ${step}`);
+  return match.path;
 }
 
-/* ---------- step 1: business ---------- */
-
+/** Step 1: save the business name, type and timezone. */
 export async function saveBusiness(input: unknown): Promise<ActionResult> {
-  // 1. validate
   const parsed = businessSchema.safeParse(input);
-  if (!parsed.success) {
-    return {
-      ok: false,
-      formError: "Please check the highlighted fields.",
-      fieldErrors: toFieldErrors(parsed.error),
-    };
-  }
+  if (!parsed.success) return invalid(parsed.error);
   const { name, business_type, timezone } = parsed.data;
 
-  // 2. load
   const dl = await getDataLayer();
-
-  // 3. write
-  try {
+  const failed = await attempt("onboarding:business", async () => {
     const org = await dl.org.get();
     await dl.org.update({
       name,
@@ -54,15 +36,8 @@ export async function saveBusiness(input: unknown): Promise<ActionResult> {
       // Only move forward: editing step 1 later shouldn't reset progress.
       onboarding_step: Math.max(org.onboarding_step, 2),
     });
-  } catch (e) {
-    if (e instanceof DbError) {
-      console.error("[onboarding:business]", e.message); // full detail, for you
-      return { ok: false, formError: e.userMessage };   // friendly, for them
-    }
-    console.error("[onboarding:business]", e);
-    return { ok: false, formError: "Something went wrong. Try again." };
-  }
+  });
+  if (failed) return failed;
 
-  // 4. advance: outside try/catch, because redirect() throws to navigate
   redirect(pathForStep(2));
 }

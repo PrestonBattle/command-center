@@ -103,9 +103,5 @@ export function getAttention(): AttentionItem[] {
   ];
 }
 
-export const money = (n: number) =>
-  n.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
+/** Re-exported so existing sample-data callers keep working until they move to global/lib/money. */
+export { formatDollars as money } from "@/global/lib/money";
