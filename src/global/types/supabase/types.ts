@@ -28,6 +28,8 @@ export interface OrgRow {
   onboarding_step: number;
   /** Null until onboarding is finished. */
   onboarding_completed_at: string | null;
+  /** Monthly revenue they reported at onboarding, in cents. Used until real clients exist. */
+  estimated_revenue_cents: number | null;
 }
 
 /** The person who logs in. `id` is their auth.users id. */
@@ -50,6 +52,8 @@ export interface ExpenseRow {
   org_id: string;
   created_at: string;
   scope: ExpenseScope;
+  /** Onboarding category key ("housing", "software", …). Null = custom expense. */
+  category: string | null;
   label: string;
   amount_cents: number;
 }

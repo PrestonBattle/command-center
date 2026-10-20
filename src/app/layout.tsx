@@ -28,7 +28,7 @@ export default function RootLayout({
           <Notifications />
           <Background />
           <div className="relative z-10 flex gap-3 p-3 sm:p-4">
-            <Navbar />
+            {/* <Navbar /> */}
             <main className="flex-1">
               {children}
             </main>
