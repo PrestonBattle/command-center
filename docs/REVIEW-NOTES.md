@@ -1,7 +1,44 @@
 # Review notes
 
-What was built on `bot/dev` in one pass, why, and what to look at. Read top
-to bottom alongside the commits; each section matches one commit.
+What was built on `bot/dev` in one pass, why, and what to look at. Each
+numbered section matches one commit.
+
+## Start here
+
+1. **Run the schema.** `supabase/schema.sql` on your Supabase project (skip
+   if you already ran the v1 schema and the onboarding additions).
+2. **Install and run.** `npm install`, then `npm run dev`. New packages:
+   `papaparse` (CSV import) and `vitest` (tests).
+3. **Walk the flow.** Sign up → onboarding (business, floor, clients, done)
+   → dashboard → Clients → Leads → Money → Life vest.
+4. **See every shared component** at `/dev/components` (dev only, no login).
+5. **Checks:** `npm run lint`, `npm run typecheck`, `npm test` (21 tests).
+   All pass, and `next build` compiles all 17 routes.
+
+### What I could and couldn't verify
+
+- **Verified:** types, lint, unit tests, a production build, and the
+  `/dev/components` page rendered at desktop and phone width.
+- **Not verified:** the signed-in pages against a real database. My
+  environment has no access to your Supabase project, so I couldn't click
+  through onboarding, add a client or mark a payment paid. **Expect a few
+  rough edges on your first run** and tell me what breaks.
+
+### Decisions I made that are yours to overrule
+
+- **Payments are computed, not stored** until marked paid (§2).
+- **Floor calculation written by me** (§2, backlog O4a). Review it.
+- **Lead moves use a select, not drag-and-drop** (§6), for accessibility.
+- **Campaigns and Settings removed from the nav** until those pages exist (§1).
+
+### Known gaps, roughly in priority order
+
+1. Editing a client's name or a service's amount (only add/end/delete now).
+2. Recording a payment with a different amount or date than expected.
+3. Settings page (profile, business details, sign out on mobile, themes).
+4. Login and signup still use the old paper `Panel` (backlog C2).
+5. Sources: no UI to pick where a lead came from.
+6. A "Record payment" for one-off invoices with no service.
 
 ---
 
@@ -251,3 +288,14 @@ as a button.
   (money arriving, needs attention, pipeline) it fed.
 - **Still on paper `Panel`:** the login and signup pages. They're auth
   files, so I left them; moving them to Glass is a quick follow-up (C2).
+
+---
+
+## 10. Dev showcase and checks
+
+- **`/dev/components`**: every shared piece with sample data, including a
+  working `FloorForm` with a fake save. The `/dev` index moved off white
+  text (invisible on Sunset) to the shared components.
+- **README** lists `npm test` and points to the schema.
+- The production build was checked with a stubbed font file, because my
+  environment can't reach Google Fonts. Your machine can, so nothing to do.

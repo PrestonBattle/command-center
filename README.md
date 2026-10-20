@@ -23,6 +23,8 @@ npm run dev
 
 Open http://localhost:3000.
 
+Before first use, run [`supabase/schema.sql`](./supabase/schema.sql) in your Supabase project's SQL editor.
+
 ### Environment variables
 
 | Name | What it is |
@@ -40,8 +42,9 @@ Open http://localhost:3000.
 | `npm run start` | Serve the production build |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript, no output |
+| `npm test` | Unit tests (money, billing, floor, CSV mapping) |
 
-CI runs `lint` and `typecheck` on every pull request.
+CI runs `lint`, `typecheck` and `test` on every pull request.
 
 ## Project layout
 
