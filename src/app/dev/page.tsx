@@ -4,13 +4,17 @@ import Glass from "@/global/components/glass/glass";
 import { Text, Title } from "@mantine/core";
 import Link from "next/link";
 
-interface showcase_card {
-  href: string, //link to dev page - create corresponding folders for componet example: dev/table
-  title: string, //title of your feature testing - example: table component
-  description: string, //description of your feature - example: a new table component that displays table information
-}
+/** One tile on the dev index, linking to a component's showcase page. */
+type ShowcaseCard = {
+  /** Route of the showcase page, e.g. "dev/table" (create the folder to match). */
+  href: string;
+  /** What's being shown off, e.g. "Table component". */
+  title: string;
+  /** One line on what the component does. */
+  description: string;
+};
 
-const SHOWCASE_CARDS = [
+const SHOWCASE_CARDS: ShowcaseCard[] = [
   {
     href: "dev/panel",
     title: "Glass Panel",

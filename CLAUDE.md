@@ -130,7 +130,7 @@ time, extract it instead. Known building blocks:
 
 ```bash
 npm run lint
-npx tsc --noEmit
+npm run typecheck
 ```
 
 Both must pass with no new warnings.

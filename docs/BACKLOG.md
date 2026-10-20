@@ -55,7 +55,7 @@ Keep items small: one PR each, under ~400 changed lines.
 - [ ] **F8 · Mobile navigation** · `ready` · after F7
   Bottom tab bar below `sm` using the same `APPCONFIG.navbar` items.
 
-- [ ] **F9 · CI and scripts** · `ready`
+- [x] **F9 · CI and scripts** · `ready`
   Add `"typecheck": "tsc --noEmit"` to `package.json` scripts. Fix existing
   lint warnings (unused imports). `.github/workflows/ci.yml` runs lint and
   typecheck on PRs.
