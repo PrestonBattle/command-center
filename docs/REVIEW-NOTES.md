@@ -85,3 +85,22 @@ money, so they're the ones worth testing first.
 **Schema** (`supabase/schema.sql`). The v1 schema plus the onboarding
 columns, in the repo so it's versioned with the code. **Run it on your
 Supabase project before using the app**, if you haven't already.
+
+---
+
+## 3. App shell
+
+**Root layout** now holds only providers, fonts and the background.
+**`(app)/layout.tsx`** is the gate for the signed-in app: if the org hasn't
+finished onboarding, it redirects to `/onboarding`. It renders the sidebar,
+the mobile tab bar and `<main id="main">`. The old `app/page.tsx` is gone;
+the dashboard is `(app)/page.tsx`.
+
+**`getCurrentOrg()`** (`data/index.ts`) wraps the org fetch in React
+`cache()`, so the layout and the page share one query per request.
+
+**Skip link.** The first Tab on any app page shows "Skip to content", which
+jumps past the nav. Standard accessibility, invisible otherwise.
+
+**`/dev`.** You'd already added the dev-only exception in the middleware.
+`dev/layout.tsx` adds `notFound()` in production as a second lock.

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/app/supabase/server";
@@ -64,6 +65,15 @@ export async function getDataLayer() {
   const supabase = await createClient();
   return { member, ...createDataLayer(supabase, member.org_id, member.id) };
 }
+
+/**
+ * The signed-in user's org, fetched once per request. The (app) layout and
+ * the page both need it; cache() means only the first call hits the database.
+ */
+export const getCurrentOrg = cache(async () => {
+  const dl = await getDataLayer();
+  return dl.org.get();
+});
 
 /** Re-exported so callers can `import { DbError } from "@/global/data"`. */
 export { DbError } from "./errors";

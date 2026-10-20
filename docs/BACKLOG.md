@@ -60,7 +60,7 @@ Keep items small: one PR each, under ~400 changed lines.
   lint warnings (unused imports). `.github/workflows/ci.yml` runs lint and
   typecheck on PRs.
 
-- [ ] **F10 · `/dev` route** · `preston`
+- [x] **F10 · `/dev` route** · `preston`
   Dev-only exception in the proxy plus `dev/layout.tsx` with `notFound()` in
   production. (Touches auth middleware.)
 
@@ -85,7 +85,7 @@ Keep items small: one PR each, under ~400 changed lines.
 
 ## Onboarding
 
-- [ ] **O1 · App route group** · `ready` · after F7
+- [x] **O1 · App route group** · `ready` · after F7
   Move the dashboard into `app/(app)/page.tsx`. `(app)/layout.tsx`:
   `getDataLayer()` → org; redirect to `/onboarding` if not finished; render
   Navbar + `<main>`. Root layout keeps only providers and background.
