@@ -1,4 +1,5 @@
-import { Panel } from "../../panel/panel";
+import Glass from "@/global/components/glass/glass";
+import { calculateFloorCents } from "@/global/lib/floor";
 import { formatDollars as money } from "@/global/lib/money";
 import { WaterLineTank } from "./water-tank";
 
@@ -53,11 +54,10 @@ export function WaterLinePanel({
   topClientMrr,
   style,
 }: WaterLinePanelProps) {
-  // Business expenses are deductible, your personal draw isn't — so to keep
-  // `personal` after tax the business must earn personal / (1 - rate) on top
-  // of covering `business`. Applying the rate to the sum under-reserves.
-  const rate = taxRate / 100;
-  const floor = business + personal / (1 - rate);
+  // The floor formula lives in one place (global/lib/floor.ts); this panel
+  // works in dollars, so convert in and out.
+  const floor =
+    calculateFloorCents({ personalCents: personal * 100, businessCents: business * 100, taxRate: taxRate / 100 }) / 100;
 
   const gap = floor - revenue;
   const coverage = floor > 0 ? revenue / floor : 0;
@@ -80,23 +80,22 @@ export function WaterLinePanel({
   const taxUncovered = revenue >= personal + business && revenue < floor;
 
   return (
-    <Panel
-      plain
+    <Glass
       style={style}
-      className="grid grid-cols-[14px_minmax(0,1fr)] gap-5"
+      className="grid grid-cols-[14px_minmax(0,1fr)] gap-5 rounded-3xl p-6"
     >
       <WaterLineTank coverage={coverage} />
 
       <div>
 
-        <div className="mb-3 flex items-center gap-2 justify-between">
-          <p className="mb-3 text-lg font-medium uppercase tracking-wider text-[var(--text-faint)]">
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">
             Snapshot
-          </p>
-
+          </h2>
+          <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${state.chip}`}>{state.label}</span>
         </div>
 
-        <p className={`text-4xl font-medium leading-none ${state.figure}`}>
+        <p className={`font-display text-4xl font-bold leading-none tabular-nums ${state.figure}`}>
           {money(Math.abs(gap))}{" "}
           <span className="text-3xl">{short ? "short" : "clear"}</span>
         </p>
@@ -138,7 +137,7 @@ export function WaterLinePanel({
             five. */}
 
       </div>
-    </Panel>
+    </Glass>
   );
 }
 

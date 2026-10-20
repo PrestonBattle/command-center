@@ -5,7 +5,7 @@ import { loadBusiness } from "../_lib/load-business";
 import { CollectionBar } from "./_components/collection-bar";
 import { MonthNav } from "./_components/month-nav";
 import { PaymentsTable } from "./_components/payments-table";
-import { earlierOverdue } from "./_lib/earlier-overdue";
+import { earlierOverdue } from "../_lib/earlier-overdue";
 
 type Props = { searchParams: Promise<{ month?: string }> };
 

@@ -9,7 +9,7 @@ import { useActionButton } from "@/global/hooks/use-action-button";
 import { formatCents } from "@/global/lib/money";
 import type { LeadRow } from "@/global/types/supabase/types";
 import { convertLead, deleteLead, moveLead } from "../actions";
-import { LEAD_STAGES } from "../_lib/stages";
+import { LEAD_STAGES } from "@/global/lib/lead-stages";
 
 type Props = { lead: LeadRow; days: number; stale: boolean };
 

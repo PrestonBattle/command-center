@@ -1,5 +1,5 @@
 import type { LeadRow } from "@/global/types/supabase/types";
-import { daysInStage, isStale } from "../_lib/stages";
+import { daysInStage, isStale } from "@/global/lib/lead-stages";
 import { LeadCard } from "./lead-card";
 
 type Props = { title: string; leads: LeadRow[]; today: string };

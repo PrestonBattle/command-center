@@ -4,7 +4,7 @@ import { todayIso } from "@/global/lib/dates";
 import { formatCents } from "@/global/lib/money";
 import { AddLeadButton } from "./_components/add-lead-button";
 import { LeadColumn } from "./_components/lead-column";
-import { LEAD_STAGES, OPEN_STAGES } from "./_lib/stages";
+import { LEAD_STAGES, OPEN_STAGES } from "@/global/lib/lead-stages";
 
 /** The pipeline: one column per stage, oldest-moved first so stale leads surface. */
 export default async function LeadsPage() {

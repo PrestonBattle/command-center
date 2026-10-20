@@ -66,7 +66,7 @@ Keep items small: one PR each, under ~400 changed lines.
 
 ## Cleanup
 
-- [ ] **C1 · Dashboard layout** · `ready` · after F2
+- [x] **C1 · Dashboard layout** · `ready` · after F2
   Replace the inline `<style>` grid in `app/page.tsx` with Tailwind grid
   classes. Move `SAMPLE` data into `_lib/sample.ts`.
 
@@ -146,5 +146,5 @@ Keep items small: one PR each, under ~400 changed lines.
 - [x] **P7 · Life vest page** · `ready` · after O4a
   Coverage vs floor and what-if sliders using `calculateFloor`.
 
-- [ ] **P8 · Dashboard on real data** · `ready` · after P6, P7
+- [x] **P8 · Dashboard on real data** · `ready` · after P6, P7
   Replace sample data with data-layer queries.

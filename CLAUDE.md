@@ -66,6 +66,8 @@ time, extract it instead. Known building blocks:
 - `global/lib/billing.ts` — `monthlyCents`, `dueDateInMonth`,
   `monthlyRevenueCents`, `revenueByClient`, `scheduleForMonth`, `scheduleTotals`.
 - `global/lib/payment-status.ts` — payment status labels and badge tones.
+- `global/lib/lead-stages.ts` — stages, open stages, `daysInStage`, `isStale`.
+- `app/(app)/_lib/earlier-overdue.ts` — unpaid payments from recent months.
 - `global/lib/dates.ts` — "YYYY-MM-DD" helpers, month params, formatting.
 - `global/hooks/use-action-form.ts` — `useActionForm`: Mantine form + the
   action's zod schema + server errors + pending. Every form uses it.

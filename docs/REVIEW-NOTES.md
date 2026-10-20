@@ -230,3 +230,24 @@ as a button.
   action (`updateFloor`), which shares `saveFloorData` with onboarding.
 - **Look at:** the what-if ranges (up to $5,000 new work, −$1,000 to
   +$2,000 personal) are guesses; tune them to your users.
+
+---
+
+## 9. Dashboard
+
+- **`/`** now runs on real data: greeting by the org's local time, three
+  tiles (collected this month, overdue with a link to chase, pipeline),
+  your **WaterLinePanel**, a "Needs attention" list and this month's
+  unpaid payments.
+- **WaterLinePanel kept, two changes.** It sits on `Glass` instead of the
+  paper `Panel`, and it calls `calculateFloorCents` instead of repeating
+  the formula. I also rendered the state chip ("Underwater", "Afloat", …):
+  the labels were defined but never shown, and they're what makes the
+  state readable without relying on color.
+- **Needs attention** (`_lib/attention.ts`, tested): overdue payments
+  first, then leads stuck 14+ days, then setup gaps (no floor, no clients).
+  Each row links to where you fix it.
+- **Removed:** `app/data.ts` (sample data) and the three sample panels
+  (money arriving, needs attention, pipeline) it fed.
+- **Still on paper `Panel`:** the login and signup pages. They're auth
+  files, so I left them; moving them to Glass is a quick follow-up (C2).
