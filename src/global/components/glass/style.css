@@ -11,6 +11,7 @@
       rgb(255 255 255 / 0.25) 40%,
       rgb(255 255 255 / 0.15) 70%,
       rgb(255 255 255 / 0.6));
+    --glass-outline: rgb(107 33 168 / 1);
   }
 
   .glass {
@@ -18,6 +19,7 @@
     border-radius: var(--default-glass-radius);
     isolation: isolate;
     box-shadow: var(--glass-shadow, none);
+    border: 1px solid var(--glass-outline, transparent)
   }
 
   .glass__background {
