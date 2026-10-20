@@ -151,3 +151,26 @@ started today. Three inserts, with cleanup if a later one fails.
 **`BackButton` fix.** It rendered a `<button>` inside a `<Link>`, which is
 invalid HTML and read twice by screen readers. Now it's a single link styled
 as a button.
+
+---
+
+## 5. Clients
+
+- **List** (`/clients`): card grid, search and status filter kept in the URL
+  (`?q=&status=`) so filtered views can be bookmarked. Each card is fully
+  clickable (the name's link stretches over the card) while email and phone
+  stay separate links. Joining clients with contacts and services is pure
+  logic in `_lib/client-summaries.ts`.
+- **Add** (`/clients/new`): name, email, amount and interval, the same schema
+  and save logic as onboarding's rows.
+- **Detail** (`/clients/[id]`): status picker, delete (with a warning that
+  suggests "Ended" instead), services with monthly total, add/end service,
+  contacts with add, and payments received.
+- **Ending a service** sets `ended_on` to today instead of deleting, so
+  history and past payments stay intact.
+- **`ConfirmButton`** (`components/confirm-button.tsx`) is the shared
+  are-you-sure dialog.
+- **Look at:** there's no editing of a client's name or a service's amount
+  yet, only add, end and delete. That's the next obvious gap.
+- **Look at:** `addContact` lists every contact to check for a primary.
+  Fine at this size; a filtered query in the data layer would be cleaner.

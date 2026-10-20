@@ -79,7 +79,11 @@ time, extract it instead. Known building blocks:
 - `global/lib/save-floor.ts`, `create-clients.ts` — server-only writes
   shared by more than one action.
 - `global/lib/parse-csv.ts` — CSV file → headers + rows.
-- `global/components/stepper` — `Stepper`; `BackButton`.
+- `global/components/stepper` — `Stepper`; `BackButton`; `ConfirmButton`
+  (are-you-sure dialog before an action).
+- `global/lib/client-status.ts` — client status labels and badge tones.
+- `app/(app)/_lib/load-business.ts` — loads org, clients, services,
+  payments, expenses, floor and revenue for the money views.
 - `global/lib/money.ts` — `dollarsToCents`, `centsToDollars`, `formatDollars`,
   `formatCents`. All money conversion and display.
 - `global/lib/action-result.ts` — `ActionResult`, `invalid()`, `toFieldErrors()`.

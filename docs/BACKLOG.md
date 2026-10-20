@@ -122,14 +122,14 @@ Keep items small: one PR each, under ~400 changed lines.
 
 ## App pages
 
-- [ ] **P1 · Clients list** · `ready` · after O1
+- [x] **P1 · Clients list** · `ready` · after O1
   Card grid from `dl.clients.list()` with primary contact and monthly
   amount; search and status filter in the URL (`?q=&status=`).
 
-- [ ] **P2 · Client detail** · `ready` · after P1
+- [x] **P2 · Client detail** · `ready` · after P1
   Contacts, services, tags, activity timeline. Edit via actions.
 
-- [ ] **P3 · Add / edit client** · `ready` · after P1
+- [x] **P3 · Add / edit client** · `ready` · after P1
   Form + actions for client, primary contact, first service.
 
 - [ ] **P4 · Leads board** · `ready` · after O1
