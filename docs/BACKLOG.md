@@ -188,7 +188,7 @@ schema changes.
   Converted leads show in Won for 30 days, then drop off the board (still
   counted in stats). Client page shows "Won from a lead on {date}".
 
-- [ ] **L3 · Lock converted leads** · `ready` · after L2
+- [x] **L3 · Lock converted leads** · `ready` · after L2
   A converted lead can't be dragged, moved or deleted. The card says
   "Client now" and links to the client. To stop working with them, end the
   client (keeps payment history; deleting a client deletes its payments).

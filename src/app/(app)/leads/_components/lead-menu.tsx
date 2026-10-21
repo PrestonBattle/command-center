@@ -10,6 +10,8 @@ import { deleteLead } from "../actions";
 
 type LeadMenuProps = {
   lead: LeadRow;
+  /** Converted to a client: only Edit, plus why Move and Delete are gone. */
+  locked: boolean;
   /** Opens the Edit dialog, which the card owns (its name opens it too). */
   onEdit: () => void;
   onMove: (to: LeadStage) => void;
@@ -20,8 +22,13 @@ type LeadMenuProps = {
  * without dragging: required for anyone who can't drag (WCAG 2.5.7), and
  * the only way on phones, where one column shows at a time.
  */
-export function LeadMenu({ lead, onEdit, onMove }: LeadMenuProps) {
+export function LeadMenu({ lead, locked, onEdit, onMove }: LeadMenuProps) {
   const [deleting, { open: askDelete, close: cancelDelete }] = useDisclosure(false);
+  const editItem = (
+    <Menu.Item leftSection={<IconPencil size={16} aria-hidden />} onClick={onEdit}>
+      Edit details
+    </Menu.Item>
+  );
 
   return (
     <>
@@ -31,26 +38,36 @@ export function LeadMenu({ lead, onEdit, onMove }: LeadMenuProps) {
             <IconDots size={18} aria-hidden />
           </ActionIcon>
         </Menu.Target>
-        <Menu.Dropdown>
-          <Menu.Label>Move to</Menu.Label>
-          {LEAD_STAGES.filter((s) => s.value !== lead.stage).map((s) => (
-            <Menu.Item
-              key={s.value}
-              leftSection={<IconArrowRight size={16} aria-hidden />}
-              aria-label={`Move to ${s.label}`}
-              onClick={() => onMove(s.value)}
-            >
-              {s.label}
+        {locked ? (
+          <Menu.Dropdown>
+            {editItem}
+            <Menu.Divider />
+            {/* A label, not an item: what's missing and where to go instead. */}
+            <Menu.Label className="max-w-56 whitespace-normal normal-case">
+              They&apos;re a client now, so this lead can&apos;t be moved or deleted. To stop working with them, set the
+              client to Ended.
+            </Menu.Label>
+          </Menu.Dropdown>
+        ) : (
+          <Menu.Dropdown>
+            <Menu.Label>Move to</Menu.Label>
+            {LEAD_STAGES.filter((s) => s.value !== lead.stage).map((s) => (
+              <Menu.Item
+                key={s.value}
+                leftSection={<IconArrowRight size={16} aria-hidden />}
+                aria-label={`Move to ${s.label}`}
+                onClick={() => onMove(s.value)}
+              >
+                {s.label}
+              </Menu.Item>
+            ))}
+            <Menu.Divider />
+            {editItem}
+            <Menu.Item color="red" leftSection={<IconTrash size={16} aria-hidden />} onClick={askDelete}>
+              Delete
             </Menu.Item>
-          ))}
-          <Menu.Divider />
-          <Menu.Item leftSection={<IconPencil size={16} aria-hidden />} onClick={onEdit}>
-            Edit details
-          </Menu.Item>
-          <Menu.Item color="red" leftSection={<IconTrash size={16} aria-hidden />} onClick={askDelete}>
-            Delete
-          </Menu.Item>
-        </Menu.Dropdown>
+          </Menu.Dropdown>
+        )}
       </Menu>
       <ConfirmDialog
         opened={deleting}

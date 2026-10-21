@@ -449,3 +449,49 @@ production build passes here.
 worst-case contrast on the glass: Harbor 4.6:1, Harbor deep 5.2:1, Harbor
 night 4.6:1; edge suite 27/27; lint, types, 27 unit tests.
 
+---
+
+## 15. Leads: backlog L1–L8
+
+Built from the leads backlog in order (L7, L8, L5, L4, L1, L2, L3), one PR
+each, stacked: each branch starts from the one before, so merge them in
+order, or merge the last to take everything. L6 is `later`.
+
+| Item | What you'll notice | Where |
+|---|---|---|
+| L7 | Inputs line up in every form row, even when one has a hint | `inputs.module.css` + theme |
+| L8 | Click a lead's name (or "⋯ → Edit details") to edit it | `LeadForm`, `updateLead` |
+| L5 | Search box on Leads; `?q=` in the URL; phone numbers match on digits | `SearchInput`, `matchesQuery` |
+| L4 | Board fits the screen; columns scroll; phone shows one stage at a time | `LeadBoard`, `LeadColumn` |
+| L1 | Drag cards between columns (mouse, touch, keyboard) | `use-lead-board.ts`, `_lib/drag.ts` |
+| L2 | Converted leads leave Won after 30 days; client page shows "Won from a lead" | `onBoard()` |
+| L3 | Converted leads can't be moved or deleted, on the server too | `moveLead`, `deleteLead` |
+
+**Things worth knowing**
+
+- **New dependency:** `@dnd-kit/core` 6.3.1, pinned exactly.
+- **Drag, three ways.** Mouse/touch grab the card anywhere except its
+  buttons (custom sensors in `_lib/drag.ts`). Keyboard uses the grip:
+  Space, arrows (a whole column per press), Space. "Move to" in the "⋯"
+  menu is the no-drag way, and the only way on phones.
+- **Optimistic moves.** `useOptimistic` moves the card immediately. If the
+  server says no, or can't be reached, the move falls away (the card snaps
+  back) and a notification says why. Tested by cutting the network.
+- **Shared, not copied.** Search needed what Clients already had, so it
+  became `SearchInput`, `useSetSearchParam` and `matchesQuery` in
+  `global/`, and Clients uses them now too. The "are you sure" dialog
+  became `ConfirmDialog` so menus can use it.
+- **Bugs found on the way:**
+  - "Make client" twice (double click, second tab) created two clients.
+    Now the second call opens the first.
+  - A stale tab could move or delete a converted lead. The server refuses.
+  - Theme-wide accessibility: notification close buttons had no name and
+    grey text at 3.3:1; menus were white in dark themes (1.1:1); menu
+    "Delete" red was 3.3:1; an empty focus element sat inside every menu.
+  - Crowded board: the "Stale" badge covered long names; emails broke
+    mid-word. Badge has its own line; contact lines end in "…".
+
+**Checked:** 44 unit tests; browser tests for edit/search (14), scrolling
+(13), drag (14), converted leads (5 + 7); axe clean with a crowded board
+and an open menu in all three themes; edge suite 27/27; production build.
+

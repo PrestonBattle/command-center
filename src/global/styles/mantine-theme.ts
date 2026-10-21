@@ -7,6 +7,7 @@ import {
   defaultVariantColorsResolver,
   Input,
   InputWrapper,
+  Menu,
   Modal,
   Notification,
   RadioCard,
@@ -72,6 +73,9 @@ export const theme = createTheme({
     ActionIcon: ActionIcon.extend({ classNames: { root: controls.touchTarget } }),
     // The X in every dialog is icon-only; without a label screen readers
     // announce just "button".
+    // No empty focus placeholder inside menus: only menu items belong in a
+    // role="menu", and focusing the first item on open is the standard pattern.
+    Menu: Menu.extend({ defaultProps: { withInitialFocusPlaceholder: false } }),
     Modal: Modal.extend({ defaultProps: { closeButtonProps: { "aria-label": "Close" } } }),
     Notification: Notification.extend({
       defaultProps: { closeButtonProps: { "aria-label": "Dismiss" } },
