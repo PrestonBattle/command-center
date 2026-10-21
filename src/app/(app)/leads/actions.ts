@@ -7,7 +7,7 @@ import { invalid, type ActionResult } from "@/global/lib/action-result";
 import { attempt } from "@/global/lib/attempt";
 import { createClientsWithServices } from "@/global/lib/create-clients";
 import { todayIso } from "@/global/lib/dates";
-import { leadIdSchema, leadSchema, moveSchema } from "./_lib/schemas";
+import { leadIdSchema, leadSchema, leadUpdateSchema, moveSchema } from "./_lib/schemas";
 
 /** Adds a lead to the New column. */
 export async function createLead(input: unknown): Promise<ActionResult> {
@@ -25,6 +25,29 @@ export async function createLead(input: unknown): Promise<ActionResult> {
   });
   if (failed) return failed;
   revalidatePath("/leads");
+  return { ok: true };
+}
+
+/**
+ * Saves edits to a lead's details. Stage isn't here on purpose: moving a
+ * lead goes through moveLead, so the stage clock only resets on a real move.
+ */
+export async function updateLead(input: unknown): Promise<ActionResult> {
+  const parsed = leadUpdateSchema.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const { leadId, estimated_monthly, contact_name, email, phone, name } = parsed.data;
+  const failed = await attempt("leads:update", async () => {
+    await (await getDataLayer()).leads.update(leadId, {
+      name,
+      contact_name: contact_name ?? null,
+      email: email ?? null,
+      phone: phone ?? null,
+      estimated_monthly_cents: estimated_monthly ?? null,
+    });
+  });
+  if (failed) return failed;
+  revalidatePath("/leads");
+  revalidatePath("/"); // the dashboard's pipeline total uses the estimate
   return { ok: true };
 }
 

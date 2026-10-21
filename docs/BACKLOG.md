@@ -161,7 +161,7 @@ schema changes.
   them (hint, wrapped label). Remove the one-off fix in `ExpenseFields`.
   Check Add lead, Add client, Life vest and onboarding forms.
 
-- [ ] **L8 · Edit a lead** · `ready` · after L7
+- [x] **L8 · Edit a lead** · `ready` · after L7
   Extract `LeadForm` (initial values, action, submit label) used by Add and
   Edit. New `updateLead` action with the same schema. Edit opens from the
   card (the lead's name, or a "⋯" menu that also holds Move to and Delete).

@@ -20,6 +20,9 @@ export type LeadFormValues = {
   estimated_monthly: number | string;
 };
 
+/** An edited lead: the same fields as a new one, plus which lead. */
+export const leadUpdateSchema = leadSchema.extend({ leadId: leadIdSchema });
+
 export const moveSchema = z.object({
   leadId: leadIdSchema,
   stage: z.enum(["new", "contacted", "proposal", "won", "lost"]),
