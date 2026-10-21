@@ -2,6 +2,7 @@ import {
   IconCash,
   IconLayoutDashboard,
   IconLifebuoy,
+  IconSettings,
   IconUserPlus,
   IconUsers,
 } from "@tabler/icons-react";
@@ -24,5 +25,6 @@ export const APPCONFIG = {
     { href: "/leads", label: "Leads", icon: <IconUserPlus {...ICON} /> },
     { href: "/money", label: "Money", icon: <IconCash {...ICON} /> },
     { href: "/life-vest", label: "Life vest", icon: <IconLifebuoy {...ICON} /> },
+    { href: "/settings", label: "Settings", icon: <IconSettings {...ICON} /> },
   ] satisfies NavbarItem[],
 };

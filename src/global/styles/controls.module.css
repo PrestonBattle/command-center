@@ -33,5 +33,25 @@
 
 .segmentedIndicator {
   background: var(--glass-tint);
-  box-shadow: 0 1px 3px rgb(124 45 18 / 0.15);
+  box-shadow: var(--pill-shadow);
+}
+
+/* Choice cards (Radio.Card), e.g. the theme picker: a light inset tile that
+   gets an accent ring when chosen. The ring is 2px so "checked" doesn't rely
+   on a color change alone; the radio dot inside says it too. */
+.radioCard {
+  background: var(--surface-inset);
+  border: 1px solid var(--divider);
+  border-radius: 16px;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.radioCard[data-checked] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.radioCard:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

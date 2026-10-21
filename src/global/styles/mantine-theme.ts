@@ -4,10 +4,14 @@ import {
   ActionIcon,
   Button,
   createTheme,
+  defaultVariantColorsResolver,
   Input,
   InputWrapper,
+  Modal,
+  RadioCard,
   SegmentedControl,
   type MantineColorsTuple,
+  type VariantColorsResolver,
 } from "@mantine/core";
 import controls from "./controls.module.css";
 import inputs from "./inputs.module.css";
@@ -35,6 +39,19 @@ const INK: MantineColorsTuple = [
 ];
 
 /**
+ * Filled primary buttons take their label color from `--on-accent`, so each
+ * theme decides: white on burnt orange or harbor blue, dark ink on Harbor
+ * night's champagne (white on champagne is ~2:1). Mantine otherwise writes
+ * white as an inline style, which no stylesheet can override.
+ */
+const variantColorResolver: VariantColorsResolver = (input) => {
+  const colors = defaultVariantColorsResolver(input);
+  const isPrimary = !input.color || input.color === input.theme.primaryColor;
+  if (input.variant === "filled" && isPrimary) return { ...colors, color: "var(--on-accent)" };
+  return colors;
+};
+
+/**
  * Mantine theme for the Sunset look. Every color other than the primary
  * comes from the CSS variables in globals.css.
  *
@@ -45,12 +62,17 @@ export const theme = createTheme({
   colors: { sunset: SUNSET, ink: INK },
   primaryColor: "sunset",
   primaryShade: 8,
+  variantColorResolver,
   defaultRadius: "md",
   fontFamily: "var(--font-sans)",
   headings: { fontFamily: "var(--font-display)" },
   components: {
     Button: Button.extend({ classNames: { root: controls.touchTarget } }),
     ActionIcon: ActionIcon.extend({ classNames: { root: controls.touchTarget } }),
+    // The X in every dialog is icon-only; without a label screen readers
+    // announce just "button".
+    Modal: Modal.extend({ defaultProps: { closeButtonProps: { "aria-label": "Close" } } }),
+    RadioCard: RadioCard.extend({ classNames: { card: controls.radioCard } }),
     SegmentedControl: SegmentedControl.extend({
       classNames: {
         root: controls.segmentedRoot,

@@ -1,0 +1,149 @@
+/*
+ * Color themes. Sunset is the default `:root` values in globals.css; each
+ * block here overrides the same variables when <html data-theme="..."> is
+ * set (root layout, from the theme cookie). Components never change: they
+ * read var(--text), var(--accent) and friends, and the block decides.
+ *
+ * Selectors are deliberately heavy (html + :root + two attributes). Mantine
+ * injects its own variables on :root[data-mantine-color-scheme] at runtime,
+ * after this file loads, so a lighter selector would lose to it.
+ *
+ * Contrast was measured on the actual blurred glass, at the brightest spot
+ * behind the text (see docs/REVIEW-NOTES.md §13), not just on a flat color.
+ */
+
+/* Every theme: Mantine's own greys follow ours, so slider marks, placeholders
+   and dimmed text match the theme instead of staying neutral grey. */
+html:root[data-mantine-color-scheme] {
+  --mantine-color-dimmed: var(--text-faint);
+  --mantine-color-placeholder: var(--text-faint);
+  --mantine-color-text: var(--text);
+}
+
+/* ---------- Harbor: mist base, powder and blush, harbor-blue accent ---------- */
+html[data-theme="harbor"]:root[data-mantine-color-scheme] {
+  --text: #1c2b36; /* ink */
+  --text-muted: #2c4d63; /* harbor */
+  --text-faint: #3d5a6e;
+  --accent: #2c4d63;
+  --on-accent: #ffffff;
+
+  --ok: #1f6b45;
+  --warn: #7a5a1e;
+  --bad: #9b2c2c;
+
+  --field-bg: rgb(255 255 255 / 0.6);
+  --field-bg-hover: rgb(255 255 255 / 0.8);
+  --field-border: #6b8396;
+  --divider: rgb(28 49 66 / 0.12);
+  --surface-inset: rgb(255 255 255 / 0.5);
+  --pill-shadow: 0 1px 3px rgb(28 49 66 / 0.15);
+
+  --glass-shadow: 0 10px 40px -8px rgb(28 49 66 / 0.18), 0 2px 6px rgb(28 49 66 / 0.06);
+
+  --sunset-base: #eef3f6; /* mist */
+  --sunset-peach: #dce6ec; /* powder */
+  --sunset-pink: #f5e6e4; /* blush */
+  --sunset-orange: #a9c0cf; /* powder, deepened toward harbor */
+  --sunset-rose: #f5e6e4; /* blush */
+  --sunset-gold: #cdb78e; /* champagne */
+
+  --mantine-primary-color-filled: #2c4d63;
+  --mantine-primary-color-filled-hover: #1c3142;
+  --mantine-primary-color-light: rgb(44 77 99 / 0.1);
+  --mantine-primary-color-light-hover: rgb(44 77 99 / 0.16);
+  --mantine-primary-color-light-color: #2c4d63;
+  --mantine-color-sunset-filled: #2c4d63;
+  --mantine-color-sunset-filled-hover: #1c3142;
+  --mantine-color-sunset-light: rgb(44 77 99 / 0.1);
+  --mantine-color-sunset-light-hover: rgb(44 77 99 / 0.16);
+  --mantine-color-sunset-light-color: #2c4d63;
+  --mantine-color-sunset-text: #2c4d63;
+  --mantine-color-ink-light-color: #1c3142;
+  --mantine-color-ink-light-hover: rgb(28 49 66 / 0.08);
+  --mantine-color-ink-text: #1c3142;
+}
+
+/* ---------- Harbor night: ink and midnight, champagne accent ---------- */
+html[data-theme="harbor-night"]:root[data-mantine-color-scheme] {
+  --text: #eef3f6; /* mist */
+  --text-muted: #dce6ec; /* powder */
+  --text-faint: #b9c8d2;
+  /* Champagne, a shade lighter than the filled buttons so accent text keeps
+     4.5:1 where the glow is brightest (bottom-right of the Money table). */
+  --accent: #ddcaa5;
+  /* Dark text on champagne buttons: white on champagne is ~2:1. */
+  --on-accent: #1c2b36;
+
+  /* Status colors lifted so they read on dark glass. */
+  --ok: #94deb5;
+  --warn: #edd08f;
+  --bad: #f7bbbb;
+
+  --field-bg: rgb(28 43 54 / 0.45);
+  --field-bg-hover: rgb(28 43 54 / 0.6);
+  --field-border: #7e97a8;
+  --divider: rgb(238 243 246 / 0.14);
+  --surface-inset: rgb(28 43 54 / 0.35);
+  --pill-shadow: 0 1px 3px rgb(0 0 0 / 0.4);
+
+  /* Darker, more opaque glass than the light themes. With the 8% tint the
+     champagne glow lifted panels until faint text fell to ~2:1. */
+  --glass-tint: #1c3142;
+  --glass-tint-amount: 55%;
+  --glass-gloss: rgb(255 255 255 / 0.08);
+  --glass-edge: rgb(255 255 255 / 0.22);
+  --glass-shadow: 0 14px 44px -10px rgb(0 0 0 / 0.45);
+  --glass-ring: linear-gradient(160deg,
+      rgb(205 183 142 / 0.55),
+      rgb(255 255 255 / 0.08) 40%,
+      rgb(255 255 255 / 0.05) 70%,
+      rgb(220 230 236 / 0.3));
+
+  --sunset-base: #1c2b36; /* ink */
+  --sunset-peach: #2c4d63; /* harbor */
+  --sunset-pink: #4a3f45; /* blush, dimmed for night */
+  --sunset-orange: #1c3142; /* midnight */
+  --sunset-rose: #2c4d63;
+  --sunset-gold: #7d6c4e; /* champagne, dimmed so the glow stays behind dark glass */
+  --sunset-shine: rgb(255 255 255 / 0.04);
+  --sunset-shine-soft: rgb(255 255 255 / 0.02);
+
+  /* Mantine surfaces (menus, dialogs, notifications) are white by default,
+     which would put mist text on white. Point them at midnight instead. */
+  --mantine-color-body: #1c3142;
+  --mantine-color-default: #22394b;
+  --mantine-color-default-hover: #2a4458;
+  --mantine-color-default-color: #eef3f6;
+  --mantine-color-default-border: #4a6476;
+  --mantine-color-gray-0: rgb(255 255 255 / 0.06);
+  --mantine-color-gray-1: rgb(255 255 255 / 0.1);
+  --mantine-color-gray-2: rgb(255 255 255 / 0.16);
+
+  --mantine-primary-color-filled: #cdb78e;
+  --mantine-primary-color-filled-hover: #d9c7a3;
+  --mantine-primary-color-light: rgb(205 183 142 / 0.15);
+  --mantine-primary-color-light-hover: rgb(205 183 142 / 0.22);
+  --mantine-primary-color-light-color: #e3d3b3;
+  --mantine-color-sunset-filled: #cdb78e;
+  --mantine-color-sunset-filled-hover: #d9c7a3;
+  --mantine-color-sunset-light: rgb(205 183 142 / 0.15);
+  --mantine-color-sunset-light-hover: rgb(205 183 142 / 0.22);
+  --mantine-color-sunset-light-color: #e3d3b3;
+  --mantine-color-sunset-text: #e3d3b3;
+  --mantine-color-ink-light-color: #dce6ec;
+  --mantine-color-ink-light-hover: rgb(238 243 246 / 0.08);
+  --mantine-color-ink-text: #dce6ec;
+  --mantine-color-red-light-color: #f7bbbb;
+  --mantine-color-red-text: #f7bbbb;
+}
+
+/* Menus (Select options, popovers) are painted with Mantine's white, not
+   --mantine-color-body, so night needs them named. Dialogs already follow
+   --mantine-color-body above. */
+html[data-theme="harbor-night"] .mantine-Popover-dropdown,
+html[data-theme="harbor-night"] .mantine-Combobox-dropdown {
+  background: #1c3142;
+  border-color: #4a6476;
+  color: var(--text);
+}

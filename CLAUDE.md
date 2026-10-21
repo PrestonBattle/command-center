@@ -93,6 +93,10 @@ time, extract it instead. Known building blocks:
 - `global/styles/controls.module.css` — button touch targets and the
   segmented filter, applied through the theme. Secondary buttons use
   `color="ink"` (warm brown), never Mantine's `"dark"`.
+- `global/lib/themes.ts` + `global/styles/themes.css` — color themes
+  (Sunset, Harbor, Harbor night). A theme is one `[data-theme]` block of the
+  same CSS variables; components never check which theme is on. New colors
+  go in every theme block. Check contrast on the glass in each theme.
 - `global/lib/client-status.ts` — client status labels and badge tones.
 - `app/(app)/_lib/load-business.ts` — loads org, clients, services,
   payments, expenses, floor and revenue for the money views.

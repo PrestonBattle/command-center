@@ -385,3 +385,41 @@ Playwright isn't a dependency; adding it is your call (README explains).
   everything in `docs/BACKLOG.md` is ticked, so it will mostly find nothing
   to do. Add items or pause it.
 
+---
+
+## 13. Harbor themes and Settings
+
+Your palette (mist, powder, harbor, midnight, ink, champagne, blush) as two
+themes next to Sunset, picked on a new **Settings** page.
+
+**How it works**
+- `global/lib/themes.ts` lists the themes. `global/styles/themes.css` has
+  one block per theme that overrides the same variables Sunset sets in
+  `globals.css`. No component changed: they all read `var(--text)` etc.
+- The choice is a cookie (`cc-theme`), per device. The root layout reads it
+  and renders `<html data-theme="...">` on the server, so pages never flash
+  Sunset first. `settings/actions.ts` sets the cookie; the picker switches
+  colors instantly and saves in the background (`use-theme-choice.ts`).
+- Why a cookie, not a database column: it's a per-device look, and the
+  layout can read a cookie before anything renders. Easy to move to the
+  member row later if you want it to follow the account.
+- Mantine bits that ignored our variables now follow them: filled-button
+  text (`variantColorResolver` → `--on-accent`), dialogs, dropdown menus,
+  dimmed/placeholder text.
+- Settings also has **Sign out**, which phones couldn't reach before.
+
+**Accessibility**
+- axe: 0 violations, every page plus the delete dialog, in all 3 themes.
+- Contrast measured on the actual glass at the brightest spot behind text.
+  Harbor light: 4.6:1 minimum. Harbor night needed darker glass, a dimmer
+  champagne glow, and slightly lighter status colors to clear 4.5:1 at the
+  bottom-right of the Money table, its worst spot.
+- Fixed along the way (all themes): the X on every dialog had no name for
+  screen readers.
+
+**Your build error** (`.next/dev/types/routes.d.ts` "Declaration or
+statement expected") isn't in the code. `tsconfig.json` includes the types
+`npm run dev` generates; building while dev runs (or after it crashed
+mid-write) reads a half-written file. Stop dev, delete `.next`, build. The
+production build passes here.
+

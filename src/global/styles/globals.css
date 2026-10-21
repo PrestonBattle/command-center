@@ -9,6 +9,8 @@
 @import "tailwindcss";
 @import "@mantine/core/styles.layer.css";
 @import "@mantine/notifications/styles.layer.css";
+/* Harbor and Harbor night: overrides of the variables below. */
+@import "./themes.css";
 
 
 :root {
@@ -25,6 +27,8 @@
   /* Icons, active nav, focus. Darker than Mantine orange-9 so it still
      clears 3:1 as a UI edge on the orange parts of the background. */
   --accent: #9a3412;
+  /* Text on a filled accent button. Dark themes with a light accent flip it. */
+  --on-accent: #ffffff;
 
   /* Status colors carry meaning (paid / at risk / overdue). Not decoration. */
   --ok: #166534;
@@ -39,6 +43,7 @@
   /* Surfaces inside cards: hairline dividers and inset tiles. */
   --divider: rgb(124 45 18 / 0.15);
   --surface-inset: rgb(255 255 255 / 0.45);
+  --pill-shadow: 0 1px 3px rgb(124 45 18 / 0.15);
 
   /* Glass. Consumed by global/components/glass/style.css. */
   --glass-tint: #ffffff;

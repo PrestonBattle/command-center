@@ -15,7 +15,8 @@ export function MobileNav() {
   return (
     <Glass className="fixed inset-x-3 bottom-3 z-20 rounded-3xl sm:hidden">
       <nav aria-label="Main">
-        <ul className="grid grid-cols-5">
+        {/* One column per APPCONFIG.navbar item; update if the list changes. */}
+        <ul className="grid grid-cols-6">
           {APPCONFIG.navbar.map((link) => {
             const active = isActive(link.href);
             return (
