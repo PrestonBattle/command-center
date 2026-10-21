@@ -10,6 +10,8 @@ Status:
 - `preston`: Preston writes this one himself (core logic he wants to own).
   The bot skips it.
 - `decision`: needs a choice from Preston first. The bot skips it.
+- `later`: written down so nobody invents their own version, but not to be
+  built yet. The bot skips it.
 
 Keep items small: one PR each, under ~400 changed lines.
 
@@ -148,3 +150,50 @@ Keep items small: one PR each, under ~400 changed lines.
 
 - [x] **P8 · Dashboard on real data** · `ready` · after P6, P7
   Replace sample data with data-layer queries.
+
+## Leads
+
+Order: L7 → L8 → L5 → L4 → L1 → L2 → L3. All use the existing tables; no
+schema changes.
+
+- [ ] **L7 · Inputs line up in every form** · `ready`
+  Theme-level: inputs in a grid row align at the bottom whatever is above
+  them (hint, wrapped label). Remove the one-off fix in `ExpenseFields`.
+  Check Add lead, Add client, Life vest and onboarding forms.
+
+- [ ] **L8 · Edit a lead** · `ready` · after L7
+  Extract `LeadForm` (initial values, action, submit label) used by Add and
+  Edit. New `updateLead` action with the same schema. Edit opens from the
+  card (the lead's name, or a "⋯" menu that also holds Move to and Delete).
+  Stage isn't in the form. Converted leads can still fix contact details.
+
+- [ ] **L5 · Search leads** · `ready` · after L8
+  Search box above the board, `?q=` in the URL, filtered on the server.
+  Matches name, contact, email and phone. Columns without a match say
+  "No matches". Same toolbar pattern as Clients.
+
+- [ ] **L4 · Scrollable stage columns** · `ready` · after L5
+  Desktop: columns a fixed height, each scrolling on its own, focusable with
+  a label. Header shows count and monthly value. Phone: one stage at a time
+  with stage tabs.
+
+- [ ] **L1 · Drag leads between stages** · `ready` · after L4
+  dnd-kit (Preston OK'd the dependency): mouse, touch and keyboard. The card
+  moves instantly (`useOptimistic`) and snaps back with a message if
+  `moveLead` fails. The column under the card highlights. Keep "Move to…"
+  in the card menu (WCAG 2.5.7). Screen-reader announcements on pick up and
+  drop. Honors `prefers-reduced-motion`.
+
+- [ ] **L2 · Converted leads leave the board** · `ready` · after L1
+  Converted leads show in Won for 30 days, then drop off the board (still
+  counted in stats). Client page shows "Won from a lead on {date}".
+
+- [ ] **L3 · Lock converted leads** · `ready` · after L2
+  A converted lead can't be dragged, moved or deleted. The card says
+  "Client now" and links to the client. To stop working with them, end the
+  client (keeps payment history; deleting a client deletes its payments).
+
+- [ ] **L6 · Load more per column** · `later`
+  Only if a column passes ~50 leads: "Show more" and batched loading in the
+  data layer.
+
