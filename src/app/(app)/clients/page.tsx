@@ -1,6 +1,5 @@
-import { Button } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import Link from "next/link";
+import { ButtonLink } from "@/global/components/button-link";
 import { EmptyState, PageHeader } from "@/global/components/layout";
 import { getCurrentOrg, getDataLayer } from "@/global/data";
 import { todayIso } from "@/global/lib/dates";
@@ -21,9 +20,9 @@ export default async function ClientsPage({ searchParams }: Props) {
   const shown = filterClients(all, q, status);
   const recurring = all.filter((c) => c.status === "active" || c.status === "onboarding").reduce((t, c) => t + c.monthlyCents, 0);
   const addButton = (
-    <Button component={Link} href="/clients/new" leftSection={<IconPlus size={18} aria-hidden />}>
+    <ButtonLink href="/clients/new" leftSection={<IconPlus size={18} aria-hidden />}>
       Add client
-    </Button>
+    </ButtonLink>
   );
 
   return (

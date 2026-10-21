@@ -1,6 +1,5 @@
-import { ActionIcon, Button } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import Link from "next/link";
+import { ButtonLink, IconLink } from "@/global/components/button-link";
 import { addMonths, formatMonth, monthParam, type YearMonth } from "@/global/lib/dates";
 
 type Props = { month: YearMonth; isCurrent: boolean };
@@ -12,16 +11,16 @@ export function MonthNav({ month, isCurrent }: Props) {
   return (
     <nav aria-label="Month" className="flex items-center gap-2">
       {!isCurrent && (
-        <Button component={Link} href="/money" variant="subtle" color="dark" size="compact-md">
+        <ButtonLink href="/money" variant="subtle" color="dark" size="compact-md">
           This month
-        </Button>
+        </ButtonLink>
       )}
-      <ActionIcon component={Link} href={`/money?month=${monthParam(prev)}`} variant="light" size={44} aria-label={`Previous month, ${formatMonth(prev)}`}>
+      <IconLink href={`/money?month=${monthParam(prev)}`} variant="light" size={44} aria-label={`Previous month, ${formatMonth(prev)}`}>
         <IconChevronLeft size={20} aria-hidden />
-      </ActionIcon>
-      <ActionIcon component={Link} href={`/money?month=${monthParam(next)}`} variant="light" size={44} aria-label={`Next month, ${formatMonth(next)}`}>
+      </IconLink>
+      <IconLink href={`/money?month=${monthParam(next)}`} variant="light" size={44} aria-label={`Next month, ${formatMonth(next)}`}>
         <IconChevronRight size={20} aria-hidden />
-      </ActionIcon>
+      </IconLink>
     </nav>
   );
 }

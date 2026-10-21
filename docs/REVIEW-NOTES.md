@@ -299,3 +299,20 @@ as a button.
 - **README** lists `npm test` and points to the schema.
 - The production build was checked with a stubbed font file, because my
   environment can't reach Google Fonts. Your machine can, so nothing to do.
+
+---
+
+## 11. Fix: `component={Link}` in server components
+
+First bug from a real run. `<Button component={Link}>` inside a server
+component crashes with "Functions cannot be passed directly to Client
+Components": `Link` is a function, and Mantine's Button is a client
+component. The production build didn't catch it because these pages render
+on request, not at build time.
+
+Fix: `global/components/button-link.tsx` adds `ButtonLink` and `IconLink`,
+client components that hold the `Link` reference themselves, so server
+components only pass an `href`. Replaced in the dashboard's payments panel,
+the Clients page and Money's month navigation. Client components (BackButton,
+lead cards, auth pages) can keep using `component={Link}` directly.
+CLAUDE.md now says so, so the bot won't repeat it.

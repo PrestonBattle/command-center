@@ -1,5 +1,4 @@
-import { Button } from "@mantine/core";
-import Link from "next/link";
+import { ButtonLink } from "@/global/components/button-link";
 import { GlassPanel } from "@/global/components/glass/glass-panel";
 import { EmptyState, StatusBadge } from "@/global/components/layout";
 import type { ScheduledPayment } from "@/global/lib/billing";
@@ -14,7 +13,7 @@ export function UpcomingPaymentsPanel({ rows }: { rows: ScheduledPayment[] }) {
   return (
     <GlassPanel
       title="Payments this month"
-      actions={<Button component={Link} href="/money" variant="subtle" size="compact-md">Open Money</Button>}
+      actions={<ButtonLink href="/money" variant="subtle" size="compact-md">Open Money</ButtonLink>}
     >
       {rows.length === 0 ? (
         <EmptyState title="Nothing expected" description="Add services to your clients to see payments here." />

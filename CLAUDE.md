@@ -82,6 +82,9 @@ time, extract it instead. Known building blocks:
 - `global/lib/save-floor.ts`, `create-clients.ts` — server-only writes
   shared by more than one action.
 - `global/lib/parse-csv.ts` — CSV file → headers + rows.
+- `global/components/button-link.tsx` — `ButtonLink`, `IconLink`: Mantine
+  buttons that navigate. **Server components must use these, never
+  `component={Link}`**: functions can't be passed from server to client.
 - `global/components/stepper` — `Stepper`; `BackButton`; `ConfirmButton`
   (are-you-sure dialog before an action).
 - `global/lib/client-status.ts` — client status labels and badge tones.
