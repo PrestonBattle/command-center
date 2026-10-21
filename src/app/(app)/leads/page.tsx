@@ -19,7 +19,7 @@ export default async function LeadsPage({ searchParams }: Props) {
   // The header describes the whole pipeline, not just what the search shows.
   const open = leads.filter((l) => OPEN_STAGES.includes(l.stage));
   const potential = open.reduce((t, l) => t + (l.estimated_monthly_cents ?? 0), 0);
-  const columns = boardColumns(leads, q);
+  const columns = boardColumns(leads, q, today);
   const matchCount = columns.reduce((t, c) => t + c.leads.length, 0);
 
   return (

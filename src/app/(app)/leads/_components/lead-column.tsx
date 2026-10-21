@@ -62,6 +62,11 @@ export function LeadColumn({ column, today, searching, onMove, className = "" }:
             ))}
           </ul>
         )}
+        {column.hiddenCount > 0 && (
+          <p className="px-1 pt-3 text-xs text-[var(--text-faint)]">
+            {`+ ${column.hiddenCount} older ${column.hiddenCount === 1 ? "win" : "wins"}, now on Clients`}
+          </p>
+        )}
       </div>
     </section>
   );

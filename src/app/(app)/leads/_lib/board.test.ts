@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { LeadRow, LeadStage } from "@/global/types/supabase/types";
-import { boardColumns, moveInColumns } from "./board";
+import { boardColumns as columnsFor, moveInColumns, onBoard } from "./board";
+
+const TODAY = "2026-10-21";
+const boardColumns = (leads: LeadRow[], q = "") => columnsFor(leads, q, TODAY);
 
 function lead(name: string, stage: LeadStage, changed: string, cents: number | null, extra: Partial<LeadRow> = {}): LeadRow {
   return {
@@ -60,6 +63,28 @@ describe("moveInColumns", () => {
   it("leaves the board alone for the same stage or an unknown lead", () => {
     expect(moveInColumns(cols, "Acme Dental", "new")).toBe(cols);
     expect(moveInColumns(cols, "nobody", "won")).toBe(cols);
+  });
+});
+
+describe("converted leads", () => {
+  const recentWin = lead("Recent Win", "won", "2026-10-10T00:00:00Z", 50000, { converted_client_id: "c1" });
+  const oldWin = lead("Old Win", "won", "2026-08-01T00:00:00Z", 70000, { converted_client_id: "c2" });
+  const notYet = lead("Not Converted", "won", "2026-08-01T00:00:00Z", 30000);
+
+  it("stay in Won for 30 days, then leave the board", () => {
+    expect(onBoard(recentWin, TODAY)).toBe(true);
+    expect(onBoard(oldWin, TODAY)).toBe(false);
+  });
+
+  it("keep a won lead that isn't a client yet, however old", () => {
+    expect(onBoard(notYet, TODAY)).toBe(true);
+  });
+
+  it("count what's hidden and leave it out of the total", () => {
+    const won = boardColumns([recentWin, oldWin, notYet]).find((c) => c.stage === "won");
+    expect(won?.leads.map((l) => l.name)).toEqual(["Not Converted", "Recent Win"]);
+    expect(won?.hiddenCount).toBe(1);
+    expect(won?.monthlyCents).toBe(80000);
   });
 });
 
