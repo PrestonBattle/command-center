@@ -5,6 +5,7 @@ import { useState } from "react";
 import { BackButton } from "@/global/components/back-button";
 import { FloorForm } from "@/global/components/floor/floor-form";
 import { GlassPanel } from "@/global/components/glass/glass-panel";
+import { InfoTip } from "@/global/components/info-tip";
 import { IntervalSelect, MoneyInput, PercentInput, SearchInput } from "@/global/components/inputs";
 import { Callout, EmptyState, FieldGrid, FormSection, PageHeader, Stat, StatusBadge } from "@/global/components/layout";
 import { Stepper } from "@/global/components/stepper/stepper";
@@ -52,6 +53,10 @@ export default function ComponentsShowcase() {
           <TextInput label="Email" defaultValue="not-an-email" error="Enter a valid email" />
           <TextInput label="Disabled" defaultValue="Can't edit" disabled />
         </FieldGrid>
+        <p className="flex items-center gap-1 text-sm font-semibold">
+          Floor
+          <InfoTip label="Floor">What the business needs to bring in each month to cover life, the business and taxes.</InfoTip>
+        </p>
         {/* Writes ?q= to this page's URL as you type. */}
         <SearchInput label="Search the showcase" placeholder="SearchInput: try typing" value="" />
       </GlassPanel>

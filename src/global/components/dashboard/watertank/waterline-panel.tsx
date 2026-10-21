@@ -4,6 +4,7 @@ import { formatDollars as money } from "@/global/lib/money";
 import { InsetStat } from "./inset-stat";
 import { WaterLineTank } from "./water-tank";
 import { coverageDate, waterlineState, WATERLINE_STATES } from "./waterline-state";
+import { WATERLINE_TIPS } from "./waterline-tips";
 
 type WaterLinePanelProps = {
   /** Monthly personal expenses — rent, food, car, savings. */
@@ -68,10 +69,11 @@ export function WaterLinePanel({
         <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
           {/* 30.44 = average days per month, so a day's cost doesn't jump
               between February and March. */}
-          <InsetStat label="A day costs" value={money(floor / 30.44)} hint="Whether or not you work" />
-          <InsetStat label="Covered through" value={coverageDate(coverage)} hint="At this month's rate" />
+          <InsetStat label="A day costs" value={money(floor / 30.44)} hint="Whether or not you work" info={WATERLINE_TIPS.dayCost} />
+          <InsetStat label="Covered through" value={coverageDate(coverage)} hint="At this month's rate" info={WATERLINE_TIPS.coveredThrough} />
           <InsetStat
             label="Largest client"
+            info={WATERLINE_TIPS.largestClient}
             value={topShare ? `${Math.round(topShare * 100)}%` : "—"}
             hint={topShare ? (topClientName ?? "of revenue") : "No clients yet"}
           />

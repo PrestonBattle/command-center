@@ -92,6 +92,9 @@ time, extract it instead. Known building blocks:
 - `global/components/stepper` — `Stepper`; `BackButton`; `ConfirmButton`
   (are-you-sure dialog before an action); `ConfirmDialog` (the same dialog
   without its button, for menus: you own `opened`).
+- `global/components/info-tip.tsx` — `InfoTip`: a "?" that explains the
+  thing next to it (hover, focus or tap; Escape closes). `Stat` and the
+  Snapshot figures take an `info` prop instead of placing one by hand.
 - `global/components/not-found-panel.tsx` — `NotFoundPanel`, the 404 body
   used by `app/not-found.tsx` and `app/(app)/not-found.tsx`. Not in `/dev`:
   it renders the page's `<h1>`. See it at any bad URL.
