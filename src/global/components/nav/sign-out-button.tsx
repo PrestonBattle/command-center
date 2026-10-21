@@ -11,9 +11,11 @@ export function SignOutButton({ compact = false }: { compact?: boolean }) {
       <button
         type="submit"
         aria-label={compact ? "Sign out" : undefined}
-        className="group flex min-h-11 w-full items-center gap-3 rounded-lg px-3 py-2 text-sm
-                   text-[var(--text-muted)] transition-colors hover:bg-[var(--accent)]/8
-                   hover:text-[var(--bad)] focus-visible:outline-2 focus-visible:outline-[var(--accent)]"
+        className={[
+          "group flex min-h-11 w-full items-center gap-3 rounded-lg px-3 py-2 text-sm",
+          "text-[var(--text-muted)] transition-colors hover:bg-[var(--accent)]/8 hover:text-[var(--bad)]",
+          "focus-visible:outline-2 focus-visible:outline-[var(--accent)]",
+        ].join(" ")}
       >
         <IconLogout size={18} stroke={1.6} aria-hidden className="shrink-0" />
         {!compact && "Sign out"}
