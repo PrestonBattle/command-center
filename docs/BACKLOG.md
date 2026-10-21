@@ -212,3 +212,12 @@ schema changes.
   step: where you are now. Next/Back and state chips; no auto-advance.
   Reduced motion: states change without animation.
 
+
+- [x] **D3 · Dashboard layout** · `ready`
+  Three compact stats on top; Snapshot (2/3) beside Needs attention (1/3),
+  same height, with the list scrolling inside its card (count in the
+  title, fade while there's more); Payments full width below. Attention is
+  grouped: setup gaps first, one line per client that owes (oldest debt
+  first), stale leads as one line. Snapshot shows how to set a floor
+  instead of "0%" when none is set; Needs attention shows "All clear" when
+  empty. Phones stack at natural height.

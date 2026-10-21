@@ -522,3 +522,27 @@ away, tap, 44px target, screen-reader description); explainer 16/16
 (fills from empty, counts, steps, chips, "You", reduced motion, phone);
 axe clean with the explainer open in all three themes; edge 27/27.
 
+
+## 17. Dashboard layout (D3)
+
+- **Layout:** stats row (Collected, Overdue, Pipeline) using `Stat compact`;
+  then Snapshot beside Needs attention; then Payments full width.
+- **Equal heights:** the Snapshot sets the row's height. Needs attention
+  sits absolutely inside its grid cell on `lg`, so it can never make the
+  row taller; its list scrolls instead. Below `lg` everything stacks at
+  natural height (no inner scroll on phones).
+- **Scrolling list is accessible:** the `<ul>` is focusable and labelled,
+  so keyboards can scroll it; a fade (`useScrollFade`) shows there's more
+  and clears at the bottom. The count is in the title ("Needs attention · 5").
+- **Grouping (`_lib/attention.ts`, tested):** floor/clients setup first,
+  then "Cedar Yoga owes $1,800 · 2 payments · oldest due Aug 28", one per
+  client, oldest first; stale leads collapse to "13 leads haven't moved in
+  14+ days". 30 lines became 5.
+- **Snapshot with no floor:** "Set your floor to see your Snapshot" and a
+  button to Life vest, instead of fake "$0 short / 0%" numbers. Split into
+  `snapshot-figures.tsx` and `snapshot-empty.tsx` to keep files small.
+
+**Checked:** dashboard 19/19 (equal heights at 1280 and 1024, grouping,
+inner scroll + fade, keyboard End clears the fade, all-clear, empty
+Snapshot, phone stacking, no sideways scroll); tips 13/13; explainer
+16/16; edge; axe clean in all three themes.
