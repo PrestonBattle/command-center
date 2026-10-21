@@ -36,11 +36,14 @@ export default async function DashboardPage() {
     <>
       <PageHeader title={`${greeting(hourIn(data.org.timezone))}${name ? `, ${name}` : ""}`} description="Here's where things stand this month." />
       <div className="grid gap-4 sm:grid-cols-3">
-        <Stat label="Collected this month" info={DASHBOARD_TIPS.collected} value={formatCents(totals.paidCents)} hint={`of ${formatCents(totals.expectedCents)} expected`} />
-        <Stat label="Overdue" info={DASHBOARD_TIPS.overdue} value={formatCents(overdueCents)} hint={overdue.length ? <Link href="/money" className="underline">{overdue.length} payment{overdue.length === 1 ? "" : "s"} to chase</Link> : "All caught up"} />
-        <Stat label="Pipeline" info={DASHBOARD_TIPS.pipeline} value={`${formatCents(pipelineCents)}/mo`} hint={<Link href="/leads" className="underline">{openLeads.length} open lead{openLeads.length === 1 ? "" : "s"}</Link>} />
+        <Stat compact label="Collected this month" info={DASHBOARD_TIPS.collected} value={formatCents(totals.paidCents)} hint={`of ${formatCents(totals.expectedCents)} expected`} />
+        <Stat compact label="Overdue" info={DASHBOARD_TIPS.overdue} value={formatCents(overdueCents)} hint={overdue.length ? <Link href="/money" className="underline">{overdue.length} payment{overdue.length === 1 ? "" : "s"} to chase</Link> : "All caught up"} />
+        <Stat compact label="Pipeline" info={DASHBOARD_TIPS.pipeline} value={`${formatCents(pipelineCents)}/mo`} hint={<Link href="/leads" className="underline">{openLeads.length} open lead{openLeads.length === 1 ? "" : "s"}</Link>} />
       </div>
-      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      {/* Snapshot sets this row's height; Needs attention matches it and
+          scrolls inside (it's taken out of the row's sizing with absolute
+          positioning). Below lg everything stacks at its natural height. */}
+      <div className="grid gap-6 lg:min-h-72 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <WaterLinePanel
           personal={personalCents / 100}
           business={businessCents / 100}
@@ -49,7 +52,12 @@ export default async function DashboardPage() {
           topClientName={topClient?.name}
           topClientMrr={topClient ? topClient.monthlyCents / 100 : undefined}
         />
-        <AttentionPanel items={attentionItems({ overdue, staleLeads, floorCents: data.floorCents, clientCount: data.clients.length })} />
+        <div className="relative min-w-0">
+          <AttentionPanel
+            className="lg:absolute lg:inset-0"
+            items={attentionItems({ overdue, staleLeads, floorCents: data.floorCents, clientCount: data.clients.length })}
+          />
+        </div>
       </div>
       <UpcomingPaymentsPanel rows={rows.filter((r) => r.status !== "paid")} />
     </>

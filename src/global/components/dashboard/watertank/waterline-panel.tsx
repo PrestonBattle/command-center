@@ -1,11 +1,10 @@
 import Glass from "@/global/components/glass/glass";
 import { calculateFloorCents } from "@/global/lib/floor";
-import { formatDollars as money } from "@/global/lib/money";
-import { InsetStat } from "./inset-stat";
+import { SnapshotEmpty } from "./snapshot-empty";
 import { SnapshotExplainer } from "./snapshot-explainer";
+import { SnapshotFigures } from "./snapshot-figures";
 import { WaterLineTank } from "./water-tank";
-import { coverageDate, waterlineState, WATERLINE_STATES } from "./waterline-state";
-import { WATERLINE_TIPS } from "./waterline-tips";
+import { WATERLINE_STATES, waterlineState } from "./waterline-state";
 
 type WaterLinePanelProps = {
   /** Monthly personal expenses — rent, food, car, savings. */
@@ -18,29 +17,22 @@ type WaterLinePanelProps = {
   revenue: number;
   topClientName?: string;
   topClientMrr?: number;
-  style?: React.CSSProperties;
+  className?: string;
 };
 
 /**
  * The dashboard's headline: how far revenue is above or below the floor,
  * shown as a water line, a state word, and three plain-language figures.
+ * With no floor set there's nothing to measure against, so it shows how to
+ * set one instead of a misleading "0% of what you need".
  */
-export function WaterLinePanel({
-  personal,
-  business,
-  taxRate,
-  revenue,
-  topClientName,
-  topClientMrr,
-  style,
-}: WaterLinePanelProps) {
+export function WaterLinePanel({ personal, business, taxRate, revenue, topClientName, topClientMrr, className = "" }: WaterLinePanelProps) {
   // The floor formula lives in one place (global/lib/floor.ts); this panel
   // works in dollars, so convert in and out.
   const floor =
     calculateFloorCents({ personalCents: personal * 100, businessCents: business * 100, taxRate: taxRate / 100 }) / 100;
-
-  const gap = floor - revenue;
-  const coverage = floor > 0 ? revenue / floor : 0;
+  const hasFloor = floor > 0;
+  const coverage = hasFloor ? revenue / floor : 0;
   const state = WATERLINE_STATES[waterlineState(coverage)];
   const topShare = topClientMrr && revenue > 0 ? topClientMrr / revenue : null;
 
@@ -50,7 +42,7 @@ export function WaterLinePanel({
   const taxUncovered = revenue >= personal + business && revenue < floor;
 
   return (
-    <Glass style={style} className="grid grid-cols-[14px_minmax(0,1fr)] gap-5 rounded-3xl p-6">
+    <Glass className={`grid grid-cols-[14px_minmax(0,1fr)] gap-5 rounded-3xl p-6 ${className}`}>
       <WaterLineTank coverage={coverage} />
 
       <div>
@@ -59,34 +51,20 @@ export function WaterLinePanel({
             <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">Snapshot</h2>
             <SnapshotExplainer floor={floor} coverage={coverage} />
           </div>
-          <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${state.chip}`}>{state.label}</span>
+          {hasFloor && <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${state.chip}`}>{state.label}</span>}
         </div>
 
-        <p className={`font-display text-4xl font-bold leading-none tabular-nums ${state.figure}`}>
-          {money(Math.abs(gap))} <span className="text-3xl">{gap > 0 ? "short" : "clear"}</span>
-        </p>
-        <span className="text-xs text-[var(--text-faint)]">Floor · {money(floor)}</span>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">
-          Revenue is {money(revenue)} — {Math.round(coverage * 100)}% of what you need.
-        </p>
-
-        <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
-          {/* 30.44 = average days per month, so a day's cost doesn't jump
-              between February and March. */}
-          <InsetStat label="A day costs" value={money(floor / 30.44)} hint="Whether or not you work" info={WATERLINE_TIPS.dayCost} />
-          <InsetStat label="Covered through" value={coverageDate(coverage)} hint="At this month's rate" info={WATERLINE_TIPS.coveredThrough} />
-          <InsetStat
-            label="Largest client"
-            info={WATERLINE_TIPS.largestClient}
-            value={topShare ? `${Math.round(topShare * 100)}%` : "—"}
-            hint={topShare ? (topClientName ?? "of revenue") : "No clients yet"}
+        {hasFloor ? (
+          <SnapshotFigures
+            floor={floor}
+            revenue={revenue}
+            coverage={coverage}
+            taxUncovered={taxUncovered}
+            topShare={topShare}
+            topClientName={topClientName}
           />
-        </div>
-
-        {taxUncovered && (
-          <p className="mt-3 rounded-lg bg-[var(--warn)]/10 p-3 text-sm text-[var(--text)]">
-            You&apos;re paying yourself and running the business, but nothing is going aside for taxes.
-          </p>
+        ) : (
+          <SnapshotEmpty />
         )}
       </div>
     </Glass>

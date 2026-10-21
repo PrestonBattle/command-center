@@ -1,36 +1,29 @@
-import { IconAlertTriangle, IconCircleCheck, IconClockHour4 } from "@tabler/icons-react";
-import Link from "next/link";
+import { IconCircleCheck } from "@tabler/icons-react";
 import { GlassPanel } from "@/global/components/glass/glass-panel";
 import type { AttentionItem } from "../_lib/attention";
+import { AttentionList } from "./attention-list";
 
-const ICON = {
-  bad: <IconAlertTriangle size={18} aria-hidden className="text-[var(--bad)]" />,
-  warn: <IconClockHour4 size={18} aria-hidden className="text-[var(--warn)]" />,
-  ok: <IconCircleCheck size={18} aria-hidden className="text-[var(--ok)]" />,
-} as const;
+type Props = {
+  items: AttentionItem[];
+  className?: string;
+};
 
-/** The dashboard's to-do list. Each row links to where it gets fixed. */
-export function AttentionPanel({ items }: { items: AttentionItem[] }) {
+/**
+ * The dashboard's to-do list. Each row links to where it gets fixed. The
+ * count is in the title so you know how many are waiting even when the
+ * list scrolls; when there's nothing, the all-clear fills the card.
+ */
+export function AttentionPanel({ items, className = "" }: Props) {
   return (
-    <GlassPanel title="Needs attention">
+    <GlassPanel title={items.length ? `Needs attention · ${items.length}` : "Needs attention"} className={className}>
       {items.length === 0 ? (
-        <p className="flex items-center gap-2 text-sm">
-          {ICON.ok} Nothing overdue, nothing stuck. Nice.
-        </p>
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 py-6 text-center">
+          <IconCircleCheck size={32} stroke={1.6} aria-hidden className="text-[var(--ok)]" />
+          <p className="font-semibold">All clear</p>
+          <p className="text-sm text-[var(--text-muted)]">Nothing overdue, nothing stuck.</p>
+        </div>
       ) : (
-        <ul className="flex flex-col">
-          {items.slice(0, 6).map((item) => (
-            <li key={item.id} className="border-t border-[var(--divider)] first:border-t-0">
-              <Link href={item.href} className="flex items-start gap-3 rounded-xl py-3 hover:bg-[var(--surface-inset)] focus-visible:outline-2 focus-visible:outline-[var(--accent)]">
-                <span className="mt-0.5">{ICON[item.tone]}</span>
-                <span className="flex min-w-0 flex-col">
-                  <span className="font-semibold">{item.title}</span>
-                  <span className="text-sm text-[var(--text-muted)]">{item.detail}</span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <AttentionList items={items} />
       )}
     </GlassPanel>
   );
