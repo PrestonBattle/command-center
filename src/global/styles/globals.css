@@ -9,41 +9,40 @@
 @import "tailwindcss";
 @import "@mantine/core/styles.layer.css";
 @import "@mantine/notifications/styles.layer.css";
-/* Harbor and Harbor night: overrides of the variables below. */
+/* Harbor deep and Harbor night: overrides of the variables below. */
 @import "./themes.css";
 
 
 :root {
   /*
-   * Sunset theme. Every color in a component comes from one of these.
-   * Text shades are dark warm browns, not grey: grey on orange glass reads
-   * dirty. Each text shade holds 4.5:1 on the warmest blob behind light
-   * glass (~#fdba74); --text-muted holds it even on the hottest spot.
+   * Harbor, the default theme. Every color in a component comes from one of
+   * these; themes.css overrides them for Harbor deep and Harbor night.
+   * Text shades are ink and harbor blue. Each holds 4.5:1 on the warmest
+   * spot behind light glass (the champagne blob, bottom right).
    */
-  --text: #431407;
-  --text-muted: #6c2b12;
-  --text-faint: #7a3519;
+  --text: #1c2b36; /* ink */
+  --text-muted: #2c4d63; /* harbor */
+  --text-faint: #3d5a6e;
 
-  /* Icons, active nav, focus. Darker than Mantine orange-9 so it still
-     clears 3:1 as a UI edge on the orange parts of the background. */
-  --accent: #9a3412;
-  /* Text on a filled accent button. Dark themes with a light accent flip it. */
+  /* Icons, active nav, focus, links. */
+  --accent: #2c4d63;
+  /* Text on a filled accent button. Themes with a light accent flip it. */
   --on-accent: #ffffff;
 
   /* Status colors carry meaning (paid / at risk / overdue). Not decoration. */
-  --ok: #166534;
-  --warn: #92400e;
-  --bad: #991b1b;
+  --ok: #1f6b45;
+  --warn: #7a5a1e;
+  --bad: #9b2c2c;
 
   /* Inputs. The border is opaque so the field edge clears 3:1 on glass. */
   --field-bg: rgb(255 255 255 / 0.6);
-  --field-bg-hover: rgb(255 255 255 / 0.75);
-  --field-border: #b4693f;
+  --field-bg-hover: rgb(255 255 255 / 0.8);
+  --field-border: #6b8396;
 
   /* Surfaces inside cards: hairline dividers and inset tiles. */
-  --divider: rgb(124 45 18 / 0.15);
-  --surface-inset: rgb(255 255 255 / 0.45);
-  --pill-shadow: 0 1px 3px rgb(124 45 18 / 0.15);
+  --divider: rgb(28 49 66 / 0.12);
+  --surface-inset: rgb(255 255 255 / 0.5);
+  --pill-shadow: 0 1px 3px rgb(28 49 66 / 0.15);
 
   /* Glass. Consumed by global/components/glass/style.css. */
   --glass-tint: #ffffff;
@@ -51,22 +50,22 @@
   --glass-gloss: rgb(255 255 255 / 0.28);
   --glass-saturate: 170%;
   --glass-edge: rgb(255 255 255 / 0.9);
-  --glass-shadow: 0 10px 40px -8px rgb(124 45 18 / 0.18), 0 2px 6px rgb(124 45 18 / 0.06);
+  --glass-shadow: 0 10px 40px -8px rgb(28 49 66 / 0.18), 0 2px 6px rgb(28 49 66 / 0.06);
   --glass-ring: linear-gradient(160deg,
       rgb(255 255 255 / 0.9),
       rgb(255 255 255 / 0.25) 40%,
       rgb(255 255 255 / 0.15) 70%,
       rgb(255 255 255 / 0.6));
 
-  /* The blurred blobs behind everything (see Background). */
-  --sunset-base: #fff3ec;
-  --sunset-peach: #fdba74;
-  --sunset-pink: #f9a8d4;
-  --sunset-orange: #fb923c;
-  --sunset-rose: #fecaca;
-  --sunset-gold: #fde68a;
-  --sunset-shine: rgb(255 255 255 / 0.5);
-  --sunset-shine-soft: rgb(255 255 255 / 0.3);
+  /* The blurred blobs behind everything (see Background), by position. */
+  --bg-base: #eef3f6; /* mist */
+  --bg-top-left: #dce6ec; /* powder */
+  --bg-top-right: #f5e6e4; /* blush */
+  --bg-center: #a9c0cf; /* powder, deepened toward harbor */
+  --bg-bottom-left: #f5e6e4; /* blush */
+  --bg-bottom-right: #cdb78e; /* champagne */
+  --bg-shine: rgb(255 255 255 / 0.5);
+  --bg-shine-soft: rgb(255 255 255 / 0.3);
 }
 
 @theme inline {
@@ -90,5 +89,5 @@ body {
   position: relative;
   font-family: var(--font-sans);
   color: var(--text);
-  background: var(--sunset-base);
+  background: var(--bg-base);
 }

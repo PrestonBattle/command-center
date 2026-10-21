@@ -389,8 +389,8 @@ Playwright isn't a dependency; adding it is your call (README explains).
 
 ## 13. Harbor themes and Settings
 
-Your palette (mist, powder, harbor, midnight, ink, champagne, blush) as two
-themes next to Sunset, picked on a new **Settings** page.
+Your palette (mist, powder, harbor, midnight, ink, champagne, blush) as
+themes, picked on a new **Settings** page. (Sunset was removed in §14.)
 
 **How it works**
 - `global/lib/themes.ts` lists the themes. `global/styles/themes.css` has
@@ -422,4 +422,30 @@ statement expected") isn't in the code. `tsconfig.json` includes the types
 `npm run dev` generates; building while dev runs (or after it crashed
 mid-write) reads a half-written file. Stop dev, delete `.next`, build. The
 production build passes here.
+
+---
+
+## 14. Harbor deep added, Sunset removed
+
+**Themes now:** Harbor (default), Harbor deep, Harbor night.
+
+- **Harbor is the base.** Its values moved into `:root` in `globals.css`;
+  `themes.css` only holds Harbor deep and Harbor night. The Mantine palette
+  is now `harbor` (built from your colors) instead of the orange one, and
+  `ink` (secondary buttons) is a blue-black instead of brown.
+- **Background variables renamed** from `--sunset-peach`, `--sunset-gold`…
+  to position names: `--bg-base`, `--bg-top-left`, `--bg-center`,
+  `--bg-bottom-right`… A theme-neutral name won't go stale the next time
+  colors change.
+- **Harbor deep** = Harbor's mist page with midnight-blue cards. Inside any
+  card, menu or dialog it switches to the night palette (light text,
+  champagne accent). That palette is written once in `themes.css` and
+  shared with Harbor night, so the two can't drift apart. Cards are 92%
+  solid: less see-through than the other themes, on purpose (at 82% they
+  looked slate grey).
+- Anyone whose cookie still says `sunset` gets Harbor (tested).
+
+**Checked:** axe 0 violations in all 3 themes (every page + delete dialog);
+worst-case contrast on the glass: Harbor 4.6:1, Harbor deep 5.2:1, Harbor
+night 4.6:1; edge suite 27/27; lint, types, 27 unit tests.
 

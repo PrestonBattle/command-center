@@ -17,32 +17,32 @@ import controls from "./controls.module.css";
 import inputs from "./inputs.module.css";
 
 /**
- * The Sunset primary, light to dark. Mantine's own orange tops out at
- * #d9480f, which gives white button text only 4.29:1 -- under the 4.5:1
- * minimum. Shade 8 here is the same burnt orange as `--accent` in
- * globals.css, so buttons and links match and white text clears 7:1.
+ * The Harbor primary, light to dark, built from the palette (mist, powder,
+ * harbor, midnight). Shade 8 is harbor blue, the same as `--accent`, so
+ * buttons and links match; white text on it is over 9:1. Dark themes
+ * override the primary through CSS variables in themes.css.
  * Hex lives here because Mantine needs real colors to build its variants.
  */
-const SUNSET: MantineColorsTuple = [
-  "#fff7ed", "#ffedd5", "#fed7aa", "#fdba74", "#fb923c",
-  "#f97316", "#ea580c", "#c2410c", "#9a3412", "#7c2d12",
+const HARBOR: MantineColorsTuple = [
+  "#eef3f6", "#dce6ec", "#b9cbd8", "#94afc2", "#6f93ab",
+  "#4f7690", "#3a6079", "#33566e", "#2c4d63", "#1c3142",
 ];
 
 /**
- * Warm browns for secondary buttons (Cancel, Undo, Skip). Mantine's "dark"
- * is a neutral near-black that reads cold on the sunset background; shade 8
- * here matches `--text`.
+ * Secondary buttons (Cancel, Undo, Skip): ink-colored text, not a second
+ * accent. Mantine's "dark" is a neutral grey-black; shade 8 here is `--text`.
  */
 const INK: MantineColorsTuple = [
-  "#fdf4ef", "#f6e3d8", "#e9c3ad", "#d69a7c", "#b8714f",
-  "#9a4e2f", "#7a3519", "#6c2b12", "#431407", "#2c0d04",
+  "#f2f5f7", "#dfe6eb", "#bccad4", "#94a8b6", "#6c8496",
+  "#4d6577", "#3d5a6e", "#2c4d63", "#1c2b36", "#111b22",
 ];
 
 /**
  * Filled primary buttons take their label color from `--on-accent`, so each
- * theme decides: white on burnt orange or harbor blue, dark ink on Harbor
- * night's champagne (white on champagne is ~2:1). Mantine otherwise writes
- * white as an inline style, which no stylesheet can override.
+ * theme decides: white on harbor blue; dark ink on champagne, in Harbor
+ * night and inside Harbor deep's cards (white on champagne is ~2:1).
+ * Mantine otherwise writes white as an inline style, which no stylesheet
+ * can override.
  */
 const variantColorResolver: VariantColorsResolver = (input) => {
   const colors = defaultVariantColorsResolver(input);
@@ -52,15 +52,15 @@ const variantColorResolver: VariantColorsResolver = (input) => {
 };
 
 /**
- * Mantine theme for the Sunset look. Every color other than the primary
+ * Mantine theme for the Harbor themes. Every color other than the primary
  * comes from the CSS variables in globals.css.
  *
  * Input and InputWrapper are the base of every Mantine input, so styling
  * them here styles TextInput, NumberInput, Select, Textarea and the rest.
  */
 export const theme = createTheme({
-  colors: { sunset: SUNSET, ink: INK },
-  primaryColor: "sunset",
+  colors: { harbor: HARBOR, ink: INK },
+  primaryColor: "harbor",
   primaryShade: 8,
   variantColorResolver,
   defaultRadius: "md",

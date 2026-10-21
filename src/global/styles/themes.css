@@ -1,5 +1,5 @@
 /*
- * Color themes. Sunset is the default `:root` values in globals.css; each
+ * Color themes. Harbor is the default `:root` values in globals.css; each
  * block here overrides the same variables when <html data-theme="..."> is
  * set (root layout, from the theme cookie). Components never change: they
  * read var(--text), var(--accent) and friends, and the block decides.
@@ -9,63 +9,45 @@
  * after this file loads, so a lighter selector would lose to it.
  *
  * Contrast was measured on the actual blurred glass, at the brightest spot
- * behind the text (see docs/REVIEW-NOTES.md §13), not just on a flat color.
+ * behind the text (docs/REVIEW-NOTES.md §13–14), not just on a flat color.
  */
 
-/* Every theme: Mantine's own greys follow ours, so slider marks, placeholders
-   and dimmed text match the theme instead of staying neutral grey. */
+/* ---------- Every theme ---------- */
 html:root[data-mantine-color-scheme] {
+  /* Mantine's own greys follow ours, so slider marks, placeholders and
+     dimmed text match the theme instead of staying neutral grey. */
   --mantine-color-dimmed: var(--text-faint);
   --mantine-color-placeholder: var(--text-faint);
   --mantine-color-text: var(--text);
-}
 
-/* ---------- Harbor: mist base, powder and blush, harbor-blue accent ---------- */
-html[data-theme="harbor"]:root[data-mantine-color-scheme] {
-  --text: #1c2b36; /* ink */
-  --text-muted: #2c4d63; /* harbor */
-  --text-faint: #3d5a6e;
-  --accent: #2c4d63;
-  --on-accent: #ffffff;
-
-  --ok: #1f6b45;
-  --warn: #7a5a1e;
-  --bad: #9b2c2c;
-
-  --field-bg: rgb(255 255 255 / 0.6);
-  --field-bg-hover: rgb(255 255 255 / 0.8);
-  --field-border: #6b8396;
-  --divider: rgb(28 49 66 / 0.12);
-  --surface-inset: rgb(255 255 255 / 0.5);
-  --pill-shadow: 0 1px 3px rgb(28 49 66 / 0.15);
-
-  --glass-shadow: 0 10px 40px -8px rgb(28 49 66 / 0.18), 0 2px 6px rgb(28 49 66 / 0.06);
-
-  --sunset-base: #eef3f6; /* mist */
-  --sunset-peach: #dce6ec; /* powder */
-  --sunset-pink: #f5e6e4; /* blush */
-  --sunset-orange: #a9c0cf; /* powder, deepened toward harbor */
-  --sunset-rose: #f5e6e4; /* blush */
-  --sunset-gold: #cdb78e; /* champagne */
-
+  /* Harbor's button colors, pinned so light variants (Mark paid, Open Money)
+     use harbor blue rather than whichever shade Mantine would pick. */
   --mantine-primary-color-filled: #2c4d63;
   --mantine-primary-color-filled-hover: #1c3142;
   --mantine-primary-color-light: rgb(44 77 99 / 0.1);
   --mantine-primary-color-light-hover: rgb(44 77 99 / 0.16);
   --mantine-primary-color-light-color: #2c4d63;
-  --mantine-color-sunset-filled: #2c4d63;
-  --mantine-color-sunset-filled-hover: #1c3142;
-  --mantine-color-sunset-light: rgb(44 77 99 / 0.1);
-  --mantine-color-sunset-light-hover: rgb(44 77 99 / 0.16);
-  --mantine-color-sunset-light-color: #2c4d63;
-  --mantine-color-sunset-text: #2c4d63;
+  --mantine-color-harbor-filled: #2c4d63;
+  --mantine-color-harbor-filled-hover: #1c3142;
+  --mantine-color-harbor-light: rgb(44 77 99 / 0.1);
+  --mantine-color-harbor-light-hover: rgb(44 77 99 / 0.16);
+  --mantine-color-harbor-light-color: #2c4d63;
+  --mantine-color-harbor-text: #2c4d63;
   --mantine-color-ink-light-color: #1c3142;
   --mantine-color-ink-light-hover: rgb(28 49 66 / 0.08);
   --mantine-color-ink-text: #1c3142;
 }
 
-/* ---------- Harbor night: ink and midnight, champagne accent ---------- */
-html[data-theme="harbor-night"]:root[data-mantine-color-scheme] {
+/*
+ * The night palette: light text, champagne accent, dark fields. Harbor night
+ * uses it everywhere; Harbor deep uses it only inside cards, menus and
+ * dialogs. Written once here so the two can't drift apart.
+ */
+html[data-theme="harbor-night"]:root[data-mantine-color-scheme],
+html[data-theme="harbor-deep"] .glass,
+html[data-theme="harbor-deep"] .mantine-Modal-content,
+html[data-theme="harbor-deep"] .mantine-Popover-dropdown,
+html[data-theme="harbor-deep"] .mantine-Combobox-dropdown {
   --text: #eef3f6; /* mist */
   --text-muted: #dce6ec; /* powder */
   --text-faint: #b9c8d2;
@@ -84,11 +66,80 @@ html[data-theme="harbor-night"]:root[data-mantine-color-scheme] {
   --field-bg-hover: rgb(28 43 54 / 0.6);
   --field-border: #7e97a8;
   --divider: rgb(238 243 246 / 0.14);
-  --surface-inset: rgb(28 43 54 / 0.35);
+  --surface-inset: rgb(255 255 255 / 0.06);
   --pill-shadow: 0 1px 3px rgb(0 0 0 / 0.4);
 
-  /* Darker, more opaque glass than the light themes. With the 8% tint the
-     champagne glow lifted panels until faint text fell to ~2:1. */
+  --mantine-color-text: #eef3f6;
+  --mantine-color-dimmed: #b9c8d2;
+  --mantine-color-placeholder: #b9c8d2;
+  --mantine-primary-color-filled: #cdb78e;
+  --mantine-primary-color-filled-hover: #d9c7a3;
+  --mantine-primary-color-light: rgb(205 183 142 / 0.15);
+  --mantine-primary-color-light-hover: rgb(205 183 142 / 0.22);
+  --mantine-primary-color-light-color: #e3d3b3;
+  --mantine-color-harbor-filled: #cdb78e;
+  --mantine-color-harbor-filled-hover: #d9c7a3;
+  --mantine-color-harbor-light: rgb(205 183 142 / 0.15);
+  --mantine-color-harbor-light-hover: rgb(205 183 142 / 0.22);
+  --mantine-color-harbor-light-color: #e3d3b3;
+  --mantine-color-harbor-text: #e3d3b3;
+  --mantine-color-ink-light-color: #dce6ec;
+  --mantine-color-ink-light-hover: rgb(238 243 246 / 0.08);
+  --mantine-color-ink-text: #dce6ec;
+  --mantine-color-red-light-color: #f7bbbb;
+  --mantine-color-red-text: #f7bbbb;
+
+  color: var(--text);
+}
+
+/* Menus and dialogs are dark cards in both dark themes. Mantine paints menus
+   with its own white, not --mantine-color-body, so they're named below. */
+html[data-theme="harbor-night"]:root[data-mantine-color-scheme],
+html[data-theme="harbor-deep"]:root[data-mantine-color-scheme] {
+  --mantine-color-body: #1c3142;
+  --mantine-color-default: #22394b;
+  --mantine-color-default-hover: #2a4458;
+  --mantine-color-default-color: #eef3f6;
+  --mantine-color-default-border: #4a6476;
+  --mantine-color-gray-0: rgb(255 255 255 / 0.06);
+  --mantine-color-gray-1: rgb(255 255 255 / 0.1);
+  --mantine-color-gray-2: rgb(255 255 255 / 0.16);
+}
+
+html[data-theme="harbor-night"] .mantine-Popover-dropdown,
+html[data-theme="harbor-night"] .mantine-Combobox-dropdown,
+html[data-theme="harbor-deep"] .mantine-Popover-dropdown,
+html[data-theme="harbor-deep"] .mantine-Combobox-dropdown {
+  background: #1c3142;
+  border-color: #4a6476;
+}
+
+/* ---------- Harbor deep: mist page, midnight-blue cards ---------- */
+html[data-theme="harbor-deep"]:root[data-mantine-color-scheme] {
+  /* Page background a touch cooler than Harbor so the dark cards sit on it. */
+  --bg-center: #b9cbd8;
+  --bg-bottom-right: #e3d3b3; /* champagne, softened */
+
+  /* 92% solid: at 82% the pale page showed through and the cards read as
+     slate grey. The trade: less see-through than the other themes. */
+  --glass-tint: #1a3348;
+  --glass-tint-amount: 92%;
+  --glass-gloss: rgb(255 255 255 / 0.1);
+  --glass-edge: rgb(255 255 255 / 0.18);
+  --glass-shadow: 0 16px 40px -12px rgb(28 49 66 / 0.45), 0 2px 6px rgb(28 49 66 / 0.15);
+  --glass-ring: linear-gradient(160deg,
+      rgb(205 183 142 / 0.6),
+      rgb(255 255 255 / 0.1) 40%,
+      rgb(255 255 255 / 0.06) 70%,
+      rgb(220 230 236 / 0.35));
+}
+
+/* ---------- Harbor night: ink and midnight, champagne accent ---------- */
+html[data-theme="harbor-night"]:root[data-mantine-color-scheme] {
+  --surface-inset: rgb(28 43 54 / 0.35);
+
+  /* Darker, more opaque glass than Harbor. With the 8% tint the champagne
+     glow lifted panels until faint text fell to ~2:1. */
   --glass-tint: #1c3142;
   --glass-tint-amount: 55%;
   --glass-gloss: rgb(255 255 255 / 0.08);
@@ -100,50 +151,12 @@ html[data-theme="harbor-night"]:root[data-mantine-color-scheme] {
       rgb(255 255 255 / 0.05) 70%,
       rgb(220 230 236 / 0.3));
 
-  --sunset-base: #1c2b36; /* ink */
-  --sunset-peach: #2c4d63; /* harbor */
-  --sunset-pink: #4a3f45; /* blush, dimmed for night */
-  --sunset-orange: #1c3142; /* midnight */
-  --sunset-rose: #2c4d63;
-  --sunset-gold: #7d6c4e; /* champagne, dimmed so the glow stays behind dark glass */
-  --sunset-shine: rgb(255 255 255 / 0.04);
-  --sunset-shine-soft: rgb(255 255 255 / 0.02);
-
-  /* Mantine surfaces (menus, dialogs, notifications) are white by default,
-     which would put mist text on white. Point them at midnight instead. */
-  --mantine-color-body: #1c3142;
-  --mantine-color-default: #22394b;
-  --mantine-color-default-hover: #2a4458;
-  --mantine-color-default-color: #eef3f6;
-  --mantine-color-default-border: #4a6476;
-  --mantine-color-gray-0: rgb(255 255 255 / 0.06);
-  --mantine-color-gray-1: rgb(255 255 255 / 0.1);
-  --mantine-color-gray-2: rgb(255 255 255 / 0.16);
-
-  --mantine-primary-color-filled: #cdb78e;
-  --mantine-primary-color-filled-hover: #d9c7a3;
-  --mantine-primary-color-light: rgb(205 183 142 / 0.15);
-  --mantine-primary-color-light-hover: rgb(205 183 142 / 0.22);
-  --mantine-primary-color-light-color: #e3d3b3;
-  --mantine-color-sunset-filled: #cdb78e;
-  --mantine-color-sunset-filled-hover: #d9c7a3;
-  --mantine-color-sunset-light: rgb(205 183 142 / 0.15);
-  --mantine-color-sunset-light-hover: rgb(205 183 142 / 0.22);
-  --mantine-color-sunset-light-color: #e3d3b3;
-  --mantine-color-sunset-text: #e3d3b3;
-  --mantine-color-ink-light-color: #dce6ec;
-  --mantine-color-ink-light-hover: rgb(238 243 246 / 0.08);
-  --mantine-color-ink-text: #dce6ec;
-  --mantine-color-red-light-color: #f7bbbb;
-  --mantine-color-red-text: #f7bbbb;
-}
-
-/* Menus (Select options, popovers) are painted with Mantine's white, not
-   --mantine-color-body, so night needs them named. Dialogs already follow
-   --mantine-color-body above. */
-html[data-theme="harbor-night"] .mantine-Popover-dropdown,
-html[data-theme="harbor-night"] .mantine-Combobox-dropdown {
-  background: #1c3142;
-  border-color: #4a6476;
-  color: var(--text);
+  --bg-base: #1c2b36; /* ink */
+  --bg-top-left: #2c4d63; /* harbor */
+  --bg-top-right: #4a3f45; /* blush, dimmed for night */
+  --bg-center: #1c3142; /* midnight */
+  --bg-bottom-left: #2c4d63;
+  --bg-bottom-right: #7d6c4e; /* champagne, dimmed so the glow stays behind dark glass */
+  --bg-shine: rgb(255 255 255 / 0.04);
+  --bg-shine-soft: rgb(255 255 255 / 0.02);
 }

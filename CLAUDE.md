@@ -94,7 +94,7 @@ time, extract it instead. Known building blocks:
   segmented filter, applied through the theme. Secondary buttons use
   `color="ink"` (warm brown), never Mantine's `"dark"`.
 - `global/lib/themes.ts` + `global/styles/themes.css` — color themes
-  (Sunset, Harbor, Harbor night). A theme is one `[data-theme]` block of the
+  (Harbor, Harbor deep, Harbor night). A theme is one `[data-theme]` block of the
   same CSS variables; components never check which theme is on. New colors
   go in every theme block. Check contrast on the glass in each theme.
 - `global/lib/client-status.ts` — client status labels and badge tones.
@@ -129,7 +129,9 @@ time, extract it instead. Known building blocks:
 
 ## Styling
 
-- Sunset theme: light glass on the warm blurred background.
+- Harbor themes: glass on a blurred mist / powder / champagne background.
+  Harbor is the default; Harbor deep (dark cards) and Harbor night (dark
+  everything) are in Settings.
 - Colors come from CSS variables only (`var(--text)`, `--text-muted`,
   `--text-faint`, `--accent`, `--ok`, `--warn`, `--bad`, `--field-*`,
   `--glass-*`). No hex codes in components; add a variable instead.

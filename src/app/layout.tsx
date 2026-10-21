@@ -20,7 +20,7 @@ export const metadata: Metadata = {
  */
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   // The theme is set on the server, from a cookie, so the first paint is
-  // already in the right colors. A client-side switch would flash Sunset
+  // already in the right colors. A client-side switch would flash the default theme
   // on every page load.
   const colorTheme = toThemeId((await cookies()).get(THEME_COOKIE)?.value);
 
