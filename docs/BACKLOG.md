@@ -167,7 +167,7 @@ schema changes.
   card (the lead's name, or a "⋯" menu that also holds Move to and Delete).
   Stage isn't in the form. Converted leads can still fix contact details.
 
-- [ ] **L5 · Search leads** · `ready` · after L8
+- [x] **L5 · Search leads** · `ready` · after L8
   Search box above the board, `?q=` in the URL, filtered on the server.
   Matches name, contact, email and phone. Columns without a match say
   "No matches". Same toolbar pattern as Clients.

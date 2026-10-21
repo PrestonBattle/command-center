@@ -1,19 +1,26 @@
 import { PageHeader } from "@/global/components/layout";
 import { getCurrentOrg, getDataLayer } from "@/global/data";
 import { todayIso } from "@/global/lib/dates";
+import { OPEN_STAGES } from "@/global/lib/lead-stages";
 import { formatCents } from "@/global/lib/money";
 import { AddLeadButton } from "./_components/add-lead-button";
 import { LeadColumn } from "./_components/lead-column";
-import { LEAD_STAGES, OPEN_STAGES } from "@/global/lib/lead-stages";
+import { LeadsToolbar } from "./_components/leads-toolbar";
+import { boardColumns } from "./_lib/board";
 
-/** The pipeline: one column per stage, oldest-moved first so stale leads surface. */
-export default async function LeadsPage() {
-  const [org, dl] = await Promise.all([getCurrentOrg(), getDataLayer()]);
-  const leads = (await dl.leads.list()).sort((a, b) => a.stage_changed_at.localeCompare(b.stage_changed_at));
+type Props = { searchParams: Promise<{ q?: string }> };
+
+/** The pipeline: one column per stage, filtered by ?q= when searching. */
+export default async function LeadsPage({ searchParams }: Props) {
+  const [{ q = "" }, org, dl] = await Promise.all([searchParams, getCurrentOrg(), getDataLayer()]);
+  const leads = await dl.leads.list();
   const today = todayIso(org.timezone);
 
+  // The header describes the whole pipeline, not just what the search shows.
   const open = leads.filter((l) => OPEN_STAGES.includes(l.stage));
   const potential = open.reduce((t, l) => t + (l.estimated_monthly_cents ?? 0), 0);
+  const columns = boardColumns(leads, q);
+  const matchCount = columns.reduce((t, c) => t + c.leads.length, 0);
 
   return (
     <>
@@ -22,9 +29,10 @@ export default async function LeadsPage() {
         description={`${open.length} open · ${formatCents(potential)}/mo if they all close`}
         actions={<AddLeadButton />}
       />
+      <LeadsToolbar query={q} matchCount={matchCount} />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {LEAD_STAGES.map((stage) => (
-          <LeadColumn key={stage.value} title={stage.label} leads={leads.filter((l) => l.stage === stage.value)} today={today} />
+        {columns.map((column) => (
+          <LeadColumn key={column.stage} column={column} today={today} searching={Boolean(q)} />
         ))}
       </div>
     </>

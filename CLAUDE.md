@@ -56,11 +56,15 @@ time, extract it instead. Known building blocks:
 
 - `Glass`, `GlassPanel` — every card and surface (the old paper `Panel` is gone).
 - `global/components/inputs` — `MoneyInput`, `PercentInput`,
-  `IntervalSelect`. Plain text fields are Mantine `TextInput`; the theme
+  `IntervalSelect`, `SearchInput` (writes `?q=` to the URL as you type). Plain text fields are Mantine `TextInput`; the theme
   styles every Mantine input, so never style a raw `<input>`.
 - `global/components/layout` — `PageHeader`, `FormSection`, `FieldGrid`,
   `Callout`, `FormActions`, `StatusBadge`, `Stat`, `EmptyState`.
 - `global/hooks/use-is-active.ts` — which nav link is current.
+- `global/hooks/use-set-search-param.ts` — `setParam(key, value)` for
+  filters that live in the URL.
+- `global/lib/search.ts` — `matchesQuery(query, fields)`: the one search
+  rule (case-insensitive, phone numbers match on digits).
 - `global/lib/intervals.ts` — billing interval options and labels.
 - `global/lib/floor.ts` — `calculateFloorCents`, `floorBreakdown`, `sumExpenses`.
 - `global/lib/billing.ts` — `monthlyCents`, `dueDateInMonth`,

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { BackButton } from "@/global/components/back-button";
 import { FloorForm } from "@/global/components/floor/floor-form";
 import { GlassPanel } from "@/global/components/glass/glass-panel";
-import { IntervalSelect, MoneyInput, PercentInput } from "@/global/components/inputs";
+import { IntervalSelect, MoneyInput, PercentInput, SearchInput } from "@/global/components/inputs";
 import { Callout, EmptyState, FieldGrid, FormSection, PageHeader, Stat, StatusBadge } from "@/global/components/layout";
 import { Stepper } from "@/global/components/stepper/stepper";
 import type { ActionResult } from "@/global/lib/action-result";
@@ -52,6 +52,8 @@ export default function ComponentsShowcase() {
           <TextInput label="Email" defaultValue="not-an-email" error="Enter a valid email" />
           <TextInput label="Disabled" defaultValue="Can't edit" disabled />
         </FieldGrid>
+        {/* Writes ?q= to this page's URL as you type. */}
+        <SearchInput label="Search the showcase" placeholder="SearchInput: try typing" value="" />
       </GlassPanel>
 
       <div className="grid gap-6 lg:grid-cols-2">
