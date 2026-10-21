@@ -172,7 +172,7 @@ schema changes.
   Matches name, contact, email and phone. Columns without a match say
   "No matches". Same toolbar pattern as Clients.
 
-- [ ] **L4 · Scrollable stage columns** · `ready` · after L5
+- [x] **L4 · Scrollable stage columns** · `ready` · after L5
   Desktop: columns a fixed height, each scrolling on its own, focusable with
   a label. Header shows count and monthly value. Phone: one stage at a time
   with stage tabs.
