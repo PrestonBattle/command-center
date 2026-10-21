@@ -76,3 +76,20 @@
     transition: none;
   }
 }
+
+/*
+ * Inputs in a row line up at the bottom, whatever sits above them. One field
+ * with a hint ("Your best guess") or a label that wraps to two lines would
+ * otherwise push its box lower than its neighbours. The outer wrapper is a
+ * column (it stretches to the grid row's height) and the box sits at the
+ * bottom of it, so labels and hints take the slack instead.
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  margin-top: auto;
+}
+
