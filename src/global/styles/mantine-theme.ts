@@ -81,10 +81,11 @@ export const theme = createTheme({
       },
     }),
     Input: Input.extend({
-      classNames: { input: inputs.input, section: inputs.section },
+      classNames: { input: inputs.input, section: inputs.section, wrapper: inputs.wrapper },
     }),
     InputWrapper: InputWrapper.extend({
       classNames: {
+        root: inputs.root,
         label: inputs.label,
         description: inputs.description,
         error: inputs.error,

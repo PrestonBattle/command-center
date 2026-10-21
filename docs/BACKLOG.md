@@ -156,7 +156,7 @@ Keep items small: one PR each, under ~400 changed lines.
 Order: L7 → L8 → L5 → L4 → L1 → L2 → L3. All use the existing tables; no
 schema changes.
 
-- [ ] **L7 · Inputs line up in every form** · `ready`
+- [x] **L7 · Inputs line up in every form** · `ready`
   Theme-level: inputs in a grid row align at the bottom whatever is above
   them (hint, wrapped label). Remove the one-off fix in `ExpenseFields`.
   Check Add lead, Add client, Life vest and onboarding forms.
