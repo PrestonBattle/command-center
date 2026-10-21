@@ -197,3 +197,18 @@ schema changes.
   Only if a column passes ~50 leads: "Show more" and batched loading in the
   data layer.
 
+## Dashboard
+
+- [x] **D1 · Explain numbers with "?" tips** · `ready`
+  Global `InfoTip`: opens on hover, focus or tap; stays open while hovered;
+  Escape or a click elsewhere closes it (WCAG 1.4.13). The explanation is
+  the button's description for screen readers. `info` prop on `Stat` and
+  the Snapshot figures. Tips on all six dashboard numbers.
+
+- [ ] **D2 · Animated Snapshot explainer** · `ready` · after D1
+  "?" on the Snapshot opens a step-through: the tank fills to each state
+  (Underwater, Treading water, Afloat, Clear) using your own floor, the
+  figure counts to the state's number, and each step explains it. Last
+  step: where you are now. Next/Back and state chips; no auto-advance.
+  Reduced motion: states change without animation.
+
