@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { LeadRow, LeadStage } from "@/global/types/supabase/types";
-import { boardColumns } from "./board";
+import { boardColumns, moveInColumns } from "./board";
 
 function lead(name: string, stage: LeadStage, changed: string, cents: number | null, extra: Partial<LeadRow> = {}): LeadRow {
   return {
@@ -38,3 +38,28 @@ describe("boardColumns", () => {
     expect(boardColumns(LEADS, "birch")[0].monthlyCents).toBe(40000);
   });
 });
+
+describe("moveInColumns", () => {
+  const cols = boardColumns(LEADS);
+  const col = (c: ReturnType<typeof boardColumns>, stage: string) => {
+    const found = c.find((x) => x.stage === stage);
+    if (!found) throw new Error(`no ${stage} column`);
+    return found;
+  };
+  const names = (c: ReturnType<typeof boardColumns>, stage: string) => col(c, stage).leads.map((l) => l.name);
+
+  it("moves the lead to the bottom of the target and updates both totals", () => {
+    const next = moveInColumns(cols, "Acme Dental", "proposal", "2026-10-21T12:00:00Z");
+    expect(names(next, "new")).toEqual(["Birch Yoga"]);
+    expect(names(next, "proposal")).toEqual(["Coral Law", "Acme Dental"]);
+    expect(next[0].monthlyCents).toBe(40000);
+    expect(col(next, "proposal").monthlyCents).toBe(120000);
+    expect(col(next, "proposal").leads[1].stage).toBe("proposal");
+  });
+
+  it("leaves the board alone for the same stage or an unknown lead", () => {
+    expect(moveInColumns(cols, "Acme Dental", "new")).toBe(cols);
+    expect(moveInColumns(cols, "nobody", "won")).toBe(cols);
+  });
+});
+

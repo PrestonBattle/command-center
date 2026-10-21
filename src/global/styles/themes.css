@@ -40,12 +40,13 @@ html:root[data-mantine-color-scheme] {
 
 /*
  * The night palette: light text, champagne accent, dark fields. Harbor night
- * uses it everywhere; Harbor deep uses it only inside cards, menus and
- * dialogs. Written once here so the two can't drift apart.
+ * uses it everywhere; Harbor deep uses it only inside cards, menus,
+ * dialogs and notifications. Written once here so the two can't drift apart.
  */
 html[data-theme="harbor-night"]:root[data-mantine-color-scheme],
 html[data-theme="harbor-deep"] .glass,
 html[data-theme="harbor-deep"] .mantine-Modal-content,
+html[data-theme="harbor-deep"] .mantine-Notification-root,
 html[data-theme="harbor-deep"] .mantine-Popover-dropdown,
 html[data-theme="harbor-deep"] .mantine-Combobox-dropdown {
   --text: #eef3f6; /* mist */

@@ -36,3 +36,22 @@ export function boardColumns(leads: LeadRow[], query = ""): BoardColumn[] {
     };
   });
 }
+
+/**
+ * The board right after a move, before the server confirms it: the lead
+ * leaves its column and joins the bottom of the target (it's now the
+ * newest in that stage, which is where the server will put it too), and
+ * both totals update. Unknown lead or same stage: unchanged.
+ */
+export function moveInColumns(columns: BoardColumn[], leadId: string, to: LeadStage, now = new Date().toISOString()): BoardColumn[] {
+  const lead = columns.flatMap((c) => c.leads).find((l) => l.id === leadId);
+  if (!lead || lead.stage === to) return columns;
+  const moved: LeadRow = { ...lead, stage: to, stage_changed_at: now };
+  const value = lead.estimated_monthly_cents ?? 0;
+
+  return columns.map((c) => {
+    if (c.stage === lead.stage) return { ...c, leads: c.leads.filter((l) => l.id !== leadId), monthlyCents: c.monthlyCents - value };
+    if (c.stage === to) return { ...c, leads: [...c.leads, moved], monthlyCents: c.monthlyCents + value };
+    return c;
+  });
+}
