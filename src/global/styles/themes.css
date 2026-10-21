@@ -36,6 +36,11 @@ html:root[data-mantine-color-scheme] {
   --mantine-color-ink-light-color: #1c3142;
   --mantine-color-ink-light-hover: rgb(28 49 66 / 0.08);
   --mantine-color-ink-text: #1c3142;
+
+  /* Red text (Delete in menus, danger buttons) is the theme's --bad, not
+     Mantine's bright red, which is 3.3:1 on white. */
+  --mantine-color-red-text: var(--bad);
+  --mantine-color-red-light-color: var(--bad);
 }
 
 /*
@@ -47,6 +52,7 @@ html[data-theme="harbor-night"]:root[data-mantine-color-scheme],
 html[data-theme="harbor-deep"] .glass,
 html[data-theme="harbor-deep"] .mantine-Modal-content,
 html[data-theme="harbor-deep"] .mantine-Notification-root,
+html[data-theme="harbor-deep"] .mantine-Menu-dropdown,
 html[data-theme="harbor-deep"] .mantine-Popover-dropdown,
 html[data-theme="harbor-deep"] .mantine-Combobox-dropdown {
   --text: #eef3f6; /* mist */
@@ -94,7 +100,8 @@ html[data-theme="harbor-deep"] .mantine-Combobox-dropdown {
 }
 
 /* Menus and dialogs are dark cards in both dark themes. Mantine paints menus
-   with its own white, not --mantine-color-body, so they're named below. */
+   and dropdowns with its own white, not --mantine-color-body, so they're
+   named below (each kind has its own class). */
 html[data-theme="harbor-night"]:root[data-mantine-color-scheme],
 html[data-theme="harbor-deep"]:root[data-mantine-color-scheme] {
   --mantine-color-body: #1c3142;
@@ -107,8 +114,10 @@ html[data-theme="harbor-deep"]:root[data-mantine-color-scheme] {
   --mantine-color-gray-2: rgb(255 255 255 / 0.16);
 }
 
+html[data-theme="harbor-night"] .mantine-Menu-dropdown,
 html[data-theme="harbor-night"] .mantine-Popover-dropdown,
 html[data-theme="harbor-night"] .mantine-Combobox-dropdown,
+html[data-theme="harbor-deep"] .mantine-Menu-dropdown,
 html[data-theme="harbor-deep"] .mantine-Popover-dropdown,
 html[data-theme="harbor-deep"] .mantine-Combobox-dropdown {
   background: #1c3142;
@@ -160,4 +169,11 @@ html[data-theme="harbor-night"]:root[data-mantine-color-scheme] {
   --bg-bottom-right: #7d6c4e; /* champagne, dimmed so the glow stays behind dark glass */
   --bg-shine: rgb(255 255 255 / 0.04);
   --bg-shine-soft: rgb(255 255 255 / 0.02);
+}
+
+/* Menu items take their color from shade 6 (Delete: Mantine's bright red,
+   3.3:1 on white). Inside menus only, red means the theme's --bad, which
+   resolves on the menu itself, so dark menus get the dark-theme red. */
+html .mantine-Menu-dropdown {
+  --mantine-color-red-6: var(--bad);
 }

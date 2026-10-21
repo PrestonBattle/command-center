@@ -42,11 +42,11 @@ export function LeadMenu({ lead, locked, onEdit, onMove }: LeadMenuProps) {
           <Menu.Dropdown>
             {editItem}
             <Menu.Divider />
-            {/* Not a button: what's missing and where to go instead. */}
-            <p className="max-w-56 px-3 py-2 text-xs text-[var(--text-muted)]">
+            {/* A label, not an item: what's missing and where to go instead. */}
+            <Menu.Label className="max-w-56 whitespace-normal normal-case">
               They&apos;re a client now, so this lead can&apos;t be moved or deleted. To stop working with them, set the
               client to Ended.
-            </p>
+            </Menu.Label>
           </Menu.Dropdown>
         ) : (
           <Menu.Dropdown>
