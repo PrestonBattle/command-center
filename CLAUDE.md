@@ -86,7 +86,8 @@ time, extract it instead. Known building blocks:
   buttons that navigate. **Server components must use these, never
   `component={Link}`**: functions can't be passed from server to client.
 - `global/components/stepper` — `Stepper`; `BackButton`; `ConfirmButton`
-  (are-you-sure dialog before an action).
+  (are-you-sure dialog before an action); `ConfirmDialog` (the same dialog
+  without its button, for menus: you own `opened`).
 - `global/components/not-found-panel.tsx` — `NotFoundPanel`, the 404 body
   used by `app/not-found.tsx` and `app/(app)/not-found.tsx`. Not in `/dev`:
   it renders the page's `<h1>`. See it at any bad URL.
