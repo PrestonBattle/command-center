@@ -12,17 +12,21 @@ numbered section matches one commit.
 3. **Walk the flow.** Sign up → onboarding (business, floor, clients, done)
    → dashboard → Clients → Leads → Money → Life vest.
 4. **See every shared component** at `/dev/components` (dev only, no login).
-5. **Checks:** `npm run lint`, `npm run typecheck`, `npm test` (21 tests).
-   All pass, and `next build` compiles all 17 routes.
+5. **Checks:** `npm run lint`, `npm run typecheck`, `npm test` (25 tests).
+   All pass.
+6. **Overnight pass:** read §12 first. It lists every bug found by
+   clicking through the app, what fixed each one, and the browser tests in
+   `scripts/e2e/` you can rerun.
 
 ### What I could and couldn't verify
 
 - **Verified:** types, lint, unit tests, a production build, and the
   `/dev/components` page rendered at desktop and phone width.
-- **Not verified:** the signed-in pages against a real database. My
-  environment has no access to your Supabase project, so I couldn't click
-  through onboarding, add a client or mark a payment paid. **Expect a few
-  rough edges on your first run** and tell me what breaks.
+- **Overnight:** the whole app against a local stand-in for Supabase
+  (real Postgres with your schema and RLS, GoTrue auth, PostgREST), in a
+  real browser, at desktop and phone size. See §12.
+- **Still not verified:** your hosted Supabase project itself (I can't
+  reach it) and Google Fonts (blocked here; fine on your machine).
 
 ### Decisions I made that are yours to overrule
 
@@ -36,9 +40,8 @@ numbered section matches one commit.
 1. Editing a client's name or a service's amount (only add/end/delete now).
 2. Recording a payment with a different amount or date than expected.
 3. Settings page (profile, business details, sign out on mobile, themes).
-4. Login and signup still use the old paper `Panel` (backlog C2).
-5. Sources: no UI to pick where a lead came from.
-6. A "Record payment" for one-off invoices with no service.
+4. Sources: no UI to pick where a lead came from.
+5. A "Record payment" for one-off invoices with no service.
 
 ---
 
@@ -316,3 +319,69 @@ components only pass an `href`. Replaced in the dashboard's payments panel,
 the Clients page and Money's month navigation. Client components (BackButton,
 lead cards, auth pages) can keep using `component={Link}` directly.
 CLAUDE.md now says so, so the bot won't repeat it.
+
+---
+
+## 12. Overnight: test, fix, polish
+
+Commits `8d7604a` → `334ab77`. I ran the app against a local copy of
+Supabase and clicked through every page the way a new customer would,
+then tried to break it. Everything below was found that way, not by
+reading code.
+
+### Bugs found and fixed
+
+| What you'd have seen | Cause | Fix |
+|---|---|---|
+| Console hydration error on every page | Sign-out button's `className` was a multi-line template string; server and client whitespace differed | Joined classes from an array (`8d7604a`) |
+| Favicon 404 | Icon in `public/` under the wrong name | Moved to `src/app/favicon.ico`, removed unused template SVGs (`8d7604a`) |
+| Onboarding progress bar stuck on step 1 | The onboarding layout is kept between steps, so it never re-read the org | `goTo()` helper revalidates the layout before redirecting (`c2b20df`) |
+| Sign-up / log-in **crashed** on any invalid input ("Cannot read properties of undefined (reading 'forEach')") | `zodResolver` is the zod **3** resolver; the schemas are zod 4 | `zod4Resolver` (`54def3c`) |
+| First click on Continue / Save did nothing when a field was invalid | `validateInputOnBlur`: clicking the button blurred the field, the error appeared, the layout shifted, and the click landed on empty space | Validate on submit only (`useActionForm`, `54def3c`) |
+| Typing 90% tax saved **60%** without a word | `PercentInput` clamped to its max on blur | No clamping; the schema shows "That looks too high" (`54def3c`) |
+| White text on orange buttons failed contrast (4.29:1, needs 4.5) | Mantine's orange-9 (`#d9480f`) | Custom `sunset` palette; buttons now use `--accent` (7:1+) (`0a622ab`) |
+| Screen readers announced Life vest sliders with no name | `aria-labelledby` lands on the wrapper, not the thumb | `thumbLabel` (`0a622ab`) |
+| Money table needed a sideways swipe on phones to see who paid | Fixed 640px-wide table | Columns fold together below `sm` (`334ab77`) |
+| React warning on 404 pages | `ColorSchemeScript` re-rendered in the browser; the app is light-only, so it did nothing anyway | Removed (`334ab77`) |
+
+### Polish
+
+- Phone layouts for the dashboard payments list and the water-line stats
+  (`c2b20df`); soft initials avatars; "Retainer" as the default service
+  name for imported clients; login and sign-up on glass with a shared
+  `AuthHeader`.
+- Every button and icon button is 44px on touch screens. Compact buttons
+  stay compact with a mouse (`global/styles/controls.module.css`).
+- `color="ink"`: warm browns for Cancel / Undo / Skip / Back, replacing
+  Mantine's cold near-black `"dark"`. Use it for any secondary button.
+- Clients filter restyled as glass; scrolls on phones instead of clipping.
+- Expense inputs line up in rows even when a label wraps to two lines.
+- A proper 404 page (`NotFoundPanel`), with the navbar inside the app.
+- `WaterLinePanel` split under 150 lines; its state bands and
+  `coverageDate` are now pure functions with tests.
+
+### Tests you can rerun
+
+`scripts/e2e/` has the three browser scripts (README inside):
+
+- `e2e.cjs`: the full happy path with a screenshot per step. Passes at
+  1280×900 and 390×844.
+- `edge.cjs`: 27 edge cases, including **RLS isolation** (account B can't
+  open or list account A's clients), duplicate email, skipping onboarding
+  by URL, double-clicking Mark paid, bad ids. All pass, twice in a row.
+- `axe.cjs`: WCAG 2.1 AA scan of all 12 pages. Zero violations.
+
+Playwright isn't a dependency; adding it is your call (README explains).
+
+### Worth your eyes
+
+- **`signup/page.tsx` is 164 lines**, over the 150 guideline, with form
+  state in the page. Moving it into a `use-signup-form.ts` hook is easy,
+  but auth is on your owned-by-Preston list, so I left it.
+- **The search box on Clients has no visible label**, only `aria-label` and
+  a placeholder. Common for search, and axe passes it, but CLAUDE.md asks for
+  visible labels. Your call.
+- **The scheduled backlog bot** still runs weekday mornings. Nearly
+  everything in `docs/BACKLOG.md` is ticked, so it will mostly find nothing
+  to do. Add items or pause it.
+
