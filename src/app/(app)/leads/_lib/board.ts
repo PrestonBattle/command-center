@@ -1,4 +1,4 @@
-import { LEAD_STAGES } from "@/global/lib/lead-stages";
+import { daysInStage, LEAD_STAGES } from "@/global/lib/lead-stages";
 import { matchesQuery } from "@/global/lib/search";
 import type { LeadRow, LeadStage } from "@/global/types/supabase/types";
 
@@ -9,7 +9,23 @@ export type BoardColumn = {
   leads: LeadRow[];
   /** Sum of the shown leads' monthly estimates. */
   monthlyCents: number;
+  /** Leads in this stage kept off the board (old converted wins). */
+  hiddenCount: number;
 };
+
+/** How long a lead that became a client stays in the Won column. */
+export const WON_SHOWN_DAYS = 30;
+
+/**
+ * Whether a lead belongs on the board. A lead that became a client is
+ * history: it shows in Won for a month so the win is visible, then leaves
+ * the board (it's still in the database and still counts in stats). A won
+ * lead that isn't a client yet stays: it still needs "Make client".
+ */
+export function onBoard(lead: LeadRow, today: string): boolean {
+  if (!lead.converted_client_id) return true;
+  return daysInStage(lead, today) < WON_SHOWN_DAYS;
+}
 
 /** True when a lead matches the board's search box (name, contact, email, phone). */
 export function leadMatches(lead: LeadRow, query: string): boolean {
@@ -21,18 +37,20 @@ export function leadMatches(lead: LeadRow, query: string): boolean {
  * leads that match the search, longest-in-stage first so stale leads sit
  * at the top where they get noticed.
  */
-export function boardColumns(leads: LeadRow[], query = ""): BoardColumn[] {
-  const shown = leads
+export function boardColumns(leads: LeadRow[], query: string, today: string): BoardColumn[] {
+  const matching = leads
     .filter((l) => leadMatches(l, query))
     .sort((a, b) => a.stage_changed_at.localeCompare(b.stage_changed_at));
 
   return LEAD_STAGES.map(({ value, label }) => {
-    const inStage = shown.filter((l) => l.stage === value);
+    const inStage = matching.filter((l) => l.stage === value);
+    const shown = inStage.filter((l) => onBoard(l, today));
     return {
       stage: value,
       label,
-      leads: inStage,
-      monthlyCents: inStage.reduce((t, l) => t + (l.estimated_monthly_cents ?? 0), 0),
+      leads: shown,
+      monthlyCents: shown.reduce((t, l) => t + (l.estimated_monthly_cents ?? 0), 0),
+      hiddenCount: inStage.length - shown.length,
     };
   });
 }

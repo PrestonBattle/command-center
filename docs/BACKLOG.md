@@ -184,7 +184,7 @@ schema changes.
   in the card menu (WCAG 2.5.7). Screen-reader announcements on pick up and
   drop. Honors `prefers-reduced-motion`.
 
-- [ ] **L2 · Converted leads leave the board** · `ready` · after L1
+- [x] **L2 · Converted leads leave the board** · `ready` · after L1
   Converted leads show in Won for 30 days, then drop off the board (still
   counted in stats). Client page shows "Won from a lead on {date}".
 

@@ -21,7 +21,15 @@ export default async function ClientPage({ params }: Props) {
   const client = await dl.clients.get(id);
   if (!client) notFound();
 
-  const [contacts, services, payments] = await Promise.all([dl.contacts.list(), dl.clientServices.list(), dl.payments.list()]);
+  const [contacts, services, payments, leads] = await Promise.all([
+    dl.contacts.list(),
+    dl.clientServices.list(),
+    dl.payments.list(),
+    dl.leads.list(),
+  ]);
+  // The lead this client was won from, if any: the board drops old wins, so
+  // this is where that history stays visible.
+  const fromLead = leads.find((l) => l.converted_client_id === id);
   const status = clientStatusMeta(client.status);
   const today = todayIso(org.timezone);
 
@@ -34,6 +42,7 @@ export default async function ClientPage({ params }: Props) {
           <span className="flex flex-wrap items-center gap-2">
             <StatusBadge tone={status.tone}>{status.label}</StatusBadge>
             Client since {formatShortDate(client.signed_on)}
+            {fromLead && <span>· Won from a lead on {formatShortDate(fromLead.stage_changed_at.slice(0, 10))}</span>}
           </span>
         }
         actions={<ClientActions clientId={client.id} clientName={client.name} status={client.status} />}
