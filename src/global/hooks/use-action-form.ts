@@ -41,7 +41,11 @@ export function useActionForm<V extends Record<string, unknown>>({
     mode,
     initialValues,
     validate: zod4Resolver(schema),
-    validateInputOnBlur: true,
+    // Validate on submit, not on blur. Blur validation adds an error line
+    // under the field as focus leaves it, which pushes the submit button
+    // down mid-click: the press lands on the button, the release doesn't,
+    // and the first click silently does nothing. Errors still clear as
+    // soon as the field is edited (Mantine's clearInputErrorOnChange).
   });
   const [pending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);

@@ -15,7 +15,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { zodResolver } from "mantine-form-zod-resolver";
+import { zod4Resolver } from "mantine-form-zod-resolver";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { GlassPanel } from "@/global/components/glass/glass-panel";
 import { AuthHeader } from "../_components/auth-header";
@@ -49,7 +49,7 @@ export default function SignUpPage() {
       password: "",
       confirmPassword: "",
     },
-    validate: zodResolver(registrationSchema),
+    validate: zod4Resolver(registrationSchema),
   });
 
   const handleSubmit = form.onSubmit((values) => {

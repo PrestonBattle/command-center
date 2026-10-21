@@ -13,7 +13,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { zodResolver } from "mantine-form-zod-resolver";
+import { zod4Resolver } from "mantine-form-zod-resolver";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { GlassPanel } from "@/global/components/glass/glass-panel";
 import { AuthHeader } from "../_components/auth-header";
@@ -37,7 +37,7 @@ export default function LoginPage() {
   const form = useForm({
     mode: "uncontrolled",
     initialValues: { email: "", password: "" },
-    validate: zodResolver(loginSchema),
+    validate: zod4Resolver(loginSchema),
   });
 
   const handleSubmit = form.onSubmit((values) => {
