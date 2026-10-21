@@ -1,3 +1,4 @@
+import { matchesQuery } from "@/global/lib/search";
 import { isServiceActive, monthlyCents } from "@/global/lib/billing";
 import type { ClientRow, ClientServiceRow, ContactRow } from "@/global/types/supabase/types";
 
@@ -40,10 +41,5 @@ export function summarizeClients(
 
 /** Keeps clients whose name or email contains the query and whose status matches. */
 export function filterClients(list: ClientSummary[], query: string, status: string): ClientSummary[] {
-  const q = query.trim().toLowerCase();
-  return list.filter(
-    (c) =>
-      (status === "all" || c.status === status) &&
-      (!q || c.name.toLowerCase().includes(q) || (c.email ?? "").toLowerCase().includes(q)),
-  );
+  return list.filter((c) => (status === "all" || c.status === status) && matchesQuery(query, [c.name, c.email]));
 }

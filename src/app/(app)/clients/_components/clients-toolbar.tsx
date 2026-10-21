@@ -1,10 +1,9 @@
 "use client";
 
-import { SegmentedControl, TextInput } from "@mantine/core";
-import { useDebouncedCallback } from "@mantine/hooks";
-import { IconSearch } from "@tabler/icons-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { SegmentedControl } from "@mantine/core";
 import Glass from "@/global/components/glass/glass";
+import { SearchInput } from "@/global/components/inputs";
+import { useSetSearchParam } from "@/global/hooks/use-set-search-param";
 import { CLIENT_STATUSES } from "@/global/lib/client-status";
 
 const FILTERS = [{ value: "all", label: "All" }, ...CLIENT_STATUSES.map(({ value, label }) => ({ value, label }))];
@@ -14,29 +13,11 @@ const FILTERS = [{ value: "all", label: "All" }, ...CLIENT_STATUSES.map(({ value
  * filtered view can be bookmarked and the server does the filtering.
  */
 export function ClientsToolbar({ query, status }: { query: string; status: string }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
-
-  function setParam(key: string, value: string) {
-    const next = new URLSearchParams(params);
-    if (value && value !== "all") next.set(key, value);
-    else next.delete(key);
-    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
-  }
-  const setQuery = useDebouncedCallback((v: string) => setParam("q", v), 250);
+  const setParam = useSetSearchParam();
 
   return (
     <Glass className="flex flex-col gap-3 rounded-2xl p-3 md:flex-row md:items-center">
-      <TextInput
-        className="flex-1"
-        aria-label="Search clients"
-        placeholder="Search by name or email"
-        leftSection={<IconSearch size={18} aria-hidden />}
-        defaultValue={query}
-        onChange={(e) => setQuery(e.currentTarget.value)}
-        type="search"
-      />
+      <SearchInput className="flex-1" label="Search clients" placeholder="Search by name or email" value={query} />
       {/* Five statuses don't fit a phone's width; the row scrolls sideways
           instead of squashing the words, and the cut-off edge shows there's more. */}
       <div className="-mx-1 max-w-full overflow-x-auto px-1">
