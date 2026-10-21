@@ -1,7 +1,9 @@
 import Glass from "@/global/components/glass/glass";
 import { calculateFloorCents } from "@/global/lib/floor";
 import { formatDollars as money } from "@/global/lib/money";
+import { InsetStat } from "./inset-stat";
 import { WaterLineTank } from "./water-tank";
+import { coverageDate, waterlineState, WATERLINE_STATES } from "./waterline-state";
 
 type WaterLinePanelProps = {
   /** Monthly personal expenses — rent, food, car, savings. */
@@ -18,33 +20,9 @@ type WaterLinePanelProps = {
 };
 
 /**
- * Four bands, not a gradient. The floor is a threshold, not a smooth
- * scale -- $10 under and $10 over are different situations, and the
- * state chip should say so rather than easing from amber to teal.
+ * The dashboard's headline: how far revenue is above or below the floor,
+ * shown as a water line, a state word, and three plain-language figures.
  */
-const STATE = {
-  under: {
-    label: "Underwater",
-    chip: "bg-[var(--bad)]/12 text-[var(--bad)]",
-    figure: "text-[var(--bad)]",
-  },
-  treading: {
-    label: "Treading water",
-    chip: "bg-[var(--warn)]/12 text-[var(--warn)]",
-    figure: "text-[var(--warn)]",
-  },
-  afloat: {
-    label: "Afloat",
-    chip: "bg-[var(--ok)]/12 text-[var(--ok)]",
-    figure: "text-[var(--text)]",
-  },
-  clear: {
-    label: "Clear",
-    chip: "bg-[var(--ok)]/12 text-[var(--ok)]",
-    figure: "text-[var(--text)]",
-  },
-} as const;
-
 export function WaterLinePanel({
   personal,
   business,
@@ -61,17 +39,7 @@ export function WaterLinePanel({
 
   const gap = floor - revenue;
   const coverage = floor > 0 ? revenue / floor : 0;
-  const short = gap > 0;
-
-  const key =
-    coverage < 0.9 ? "under"
-      : coverage < 1 ? "treading"
-        : coverage < 1.15 ? "afloat"
-          : "clear";
-  const state = STATE[key];
-
-  const dayCost = floor / 30.44;
-  const coveredThrough = coverageDate(coverage);
+  const state = WATERLINE_STATES[waterlineState(coverage)];
   const topShare = topClientMrr && revenue > 0 ? topClientMrr / revenue : null;
 
   // Revenue clears the operating costs but not the reserve. The specific
@@ -80,43 +48,29 @@ export function WaterLinePanel({
   const taxUncovered = revenue >= personal + business && revenue < floor;
 
   return (
-    <Glass
-      style={style}
-      className="grid grid-cols-[14px_minmax(0,1fr)] gap-5 rounded-3xl p-6"
-    >
+    <Glass style={style} className="grid grid-cols-[14px_minmax(0,1fr)] gap-5 rounded-3xl p-6">
       <WaterLineTank coverage={coverage} />
 
       <div>
-
         <div className="mb-4 flex items-center justify-between gap-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            Snapshot
-          </h2>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">Snapshot</h2>
           <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${state.chip}`}>{state.label}</span>
         </div>
 
         <p className={`font-display text-4xl font-bold leading-none tabular-nums ${state.figure}`}>
-          {money(Math.abs(gap))}{" "}
-          <span className="text-3xl">{short ? "short" : "clear"}</span>
+          {money(Math.abs(gap))} <span className="text-3xl">{gap > 0 ? "short" : "clear"}</span>
         </p>
         <span className="text-xs text-[var(--text-faint)]">Floor · {money(floor)}</span>
         <p className="mt-2 text-sm text-[var(--text-muted)]">
-          Revenue is {money(revenue)} — {Math.round(coverage * 100)}% of what
-          you need.
+          Revenue is {money(revenue)} — {Math.round(coverage * 100)}% of what you need.
         </p>
 
         <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
-          <Stat
-            label="A day costs"
-            value={money(dayCost)}
-            hint="Whether or not you work"
-          />
-          <Stat
-            label="Covered through"
-            value={coveredThrough}
-            hint="At this month's rate"
-          />
-          <Stat
+          {/* 30.44 = average days per month, so a day's cost doesn't jump
+              between February and March. */}
+          <InsetStat label="A day costs" value={money(floor / 30.44)} hint="Whether or not you work" />
+          <InsetStat label="Covered through" value={coverageDate(coverage)} hint="At this month's rate" />
+          <InsetStat
             label="Largest client"
             value={topShare ? `${Math.round(topShare * 100)}%` : "—"}
             hint={topShare ? (topClientName ?? "of revenue") : "No clients yet"}
@@ -124,60 +78,11 @@ export function WaterLinePanel({
         </div>
 
         {taxUncovered && (
-          <div className="mt-3 rounded-lg bg-[var(--warn)]/10 p-3">
-            <p className="text-sm text-[var(--text)]">
-              You&apos;re paying yourself and running the business, but nothing
-              is going aside for taxes.
-            </p>
-          </div>
+          <p className="mt-3 rounded-lg bg-[var(--warn)]/10 p-3 text-sm text-[var(--text)]">
+            You&apos;re paying yourself and running the business, but nothing is going aside for taxes.
+          </p>
         )}
-
-        {/* Stays visible even when clear — being above the line because of
-            one client is a different situation from being above it across
-            five. */}
-
       </div>
     </Glass>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: string;
-  hint: string;
-}) {
-  return (
-    <div className="rounded-lg bg-[var(--surface-inset)] p-3">
-      <p className="text-xs text-[var(--text-faint)]">{label}</p>
-      <p className="mt-0.5 text-lg font-medium tabular-nums text-[var(--text)]">{value}</p>
-      <p className="mt-0.5 truncate text-xs text-[var(--text-faint)]">{hint}</p>
-    </div>
-  );
-}
-
-
-/**
- * Coverage as a date rather than a fraction. "71%" is abstract; "the money
- * runs out on the 22nd" isn't — and unlike the percentage, this one shifts
- * meaning as the month progresses.
- */
-function coverageDate(coverage: number): string {
-  const now = new Date();
-  const daysInMonth = new Date(
-    now.getFullYear(),
-    now.getMonth() + 1,
-    0
-  ).getDate();
-
-  if (coverage >= 1) return "All month";
-
-  const day = Math.max(1, Math.floor(daysInMonth * coverage));
-  return new Date(now.getFullYear(), now.getMonth(), day).toLocaleDateString(
-    "en-US",
-    { month: "short", day: "numeric" }
   );
 }

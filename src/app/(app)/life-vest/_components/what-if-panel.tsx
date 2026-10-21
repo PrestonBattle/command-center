@@ -43,14 +43,14 @@ export function WhatIfPanel({ clients, ...base }: Props) {
         <p id="gain-label" className="flex justify-between text-sm font-semibold">
           I land new work worth <span className="tabular-nums">{formatCents(gainedDollars * 100)}/mo</span>
         </p>
-        <Slider aria-labelledby="gain-label" min={0} max={5000} step={100} value={gainedDollars} onChange={setGained} label={(v) => formatCents(v * 100)} />
+        <Slider aria-labelledby="gain-label" thumbLabel="New work per month" min={0} max={5000} step={100} value={gainedDollars} onChange={setGained} label={(v) => formatCents(v * 100)} />
       </div>
       <div className="flex flex-col gap-2">
         <p id="personal-label" className="flex justify-between text-sm font-semibold">
           My personal costs change by{" "}
           <span className="tabular-nums">{personalDollars >= 0 ? "+" : "−"}{formatCents(Math.abs(personalDollars) * 100)}/mo</span>
         </p>
-        <Slider aria-labelledby="personal-label" min={-1000} max={2000} step={50} value={personalDollars} onChange={setPersonal} label={(v) => formatCents(v * 100)} marks={[{ value: 0, label: "No change" }]} mb="md" />
+        <Slider aria-labelledby="personal-label" thumbLabel="Change in personal costs per month" min={-1000} max={2000} step={50} value={personalDollars} onChange={setPersonal} label={(v) => formatCents(v * 100)} marks={[{ value: 0, label: "No change" }]} mb="md" />
       </div>
       <div aria-live="polite">
         <Callout
