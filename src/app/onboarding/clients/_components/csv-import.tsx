@@ -81,7 +81,7 @@ export function CsvImport({ onImport }: { onImport: (rows: ClientRowFormValues[]
             </>
           )}
           <div className="flex justify-end gap-2">
-            <Button variant="subtle" color="dark" onClick={close}>Cancel</Button>
+            <Button variant="subtle" color="ink" onClick={close}>Cancel</Button>
             <Button onClick={finish} disabled={!ready}>
               Add {rows.length || ""} clients
             </Button>

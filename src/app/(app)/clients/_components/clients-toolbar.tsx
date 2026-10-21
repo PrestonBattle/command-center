@@ -37,7 +37,11 @@ export function ClientsToolbar({ query, status }: { query: string; status: strin
         onChange={(e) => setQuery(e.currentTarget.value)}
         type="search"
       />
-      <SegmentedControl aria-label="Filter by status" data={FILTERS} value={status} onChange={(v) => setParam("status", v)} />
+      {/* Five statuses don't fit a phone's width; the row scrolls sideways
+          instead of squashing the words, and the cut-off edge shows there's more. */}
+      <div className="-mx-1 max-w-full overflow-x-auto px-1">
+        <SegmentedControl aria-label="Filter by status" data={FILTERS} value={status} onChange={(v) => setParam("status", v)} />
+      </div>
     </Glass>
   );
 }

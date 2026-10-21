@@ -24,7 +24,7 @@ export function BackButton({ text = "Back", href, fallbackHref = "/", className 
 
   if (href) {
     return (
-      <Button component={Link} href={href} variant="subtle" color="dark" leftSection={icon} className={className}>
+      <Button component={Link} href={href} variant="subtle" color="ink" leftSection={icon} className={className}>
         {text}
       </Button>
     );
@@ -33,7 +33,7 @@ export function BackButton({ text = "Back", href, fallbackHref = "/", className 
   return (
     <Button
       variant="subtle"
-      color="dark"
+      color="ink"
       leftSection={icon}
       className={className}
       onClick={() => (window.history.length > 1 ? router.back() : router.push(fallbackHref))}

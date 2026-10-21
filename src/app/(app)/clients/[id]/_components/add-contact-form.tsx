@@ -38,7 +38,7 @@ export function AddContactForm({ clientId }: { clientId: string }) {
         <TextInput label="Phone (optional)" type="tel" autoComplete="tel" key={form.key("phone")} {...form.getInputProps("phone")} />
       </FieldGrid>
       {formError && <Callout tone="bad" role="alert" title={formError} />}
-      <FormActions submitLabel="Add contact" pending={pending} back={<Button variant="subtle" color="dark" onClick={close}>Cancel</Button>} />
+      <FormActions submitLabel="Add contact" pending={pending} back={<Button variant="subtle" color="ink" onClick={close}>Cancel</Button>} />
     </form>
   );
 }

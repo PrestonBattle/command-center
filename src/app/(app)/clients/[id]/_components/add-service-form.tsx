@@ -40,7 +40,7 @@ export function AddServiceForm({ clientId, today }: { clientId: string; today: s
         <TextInput label="Starts" type="date" key={form.key("started_on")} {...form.getInputProps("started_on")} />
       </FieldGrid>
       {formError && <Callout tone="bad" role="alert" title={formError} />}
-      <FormActions submitLabel="Add service" pending={pending} back={<Button variant="subtle" color="dark" onClick={close}>Cancel</Button>} />
+      <FormActions submitLabel="Add service" pending={pending} back={<Button variant="subtle" color="ink" onClick={close}>Cancel</Button>} />
     </form>
   );
 }

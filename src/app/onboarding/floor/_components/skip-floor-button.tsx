@@ -9,7 +9,7 @@ export function SkipFloorButton() {
   const { run, pending, error } = useActionButton(skipFloor);
   return (
     <>
-      <Button variant="subtle" color="dark" size="md" loading={pending} onClick={() => run()}>
+      <Button variant="subtle" color="ink" size="md" loading={pending} onClick={() => run()}>
         Finish later
       </Button>
       {error && (

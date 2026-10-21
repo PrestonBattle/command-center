@@ -11,7 +11,7 @@ export function MonthNav({ month, isCurrent }: Props) {
   return (
     <nav aria-label="Month" className="flex items-center gap-2">
       {!isCurrent && (
-        <ButtonLink href="/money" variant="subtle" color="dark" size="compact-md">
+        <ButtonLink href="/money" variant="subtle" color="ink" size="compact-md">
           This month
         </ButtonLink>
       )}

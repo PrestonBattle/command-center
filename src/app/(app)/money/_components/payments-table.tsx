@@ -9,7 +9,12 @@ import { PaymentAction } from "./payment-action";
 
 type Props = { title: string; rows: ScheduledPayment[]; emptyText?: string };
 
-/** A table of scheduled payments with status and a mark-paid button per row. */
+/**
+ * A table of scheduled payments with status and a mark-paid button per row.
+ * Below `sm` the Due, Service and Status columns fold into the Client and
+ * Amount cells, so the table fits a phone without sideways scrolling --
+ * a swipe-to-see-who-paid table is easy to misread.
+ */
 export function PaymentsTable({ title, rows, emptyText }: Props) {
   return (
     <GlassPanel title={title}>
@@ -17,33 +22,40 @@ export function PaymentsTable({ title, rows, emptyText }: Props) {
         <EmptyState title={emptyText ?? "Nothing expected"} description="Payments come from each client's services." />
       ) : (
         <div className="-mx-2 overflow-x-auto px-2">
-          <table className="w-full min-w-[640px] text-sm">
+          <table className="w-full text-sm sm:min-w-[640px]">
             <caption className="sr-only">{title}</caption>
             <thead>
               <tr className="text-left text-[var(--text-muted)]">
-                <th scope="col" className="pb-2 font-semibold">Due</th>
+                <th scope="col" className="hidden pb-2 font-semibold sm:table-cell">Due</th>
                 <th scope="col" className="pb-2 font-semibold">Client</th>
-                <th scope="col" className="pb-2 font-semibold">Service</th>
+                <th scope="col" className="hidden pb-2 font-semibold sm:table-cell">Service</th>
                 <th scope="col" className="pb-2 text-right font-semibold">Amount</th>
-                <th scope="col" className="pb-2 pl-4 font-semibold">Status</th>
+                <th scope="col" className="hidden pb-2 pl-4 font-semibold sm:table-cell">Status</th>
                 <th scope="col" className="pb-2"><span className="sr-only">Action</span></th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r) => {
                 const status = PAYMENT_STATUS[r.status];
+                const badge = (
+                  <StatusBadge tone={status.tone}>{r.paidOn ? `Paid ${formatShortDate(r.paidOn)}` : status.label}</StatusBadge>
+                );
                 return (
                   <tr key={r.key} className="border-t border-[var(--divider)]">
-                    <td className="py-3 text-[var(--text-muted)]">{formatShortDate(r.dueOn)}</td>
+                    <td className="hidden py-3 text-[var(--text-muted)] sm:table-cell">{formatShortDate(r.dueOn)}</td>
                     <td className="py-3 font-semibold">
                       <Link href={`/clients/${r.clientId}`} className="hover:underline">{r.clientName}</Link>
+                      <p className="text-xs font-normal text-[var(--text-muted)] sm:hidden">
+                        {formatShortDate(r.dueOn)} · {r.serviceName}
+                      </p>
                     </td>
-                    <td className="py-3 text-[var(--text-muted)]">{r.serviceName}</td>
-                    <td className="py-3 text-right font-semibold tabular-nums">{formatCents(r.amountCents)}</td>
-                    <td className="py-3 pl-4">
-                      <StatusBadge tone={status.tone}>{r.paidOn ? `Paid ${formatShortDate(r.paidOn)}` : status.label}</StatusBadge>
+                    <td className="hidden py-3 text-[var(--text-muted)] sm:table-cell">{r.serviceName}</td>
+                    <td className="py-3 text-right font-semibold tabular-nums">
+                      {formatCents(r.amountCents)}
+                      <div className="mt-1 sm:hidden">{badge}</div>
                     </td>
-                    <td className="py-3 text-right"><PaymentAction row={r} /></td>
+                    <td className="hidden py-3 pl-4 sm:table-cell">{badge}</td>
+                    <td className="py-3 pl-2 text-right"><PaymentAction row={r} /></td>
                   </tr>
                 );
               })}

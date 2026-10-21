@@ -87,6 +87,12 @@ time, extract it instead. Known building blocks:
   `component={Link}`**: functions can't be passed from server to client.
 - `global/components/stepper` — `Stepper`; `BackButton`; `ConfirmButton`
   (are-you-sure dialog before an action).
+- `global/components/not-found-panel.tsx` — `NotFoundPanel`, the 404 body
+  used by `app/not-found.tsx` and `app/(app)/not-found.tsx`. Not in `/dev`:
+  it renders the page's `<h1>`. See it at any bad URL.
+- `global/styles/controls.module.css` — button touch targets and the
+  segmented filter, applied through the theme. Secondary buttons use
+  `color="ink"` (warm brown), never Mantine's `"dark"`.
 - `global/lib/client-status.ts` — client status labels and badge tones.
 - `app/(app)/_lib/load-business.ts` — loads org, clients, services,
   payments, expenses, floor and revenue for the money views.

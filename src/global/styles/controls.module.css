@@ -1,0 +1,37 @@
+/*
+ * Buttons and the segmented filter. Applied once through the theme in
+ * mantine-theme.ts. Unlayered, so it beats Mantine's layered defaults.
+ */
+
+/*
+ * Compact buttons keep tables and cards tidy with a mouse, but are ~26px
+ * tall -- too small for a thumb. On touch screens every button and icon
+ * button grows to the 44px minimum.
+ */
+@media (pointer: coarse) {
+  .touchTarget {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* The status filter on Clients: a glass track with a white pill, not
+   Mantine's grey. */
+.segmentedRoot {
+  background: var(--surface-inset);
+  border: 1px solid var(--divider);
+}
+
+.segmentedLabel {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.segmentedLabel[data-active] {
+  color: var(--text);
+}
+
+.segmentedIndicator {
+  background: var(--glass-tint);
+  box-shadow: 0 1px 3px rgb(124 45 18 / 0.15);
+}

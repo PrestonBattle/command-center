@@ -27,7 +27,7 @@ export function ConfirmButton({ children, title, message, confirmLabel, action, 
 
   return (
     <>
-      <Button variant="subtle" color={danger ? "red" : "dark"} onClick={open} {...buttonProps}>
+      <Button variant="subtle" color={danger ? "red" : "ink"} onClick={open} {...buttonProps}>
         {children}
       </Button>
       <Modal opened={opened} onClose={close} title={title} centered>
@@ -35,7 +35,7 @@ export function ConfirmButton({ children, title, message, confirmLabel, action, 
           <div className="text-sm">{message}</div>
           {error && <Callout tone="bad" role="alert" title={error} />}
           <div className="flex justify-end gap-2">
-            <Button variant="subtle" color="dark" onClick={close}>Cancel</Button>
+            <Button variant="subtle" color="ink" onClick={close}>Cancel</Button>
             <Button color={danger ? "red" : undefined} loading={pending} onClick={() => run()}>
               {confirmLabel}
             </Button>

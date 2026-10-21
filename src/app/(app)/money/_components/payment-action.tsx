@@ -14,7 +14,7 @@ export function PaymentAction({ row }: { row: ScheduledPayment }) {
   return (
     <div className="flex flex-col items-end gap-1">
       {row.paymentId ? (
-        <Button variant="subtle" color="dark" size="compact-sm" loading={undo.pending} onClick={() => undo.run(row.paymentId)} aria-label={`Undo payment for ${label}`}>
+        <Button variant="subtle" color="ink" size="compact-sm" loading={undo.pending} onClick={() => undo.run(row.paymentId)} aria-label={`Undo payment for ${label}`}>
           Undo
         </Button>
       ) : (

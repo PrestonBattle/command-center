@@ -73,7 +73,7 @@ export function ClientsStepForm({ floorCents }: { floorCents: number }) {
         pending={pending}
         back={<BackButton href={pathForStep(2)} />}
         secondary={
-          <Button variant="subtle" color="dark" size="md" loading={skip.pending} onClick={() => skip.run()}>
+          <Button variant="subtle" color="ink" size="md" loading={skip.pending} onClick={() => skip.run()}>
             Skip for now
           </Button>
         }

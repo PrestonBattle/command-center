@@ -1,4 +1,4 @@
-import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from "@mantine/core";
+import { MantineProvider, mantineHtmlProps } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import type { Metadata } from "next";
 import { Background } from "@/global/components/background";
@@ -18,10 +18,11 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
+    // No ColorSchemeScript: the app is light-only, and mantineHtmlProps
+    // already sets data-mantine-color-scheme="light" on the server. The script
+    // only matters for user-chosen schemes, and React 19 warns about it
+    // whenever the root layout re-renders on the client (e.g. a 404).
     <html lang="en" {...mantineHtmlProps}>
-      <head>
-        <ColorSchemeScript defaultColorScheme="light" />
-      </head>
       <body className={`${bricolageGrotesque.variable} ${redditSans.variable}`}>
         <MantineProvider theme={theme} forceColorScheme="light">
           <Notifications position="top-right" />

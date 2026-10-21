@@ -22,6 +22,9 @@ export function ExpenseFields({ title, categories, totalCents, form }: ExpenseFi
             key={form.key(`expenses.${c.key}`)}
             label={c.label}
             description={c.hint}
+            // Labels and hints wrap to different heights; pinning the box to
+            // the bottom of its cell keeps every row of inputs on one line.
+            classNames={{ root: "flex h-full flex-col", wrapper: "mt-auto" }}
             {...form.getInputProps(`expenses.${c.key}`)}
           />
         ))}

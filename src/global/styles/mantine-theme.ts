@@ -1,6 +1,15 @@
 "use client";
 
-import { createTheme, Input, InputWrapper, type MantineColorsTuple } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  createTheme,
+  Input,
+  InputWrapper,
+  SegmentedControl,
+  type MantineColorsTuple,
+} from "@mantine/core";
+import controls from "./controls.module.css";
 import inputs from "./inputs.module.css";
 
 /**
@@ -16,6 +25,16 @@ const SUNSET: MantineColorsTuple = [
 ];
 
 /**
+ * Warm browns for secondary buttons (Cancel, Undo, Skip). Mantine's "dark"
+ * is a neutral near-black that reads cold on the sunset background; shade 8
+ * here matches `--text`.
+ */
+const INK: MantineColorsTuple = [
+  "#fdf4ef", "#f6e3d8", "#e9c3ad", "#d69a7c", "#b8714f",
+  "#9a4e2f", "#7a3519", "#6c2b12", "#431407", "#2c0d04",
+];
+
+/**
  * Mantine theme for the Sunset look. Every color other than the primary
  * comes from the CSS variables in globals.css.
  *
@@ -23,13 +42,22 @@ const SUNSET: MantineColorsTuple = [
  * them here styles TextInput, NumberInput, Select, Textarea and the rest.
  */
 export const theme = createTheme({
-  colors: { sunset: SUNSET },
+  colors: { sunset: SUNSET, ink: INK },
   primaryColor: "sunset",
   primaryShade: 8,
   defaultRadius: "md",
   fontFamily: "var(--font-sans)",
   headings: { fontFamily: "var(--font-display)" },
   components: {
+    Button: Button.extend({ classNames: { root: controls.touchTarget } }),
+    ActionIcon: ActionIcon.extend({ classNames: { root: controls.touchTarget } }),
+    SegmentedControl: SegmentedControl.extend({
+      classNames: {
+        root: controls.segmentedRoot,
+        label: controls.segmentedLabel,
+        indicator: controls.segmentedIndicator,
+      },
+    }),
     Input: Input.extend({
       classNames: { input: inputs.input, section: inputs.section },
     }),

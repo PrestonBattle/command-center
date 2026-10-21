@@ -39,7 +39,7 @@ export function AddLeadButton() {
             <MoneyInput label="Worth per month (optional)" description="Your best guess" key={form.key("estimated_monthly")} {...form.getInputProps("estimated_monthly")} />
           </FieldGrid>
           {formError && <Callout tone="bad" role="alert" title={formError} />}
-          <FormActions submitLabel="Add lead" pending={pending} back={<Button variant="subtle" color="dark" onClick={close}>Cancel</Button>} />
+          <FormActions submitLabel="Add lead" pending={pending} back={<Button variant="subtle" color="ink" onClick={close}>Cancel</Button>} />
         </form>
       </Modal>
     </>

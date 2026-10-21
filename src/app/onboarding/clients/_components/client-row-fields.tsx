@@ -28,7 +28,7 @@ export function ClientRowFields({ form, index, onRemove }: Props) {
       <IntervalSelect label="Billed" labelProps={labelProps} key={form.key(path("interval_months"))} {...form.getInputProps(path("interval_months"))} />
       <ActionIcon
         variant="subtle"
-        color="dark"
+        color="ink"
         size={44}
         aria-label={`Remove ${rowName}`}
         onClick={onRemove}
