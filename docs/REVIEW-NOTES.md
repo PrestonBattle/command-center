@@ -495,3 +495,30 @@ order, or merge the last to take everything. L6 is `later`.
 (13), drag (14), converted leads (5 + 7); axe clean with a crowded board
 and an open menu in all three themes; edge suite 27/27; production build.
 
+---
+
+## 16. "?" tips and the Snapshot explainer (D1, D2)
+
+- **`InfoTip`** (`global/components/info-tip.tsx`): a "?" after a label.
+  Hover, keyboard focus or tap opens it; it stays open while you hover it
+  (so you can read it); a click pins it; Escape or a click elsewhere
+  closes it. Screen readers hear the text as the button's description.
+  Pass `info="…"` to `Stat` or the Snapshot figures; the dashboard has six.
+  Wording lives in `app/(app)/_lib/explanations.ts` and
+  `watertank/waterline-tips.ts`, so it's easy to edit in one place.
+- **Snapshot explainer** (the "?" next to "Snapshot"): a dialog that steps
+  through The line → Underwater → Treading water → Afloat → Clear → You.
+  The tank fills after the dialog appears, the figure counts to each
+  state's number, all from your own floor (an example floor if none is
+  set). Steps are pure (`explainer-steps.ts`, tested), so the copy is
+  easy to change. No auto-advance; reduced motion shows each state
+  without animating. The state thresholds are now named constants
+  (`WATERLINE_BREAKS`) shared by the panel and the explainer.
+- **Small change you'll see:** the water tank has a thin outline, so its
+  empty part is visible on white (it disappeared in the dialog).
+
+**Checked:** tips 13/13 (hover, hover onto tip, focus, Escape, pin, click
+away, tap, 44px target, screen-reader description); explainer 16/16
+(fills from empty, counts, steps, chips, "You", reduced motion, phone);
+axe clean with the explainer open in all three themes; edge 27/27.
+
