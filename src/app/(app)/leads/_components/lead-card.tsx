@@ -30,7 +30,7 @@ export function LeadCard({ lead, days, stale }: Props) {
     <li>
       <Glass className="flex flex-col gap-3 rounded-2xl p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="min-w-0 font-bold">
+          <h3 className="min-w-0 break-words font-bold">
             <button
               type="button"
               onClick={edit}
@@ -40,18 +40,24 @@ export function LeadCard({ lead, days, stale }: Props) {
               {lead.name}
             </button>
           </h3>
-          <div className="flex shrink-0 items-center gap-1">
-            {stale && <StatusBadge tone="warn">{`Stale ${days}d`}</StatusBadge>}
-            <LeadMenu lead={lead} onEdit={edit} />
-          </div>
+          <LeadMenu lead={lead} onEdit={edit} />
         </div>
         {lead.estimated_monthly_cents ? (
           <p className="font-display text-xl font-bold tabular-nums">{formatCents(lead.estimated_monthly_cents)}/mo</p>
         ) : null}
-        {(lead.contact_name || lead.email) && (
-          <p className="text-sm text-[var(--text-muted)]">{[lead.contact_name, lead.email].filter(Boolean).join(" · ")}</p>
+        {/* One line each, cut with "…" when a column is narrow: an email
+            broken mid-word is harder to read than a shortened one. */}
+        {lead.contact_name && <p className="truncate text-sm text-[var(--text-muted)]">{lead.contact_name}</p>}
+        {lead.email && <p className="truncate text-sm text-[var(--text-muted)]" title={lead.email}>{lead.email}</p>}
+        {/* Stale gets its own line: next to the name it collided with long
+            names in narrow columns. Badge word + days, never color alone. */}
+        {stale ? (
+          <div>
+            <StatusBadge tone="warn">{`Stale · ${days}d`}</StatusBadge>
+          </div>
+        ) : (
+          <p className="text-xs text-[var(--text-faint)]">{days === 0 ? "Moved here today" : `In this stage ${days} day${days === 1 ? "" : "s"}`}</p>
         )}
-        <p className="text-xs text-[var(--text-faint)]">{days === 0 ? "Moved here today" : `In this stage ${days} day${days === 1 ? "" : "s"}`}</p>
 
         <Select
           aria-label={`Stage for ${lead.name}`}

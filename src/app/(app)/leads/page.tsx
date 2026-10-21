@@ -4,7 +4,7 @@ import { todayIso } from "@/global/lib/dates";
 import { OPEN_STAGES } from "@/global/lib/lead-stages";
 import { formatCents } from "@/global/lib/money";
 import { AddLeadButton } from "./_components/add-lead-button";
-import { LeadColumn } from "./_components/lead-column";
+import { LeadBoard } from "./_components/lead-board";
 import { LeadsToolbar } from "./_components/leads-toolbar";
 import { boardColumns } from "./_lib/board";
 
@@ -30,11 +30,8 @@ export default async function LeadsPage({ searchParams }: Props) {
         actions={<AddLeadButton />}
       />
       <LeadsToolbar query={q} matchCount={matchCount} />
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {columns.map((column) => (
-          <LeadColumn key={column.stage} column={column} today={today} searching={Boolean(q)} />
-        ))}
-      </div>
+      {/* Keyed on the search so the phone stage picker re-opens on a match. */}
+      <LeadBoard key={q} columns={columns} today={today} searching={Boolean(q)} />
     </>
   );
 }
