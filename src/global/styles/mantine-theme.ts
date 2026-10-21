@@ -8,6 +8,7 @@ import {
   Input,
   InputWrapper,
   Modal,
+  Notification,
   RadioCard,
   SegmentedControl,
   type MantineColorsTuple,
@@ -72,6 +73,10 @@ export const theme = createTheme({
     // The X in every dialog is icon-only; without a label screen readers
     // announce just "button".
     Modal: Modal.extend({ defaultProps: { closeButtonProps: { "aria-label": "Close" } } }),
+    Notification: Notification.extend({
+      defaultProps: { closeButtonProps: { "aria-label": "Dismiss" } },
+      classNames: { title: controls.notificationTitle, description: controls.notificationDescription },
+    }),
     RadioCard: RadioCard.extend({ classNames: { card: controls.radioCard } }),
     SegmentedControl: SegmentedControl.extend({
       classNames: {

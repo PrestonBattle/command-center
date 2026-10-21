@@ -177,7 +177,7 @@ schema changes.
   a label. Header shows count and monthly value. Phone: one stage at a time
   with stage tabs.
 
-- [ ] **L1 · Drag leads between stages** · `ready` · after L4
+- [x] **L1 · Drag leads between stages** · `ready` · after L4
   dnd-kit (Preston OK'd the dependency): mouse, touch and keyboard. The card
   moves instantly (`useOptimistic`) and snaps back with a message if
   `moveLead` fails. The column under the card highlights. Keep "Move to…"
