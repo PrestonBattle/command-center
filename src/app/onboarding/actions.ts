@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getDataLayer, type DataLayer } from "@/global/data";
 import { invalid, type ActionResult } from "@/global/lib/action-result";
@@ -17,6 +18,16 @@ import { pathForStep } from "./_lib/steps";
  * because it works by throwing.
  */
 
+/**
+ * Next.js keeps a layout mounted across navigations, so the progress bar
+ * would keep showing the step from the first page load. Revalidating the
+ * onboarding layout makes it re-read onboarding_step after every save.
+ */
+function goTo(path: string): never {
+  revalidatePath("/onboarding", "layout");
+  redirect(path);
+}
+
 /** Only move forward: going back to edit an earlier step keeps progress. */
 async function stepAfter(dl: DataLayer, step: number): Promise<number> {
   const org = await dl.org.get();
@@ -33,7 +44,7 @@ export async function saveBusiness(input: unknown): Promise<ActionResult> {
     await dl.org.update({ ...parsed.data, onboarding_step: await stepAfter(dl, 1) });
   });
   if (failed) return failed;
-  redirect(pathForStep(2));
+  goTo(pathForStep(2));
 }
 
 /** Step 2: monthly expenses, tax set-aside and revenue estimate. */
@@ -46,7 +57,7 @@ export async function saveFloor(input: unknown): Promise<ActionResult> {
     await saveFloorData(dl, parsed.data, { onboarding_step: await stepAfter(dl, 2) });
   });
   if (failed) return failed;
-  redirect(pathForStep(3));
+  goTo(pathForStep(3));
 }
 
 /** Step 2, "Finish later": move on without saving. Life vest can fill it in. */
@@ -56,7 +67,7 @@ export async function skipFloor(): Promise<ActionResult> {
     await dl.org.update({ onboarding_step: await stepAfter(dl, 2) });
   });
   if (failed) return failed;
-  redirect(pathForStep(3));
+  goTo(pathForStep(3));
 }
 
 /** Step 3: the client list, typed or imported. An empty list skips the step. */
@@ -71,7 +82,7 @@ export async function saveClients(input: unknown): Promise<ActionResult> {
     await dl.org.update({ onboarding_step: Math.max(org.onboarding_step, 4) });
   });
   if (failed) return failed;
-  redirect(pathForStep(4));
+  goTo(pathForStep(4));
 }
 
 /** Step 4: mark onboarding finished and open the dashboard. */
@@ -81,5 +92,6 @@ export async function finishOnboarding(): Promise<ActionResult> {
     await dl.org.update({ onboarding_step: 4, onboarding_completed_at: new Date().toISOString() });
   });
   if (failed) return failed;
+  revalidatePath("/", "layout");
   redirect("/");
 }

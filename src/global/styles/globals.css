@@ -36,10 +36,8 @@
   --field-bg-hover: rgb(255 255 255 / 0.75);
   --field-border: #b4693f;
 
-  /* Surfaces inside cards: hairline dividers, inset tiles, and the opaque
-     paper still used by Panel and the navbar until they move to Glass. */
+  /* Surfaces inside cards: hairline dividers and inset tiles. */
   --divider: rgb(124 45 18 / 0.15);
-  --surface: #fffaf5;
   --surface-inset: rgb(255 255 255 / 0.45);
 
   /* Glass. Consumed by global/components/glass/style.css. */
@@ -71,10 +69,6 @@
      font-display utilities read them. */
   --font-sans: var(--font-reddit-sans), system-ui, sans-serif;
   --font-display: var(--font-bricolage-grotesque), var(--font-reddit-sans), sans-serif;
-}
-
-@theme {
-  --radius-panel: 14px;
 }
 
 html {

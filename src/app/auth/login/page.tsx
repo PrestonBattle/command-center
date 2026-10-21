@@ -15,7 +15,8 @@ import {
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { IconAlertCircle } from "@tabler/icons-react";
-import { Panel } from "@/global/components/panel/panel";
+import { GlassPanel } from "@/global/components/glass/glass-panel";
+import { AuthHeader } from "../_components/auth-header";
 import { loginSchema } from "./validation";
 import { LoginUser } from "./actions/login";
 
@@ -60,13 +61,9 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-dvh items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <header className="mb-8 text-center">
-          <Text size="sm" className="text-[var(--text-muted)]">
-            Welcome back. Sign in to your command center.
-          </Text>
-        </header>
+        <AuthHeader title="Welcome back" description="Sign in to your command center." />
 
-        <Panel plain>
+        <GlassPanel padding="lg">
           <form onSubmit={handleSubmit} noValidate>
             <Stack gap="md">
               {formError && (
@@ -103,7 +100,7 @@ export default function LoginPage() {
               </Button>
             </Stack>
           </form>
-        </Panel>
+        </GlassPanel>
 
         <Text className="mt-6 text-center text-[var(--text-muted)]" size="sm">
           Don&apos;t have an account?{" "}

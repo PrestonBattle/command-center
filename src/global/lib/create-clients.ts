@@ -4,7 +4,7 @@ import type { DataLayer } from "@/global/data";
 import type { ClientRowValues } from "@/global/lib/schemas/client";
 
 /** What each new client's recurring service is called until it's renamed. */
-export const DEFAULT_SERVICE_NAME = "Services";
+export const DEFAULT_SERVICE_NAME = "Retainer";
 
 /**
  * Creates clients from validated rows: the client, a primary contact when

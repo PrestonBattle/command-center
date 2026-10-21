@@ -54,7 +54,7 @@ Before writing anything, search `src/global/` for an existing component,
 hook or helper. Reuse or extend it. If you'd paste the same logic a second
 time, extract it instead. Known building blocks:
 
-- `Glass`, `GlassPanel` — every card and surface.
+- `Glass`, `GlassPanel` — every card and surface (the old paper `Panel` is gone).
 - `global/components/inputs` — `MoneyInput`, `PercentInput`,
   `IntervalSelect`. Plain text fields are Mantine `TextInput`; the theme
   styles every Mantine input, so never style a raw `<input>`.

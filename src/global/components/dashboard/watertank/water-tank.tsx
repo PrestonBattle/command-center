@@ -20,13 +20,14 @@ export function WaterLineTank({ coverage }: WaterLineTankProps) {
     <div className="relative h-full w-full" aria-hidden>
       <div className="absolute inset-0 overflow-hidden rounded-full bg-[var(--surface-inset)]">
         <div
-          className="absolute inset-x-0 bottom-0 bg-[var(--accent)] transition-[height] duration-500"
+          className="absolute inset-x-0 bottom-0 bg-[var(--accent)]/30 transition-[height] duration-500 motion-reduce:transition-none"
           style={{ height: `${belowLine}%` }}
         />
-        {/* Only renders when clear. Purple is money doing a job; teal is
-            money that's free. */}
+        {/* Only renders when clear. The soft tint below the line is money
+            already spoken for; green above it is money that's free. A
+            strong color below would read as an alarm even when you're fine. */}
         <div
-          className="absolute inset-x-0 bg-[var(--ok)] transition-[height] duration-500"
+          className="absolute inset-x-0 bg-[var(--ok)] transition-[height] duration-500 motion-reduce:transition-none"
           style={{ bottom: `${LINE_AT}%`, height: `${aboveLine}%` }}
         />
       </div>

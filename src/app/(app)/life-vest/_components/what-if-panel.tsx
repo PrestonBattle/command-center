@@ -50,7 +50,7 @@ export function WhatIfPanel({ clients, ...base }: Props) {
           My personal costs change by{" "}
           <span className="tabular-nums">{personalDollars >= 0 ? "+" : "−"}{formatCents(Math.abs(personalDollars) * 100)}/mo</span>
         </p>
-        <Slider aria-labelledby="personal-label" min={-1000} max={2000} step={50} value={personalDollars} onChange={setPersonal} label={(v) => formatCents(v * 100)} />
+        <Slider aria-labelledby="personal-label" min={-1000} max={2000} step={50} value={personalDollars} onChange={setPersonal} label={(v) => formatCents(v * 100)} marks={[{ value: 0, label: "No change" }]} mb="md" />
       </div>
       <div aria-live="polite">
         <Callout

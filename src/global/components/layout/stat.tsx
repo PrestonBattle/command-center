@@ -12,9 +12,9 @@ type StatProps = {
 /** A dashboard tile: a label, a big number and a line of context. */
 export function Stat({ label, value, hint, children }: StatProps) {
   return (
-    <GlassPanel padding="sm" className="gap-1.5 px-5 py-5">
+    <GlassPanel padding="sm" className="gap-1 px-5 py-4 sm:gap-1.5 sm:py-5">
       <p className="text-sm font-semibold text-[var(--text-muted)]">{label}</p>
-      <p className="font-display text-3xl font-bold tabular-nums">{value}</p>
+      <p className="font-display text-2xl font-bold tabular-nums sm:text-3xl">{value}</p>
       {hint && <p className="text-sm text-[var(--text-faint)]">{hint}</p>}
       {children}
     </GlassPanel>

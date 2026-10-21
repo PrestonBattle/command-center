@@ -70,7 +70,7 @@ Keep items small: one PR each, under ~400 changed lines.
   Replace the inline `<style>` grid in `app/page.tsx` with Tailwind grid
   classes. Move `SAMPLE` data into `_lib/sample.ts`.
 
-- [ ] **C2 · One surface style** · `ready` · after F5
+- [x] **C2 · One surface style** · `ready` · after F5
   Move dashboard panels from `Panel` (paper) to `GlassPanel`; delete
   `panel/panel.tsx` once nothing uses it.
 

@@ -17,7 +17,8 @@ import {
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { IconAlertCircle } from "@tabler/icons-react";
-import { Panel } from "@/global/components/panel/panel";
+import { GlassPanel } from "@/global/components/glass/glass-panel";
+import { AuthHeader } from "../_components/auth-header";
 import { registrationSchema } from "./validation";
 import { RegisterUserOrg } from "./actions/register";
 
@@ -75,17 +76,9 @@ export default function SignUpPage() {
   return (
     <div className="flex min-h-dvh items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <header className="mb-8 text-center">
-          <Text
-            size="sm"
-            className="uppercase tracking-[0.18em] text-[var(--text-muted)]"
-          >
-            Ready to take command of your business? signup now
-          </Text>
-          
-        </header>
+        <AuthHeader title="Create your account" description="Ready to take command of your business?" />
 
-        <Panel plain>
+        <GlassPanel padding="lg">
           <form onSubmit={handleSubmit} noValidate>
             <Stack gap="md">
               {formError && (
@@ -153,8 +146,7 @@ export default function SignUpPage() {
               </Button>
             </Stack>
           </form>
-          
-        </Panel>
+        </GlassPanel>
 
         <Text className="mt-6 text-center text-[var(--text-muted)]" size="sm">
           Already have an account?{" "}

@@ -22,10 +22,10 @@ export function UpcomingPaymentsPanel({ rows }: { rows: ScheduledPayment[] }) {
           {rows.slice(0, SHOWN).map((r) => {
             const status = PAYMENT_STATUS[r.status];
             return (
-              <li key={r.key} className="flex items-center gap-3 border-t border-[var(--divider)] py-3 first:border-t-0">
-                <span className="min-w-0 flex-1 truncate font-semibold">{r.clientName}</span>
-                <span className="w-16 text-sm text-[var(--text-faint)]">{formatShortDate(r.dueOn)}</span>
-                <span className="w-20 text-right font-semibold tabular-nums">{formatCents(r.amountCents)}</span>
+              <li key={r.key} className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-[var(--divider)] py-3 first:border-t-0">
+                <span className="min-w-0 basis-full truncate font-semibold sm:flex-1 sm:basis-auto">{r.clientName}</span>
+                <span className="text-sm text-[var(--text-faint)] sm:w-16">{formatShortDate(r.dueOn)}</span>
+                <span className="ml-auto font-semibold tabular-nums sm:ml-0 sm:w-20 sm:text-right">{formatCents(r.amountCents)}</span>
                 <StatusBadge tone={status.tone}>{status.label}</StatusBadge>
               </li>
             );

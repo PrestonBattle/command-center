@@ -20,7 +20,7 @@ export function ClientCard({ client }: { client: ClientSummary }) {
     <li>
       <GlassPanel padding="sm" className="relative h-full gap-4 p-5 transition-transform focus-within:ring-2 focus-within:ring-[var(--accent)] hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
         <div className="flex items-center gap-3">
-          <span aria-hidden className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] font-bold text-white">
+          <span aria-hidden className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)]/12 font-bold text-[var(--accent)]">
             {initials(client.name)}
           </span>
           <div className="min-w-0 flex-1">
