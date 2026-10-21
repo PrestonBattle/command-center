@@ -2,6 +2,7 @@ import Glass from "@/global/components/glass/glass";
 import { calculateFloorCents } from "@/global/lib/floor";
 import { formatDollars as money } from "@/global/lib/money";
 import { InsetStat } from "./inset-stat";
+import { SnapshotExplainer } from "./snapshot-explainer";
 import { WaterLineTank } from "./water-tank";
 import { coverageDate, waterlineState, WATERLINE_STATES } from "./waterline-state";
 import { WATERLINE_TIPS } from "./waterline-tips";
@@ -54,7 +55,10 @@ export function WaterLinePanel({
 
       <div>
         <div className="mb-4 flex items-center justify-between gap-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">Snapshot</h2>
+          <div className="flex items-center gap-1">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--text-muted)]">Snapshot</h2>
+            <SnapshotExplainer floor={floor} coverage={coverage} />
+          </div>
           <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${state.chip}`}>{state.label}</span>
         </div>
 

@@ -28,11 +28,17 @@ export const WATERLINE_STATES = {
 
 export type WaterlineStateKey = keyof typeof WATERLINE_STATES;
 
+/**
+ * Where each band starts, as coverage (revenue / floor). Under 0.9 is
+ * underwater. Shared by the panel and its explainer so they can't disagree.
+ */
+export const WATERLINE_BREAKS = { treading: 0.9, afloat: 1, clear: 1.15 } as const;
+
 /** Which band a coverage ratio (revenue / floor) falls in. */
 export function waterlineState(coverage: number): WaterlineStateKey {
-  if (coverage < 0.9) return "under";
-  if (coverage < 1) return "treading";
-  if (coverage < 1.15) return "afloat";
+  if (coverage < WATERLINE_BREAKS.treading) return "under";
+  if (coverage < WATERLINE_BREAKS.afloat) return "treading";
+  if (coverage < WATERLINE_BREAKS.clear) return "afloat";
   return "clear";
 }
 

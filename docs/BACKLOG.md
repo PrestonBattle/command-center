@@ -205,7 +205,7 @@ schema changes.
   the button's description for screen readers. `info` prop on `Stat` and
   the Snapshot figures. Tips on all six dashboard numbers.
 
-- [ ] **D2 · Animated Snapshot explainer** · `ready` · after D1
+- [x] **D2 · Animated Snapshot explainer** · `ready` · after D1
   "?" on the Snapshot opens a step-through: the tank fills to each state
   (Underwater, Treading water, Afloat, Clear) using your own floor, the
   figure counts to the state's number, and each step explains it. Last
