@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ButtonLink } from "@/global/components/button-link";
 import { GlassPanel } from "@/global/components/glass/glass-panel";
 import { EmptyState, StatusBadge } from "@/global/components/layout";
 import type { ScheduledPayment } from "@/global/lib/billing";
@@ -7,7 +8,15 @@ import { formatCents } from "@/global/lib/money";
 import { PAYMENT_STATUS } from "@/global/lib/payment-status";
 import { PaymentAction } from "./payment-action";
 
-type Props = { title: string; rows: ScheduledPayment[]; emptyText?: string };
+type Props = {
+  title: string;
+  rows: ScheduledPayment[];
+  emptyText?: string;
+  /** Show only the first this-many rows, with a link to the rest. */
+  limit?: number;
+  /** Where "Show all" goes (the same month with ?all=1). */
+  showAllHref?: string;
+};
 
 /**
  * A table of scheduled payments with status and a mark-paid button per row.
@@ -15,7 +24,10 @@ type Props = { title: string; rows: ScheduledPayment[]; emptyText?: string };
  * Amount cells, so the table fits a phone without sideways scrolling --
  * a swipe-to-see-who-paid table is easy to misread.
  */
-export function PaymentsTable({ title, rows, emptyText }: Props) {
+export function PaymentsTable({ title, rows, emptyText, limit, showAllHref }: Props) {
+  // A business with hundreds of clients has hundreds of rows a month; the
+  // first ones (soonest due) are what you act on, the rest are a click away.
+  const shown = limit ? rows.slice(0, limit) : rows;
   return (
     <GlassPanel title={title}>
       {rows.length === 0 ? (
@@ -35,7 +47,7 @@ export function PaymentsTable({ title, rows, emptyText }: Props) {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => {
+              {shown.map((r) => {
                 const status = PAYMENT_STATUS[r.status];
                 const badge = (
                   <StatusBadge tone={status.tone}>{r.paidOn ? `Paid ${formatShortDate(r.paidOn)}` : status.label}</StatusBadge>
@@ -61,6 +73,16 @@ export function PaymentsTable({ title, rows, emptyText }: Props) {
               })}
             </tbody>
           </table>
+        </div>
+      )}
+      {shown.length < rows.length && showAllHref && (
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--divider)] pt-3 text-sm text-[var(--text-muted)]">
+          <span>
+            Showing {shown.length} of {rows.length}
+          </span>
+          <ButtonLink href={showAllHref} variant="subtle" color="ink" size="compact-md">
+            Show all {rows.length}
+          </ButtonLink>
         </div>
       )}
     </GlassPanel>

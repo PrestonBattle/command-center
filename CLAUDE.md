@@ -89,7 +89,10 @@ time, extract it instead. Known building blocks:
   `Callout`, `FormActions`, `StatusBadge`, `Stat`, `EmptyState`.
 - `global/hooks/use-is-active.ts` — which nav link is current.
 - `global/hooks/use-set-search-param.ts` — `setParam(key, value)` for
-  filters that live in the URL.
+  filters that live in the URL. Changing a filter drops `?page=`.
+- `global/lib/paging.ts` — `parsePage`, `paginate(items, page, perPage)`,
+  `pageHref`; `global/components/pager.tsx` — `Pager` (Previous / Next and
+  "Page 2 of 9 · 51–100 of 403"). Clients pages by 50.
 - `global/lib/search.ts` — `matchesQuery(query, fields)`: the one search
   rule (case-insensitive, phone numbers match on digits).
 - `global/lib/intervals.ts` — billing interval options and labels.

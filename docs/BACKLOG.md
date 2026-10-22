@@ -55,7 +55,7 @@ Preston.
   A full CSP is R14, because Mantine's inline styles need care. HSTS is set
   at the host.
 
-- [ ] **R4 · Page through Money and Clients** · `ready` · after A2, A4
+- [x] **R4 · Page through Money and Clients** · `ready` · after A2, A4
   With 400 clients, Money renders 1,600 rows (90,000px tall, 5.5s to load
   locally) and Clients renders 400 cards.
   - Clients: 50 per page, with `?page=` in the URL, working alongside
