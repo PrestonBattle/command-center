@@ -566,3 +566,23 @@ vest and settings computes to Geist; screenshots in all three themes; axe
 clean in all three; tips 13/13; dashboard 18/19 (the calm account's bills
 fell due on Oct 21, so its "all clear" case no longer applies; not a font
 issue).
+
+## 19. Forms survive surprises (R1)
+
+- **`safeAction`** (`global/lib/safe-action.ts`, tested): wraps the browser
+  side of an action call. A thrown action becomes `{ ok: false, formError }`
+  with "That didn't save. You may have been signed out. Reload the page and
+  try again." or, when the browser says it's offline, "You're offline, so
+  nothing was saved." Next's redirect/notFound are rethrown untouched.
+- Used by `useActionForm` and `useActionButton`, so every form and one-click
+  button gets it. The leads board (which calls `moveLead` itself) uses the
+  same message when a card snaps back.
+- **Why reload instead of a "Sign in" link:** login doesn't send you back
+  to where you were yet, and reloading handles both causes (it goes to
+  login if the session ended, or shows the error page if the server is
+  down). The real fix for the sign-out case is R7, in the proxy.
+
+**Checked:** sign out in one tab, then in another: Add client shows the
+message (no crash overlay), Mark paid shows it, a lead move snaps back with
+it; offline submit says offline; a normal submit still redirects. Unit tests
+for safeAction (5).

@@ -29,7 +29,7 @@ Preston.
 
 ### Bot can build
 
-- [ ] **R1 · Forms survive surprises** · `ready`
+- [x] **R1 · Forms survive surprises** · `ready`
   `useActionForm` and `useActionButton` catch a thrown action (a network
   drop or an expired session) and show a form error instead of crashing:
   "You've been signed out. Sign in again", with a link back to this page.
