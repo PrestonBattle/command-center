@@ -95,12 +95,37 @@ Preston.
   your email" screen. Decide whether onboarding can start before the email
   is confirmed.
 
-- [ ] **R10 · Limit login attempts** · `decision`
+- [ ] **R10 · Limit login attempts (Redis)** · `decision`
   25 wrong passwords in a row went through with no slowdown. The login
-  action has a spot marked for a limiter. Supabase's own limit counts per
-  IP, and every login comes from the server's IP, so it doesn't protect a
-  single account. Pick where the counts live: Upstash, Redis, or a
-  Postgres table.
+  action has a spot marked for a limiter, and `ioredis` is already in
+  `package.json` (unused). Decisions, with the suggested choice first:
+  1. **Where Redis runs.** This follows from hosting (R13): Upstash +
+     `@upstash/ratelimit` (over HTTP, so it suits serverless and anywhere
+     else); or `ioredis` + a managed Redis on a long-running server (port
+     qrum's limiter).
+  2. **What's limited.**
+     - Login: by email (failures only) and by IP.
+     - Signup: by IP.
+     - Forgot password, once R8 exists: by email and IP.
+  3. **Numbers.** A sliding window:
+     - login: 5 failures per email per 15 min, 20 attempts per IP per 15 min
+     - signup: 5 per IP per hour
+  4. **Message.** "Too many attempts. Try again in N minutes." The same
+     message whether or not the account exists. A successful login clears
+     the count.
+  5. **Redis down.** Fail open (let logins through) and send an alert,
+     rather than fail closed (which locks everyone out).
+  6. **Real IP.** Only trust `x-forwarded-for` behind a proxy that
+     overwrites it (Vercel does; on a VPS, nginx or Caddy must be set up
+     to).
+  7. **Supabase's own limit** counts per IP, and every login comes from
+     the server's IP. Raise it in production, and let this limiter do the
+     per-person job.
+  8. **Dev and tests.** An in-memory limiter when `REDIS_URL` isn't set.
+  9. **Who builds it.** It touches auth, `package.json` and `.env`, so it's
+     Preston's, or a bot PR he reviews. The bot would build
+     `global/lib/rate-limit.ts` (with the fallback and tests) and the
+     gates; Preston creates the Redis instance and sets the env vars.
 
 - [ ] **R11 · Billing** · `decision`
   The big one. Decide first:
