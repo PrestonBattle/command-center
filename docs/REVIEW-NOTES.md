@@ -750,3 +750,31 @@ blocked, stats + attention fail and Snapshot + Payments show; one Try again
 restores all; axe clean (Harbor, Harbor night). Dashboard layout 18/19
 (the calm account's bills fell due on Oct 21; known). Clients, Leads and
 Money data-flow tests re-run after the boundary change: 21/21, 15/15, 19/19.
+
+## 27. Client detail and Life vest on the data-flow pattern (A6)
+
+- **Client detail** (`clients/[id]/_server/queries.ts`):
+  - `getClient(id)` is the one awaited load: the name is the title, and a
+    missing or malformed id must be a real 404 before anything streams.
+  - `getClientDetails(id)` (services, contacts, received payments) starts
+    first and streams into three panels, each with its own boundary.
+  - "· Won from a lead on …" streams into the header; if that lookup fails
+    it's simply left out (history, not something to act on).
+- **Life vest** (`life-vest/_server/queries.ts`): `getLifeVestView()` feeds
+  three sections. Coverage is a server section; What if and the costs form
+  are client sections (`use()`) because they're interactive.
+- **Settings** is unchanged: it reads only the theme cookie, so there's
+  nothing to stream.
+- **New shared piece:** `SkeletonPanel` (a panel's real title plus
+  placeholder lines, or your own shapes) moved from client detail to
+  `global/components/skeleton` once Life vest needed it too. In CLAUDE.md
+  and /dev.
+
+**Checked:** 26/26: client detail title, panels and total; unknown and
+malformed ids return 404; with contacts held, the name, actions and panel
+skeletons show first; with contacts blocked, the panels say so under an
+intact header and Try again restores. Life vest shows coverage, What if
+reacts to its slider, saving the floor works; held and blocked states
+behave the same way. axe clean on both pages in Harbor and Harbor night.
+L2 5/5 and edge cases pass (two reload checks in older suites now wait for
+the streamed content).

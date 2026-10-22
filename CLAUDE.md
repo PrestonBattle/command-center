@@ -156,7 +156,8 @@ time, extract it instead. Known building blocks:
   a section loads, `SectionError` (message + Try again) if it fails, the
   section once it's in. Takes `children`, so server sections stay server.
 - `global/components/skeleton` — `SkeletonRegion` (busy + "Loading…" for
-  screen readers), `SkeletonLine`, `SkeletonCard`, `SkeletonRows`. Colour is
+  screen readers), `SkeletonLine`, `SkeletonCard`, `SkeletonRows`,
+  `SkeletonPanel` (a panel's real title + placeholder lines or shapes). Colour is
   `--skeleton`; the pulse stops under reduced motion.
 - `getDataLayer()` — all reads and writes.
 
