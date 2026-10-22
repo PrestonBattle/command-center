@@ -17,6 +17,183 @@ Keep items small: one PR each, under ~400 changed lines.
 
 ---
 
+## Launch
+
+These are the items between the app and charging for it, from the break-it
+pass on Oct 21 (dev server, local Supabase). The R items come first because
+the bot takes the first `ready` item in the file.
+
+Order: R5 (Preston asked for it first), R1 → R2 → R3, then Data flow
+A1–A6, then R4. The rest wait on
+Preston.
+
+### Bot can build
+
+- [ ] **R1 · Forms survive surprises** · `ready`
+  `useActionForm` and `useActionButton` catch a thrown action (a network
+  drop or an expired session) and show a form error instead of crashing:
+  "You've been signed out. Sign in again", with a link back to this page.
+  Today any submit after the session ends throws "An unexpected response
+  was received from the server." R7 removes the cause; R1 makes the next
+  surprise fail softly.
+
+- [ ] **R2 · Error pages** · `ready` · after R1
+  Add `app/(app)/error.tsx` inside the app shell: what happened, Try again,
+  and Back to dashboard. Add a bare `app/global-error.tsx` for when the
+  layout itself breaks. Both use glass, have one `<h1>`, and move focus to
+  the heading. Today a server error shows Next's blank "Application error".
+
+- [ ] **R3 · Security headers** · `ready`
+  In `next.config.ts`:
+  - `poweredByHeader: false`
+  - `X-Frame-Options: DENY` and `frame-ancestors 'none'`, so no other site
+    can embed the app
+  - `X-Content-Type-Options: nosniff`
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+  - `Permissions-Policy` turning off camera, mic and location
+
+  A full CSP is R14, because Mantine's inline styles need care. HSTS is set
+  at the host.
+
+- [ ] **R4 · Page through Money and Clients** · `ready` · after A2, A4
+  With 400 clients, Money renders 1,600 rows (90,000px tall, 5.5s to load
+  locally) and Clients renders 400 cards.
+  - Clients: 50 per page, with `?page=` in the URL, working alongside
+    search.
+  - Money: group by status, show the first 25 in each group with a "Show
+    all", and keep totals counting everything.
+
+- [ ] **R5 · Geist, one font file** · `ready`
+  Preston picked Geist (Oct 22) over the current Bricolage + Reddit Sans,
+  which load 23 font files. Use one variable-weight Geist file for both body
+  and headings, with equal-width numbers on figures so money columns line
+  up. Check all three themes.
+
+### Preston's (auth, proxy, dependencies, schema)
+
+- [ ] **R6 · Upgrade Next.js** · `preston`
+  16.2.4 has published critical advisories: remote code execution through
+  image optimization, ways around the proxy, and server-action denial of
+  service. Move to the latest 16.x (16.4.2 as of Oct 21); `npm audit` says
+  it isn't a major bump. In the same PR, drop the unused `ioredis`, `pino`
+  and `pino-pretty`, and run `npm audit fix` for the moderate advisories.
+
+- [ ] **R7 · Don't redirect server actions in the proxy** · `preston`
+  `updateSession` answers a signed-out server-action POST with a 307 to
+  `/auth/login`. The client can't follow it, so the form crashes. Skip the
+  redirect when the request has a `Next-Action` header and let
+  `getDataLayer()` redirect instead: an action can redirect, but a 307 to a
+  page can't be followed.
+
+- [ ] **R8 · Forgot password** · `decision`
+  "Forgot password?" on login → email link → a "Set a new password" page,
+  using Supabase's reset email (including its template wording). Auth is
+  Preston's, but the bot can build the pages and actions if he says so.
+
+- [ ] **R9 · Confirm email at signup** · `decision`
+  Turn on email confirmation in the live Supabase project and add a "Check
+  your email" screen. Decide whether onboarding can start before the email
+  is confirmed.
+
+- [ ] **R10 · Limit login attempts** · `decision`
+  25 wrong passwords in a row went through with no slowdown. The login
+  action has a spot marked for a limiter. Supabase's own limit counts per
+  IP, and every login comes from the server's IP, so it doesn't protect a
+  single account. Pick where the counts live: Upstash, Redis, or a
+  Postgres table.
+
+- [ ] **R11 · Billing** · `decision`
+  The big one. Decide first:
+  - price
+  - trial length, and whether a card is needed up front
+  - what an unpaid account sees (read-only is kindest)
+
+  Then build Stripe Checkout, the Customer Portal, and a webhook that
+  writes the subscription status on the org (a schema change). The app
+  layout checks that status.
+
+- [ ] **R12 · Terms, privacy, delete account** · `decision`
+  - Terms of service and privacy policy pages, with wording from Preston
+    or a template he approves.
+  - Settings, "Export my data": a CSV of clients, payments and leads. The
+    bot can build this.
+  - Settings, "Delete my account": deletes the org and the auth user. It
+    needs a SQL function, so it's Preston's.
+
+- [ ] **R13 · Production setup** · `preston`
+  - a live Supabase project with backups (point-in-time recovery)
+  - hosting on the subdomain, with env vars set
+  - error monitoring (Sentry or the host's own)
+  - one signup on the real domain, tested end to end
+
+### Later
+
+- [ ] **R14 · Content Security Policy** · `later` · after R3
+  A nonce-based CSP once the R3 headers are in. It needs testing against
+  Mantine's inline styles and Next's scripts.
+
+- [ ] **R15 · Browser tests in the repo** · `later`
+  The Playwright checks live outside the repo: signup → onboarding →
+  clients → money, the edge cases, and axe in every theme. Move them in and
+  run them in CI against a local Supabase. This needs `@playwright/test`, a
+  new dependency.
+
+- [ ] **R16 · Length limits in the database** · `later`
+  The forms cap text length but the tables don't, so a direct API call
+  saved a 100,000-character name. Add `check (length(name) <= …)` to the
+  text columns. That's a schema change, so it's Preston's.
+
+## Data flow
+
+Every page moves to the same shape, modelled on qrum's events pages:
+
+```
+_server/queries.ts   import "server-only"; fetch + map → a view object
+page.tsx             starts the promises (no await), renders the title at once
+<SectionBoundary>    error fallback with Try again + Suspense + skeleton
+section              unwraps the promise; picks the empty state or the content
+pieces               props in, markup out
+```
+
+Rule: a section that isn't interactive is an async server component that
+awaits its promise. One that is interactive (dragging, live controls) is a
+client component that calls `use()`. `SectionBoundary` takes `children`, so a
+server section stays server-side inside it. Page titles show at once and
+numbers stream in.
+
+- [ ] **A1 · SectionBoundary and skeletons** · `ready`
+  Add `global/components/section-boundary.tsx`: a client error boundary
+  (Callout in `--bad`, "Try again" re-renders just that section) wrapped
+  around `Suspense`. Add `global/components/skeleton/`: line, block, card and
+  table-row pieces in glass, with the pulse off under reduced motion and
+  `aria-busy` on the region. Write the rule above into CLAUDE.md ("Where
+  things go" gets `_server/`) and add the pieces to `/dev`.
+
+- [ ] **A2 · Clients on the pattern** · `ready` · after A1
+  `clients/_server/queries.ts` → `getClientsView({ q, status })`. Title
+  "Clients" and the Add button show at once; the count and recurring total,
+  toolbar results and grid stream in. Skeleton: six cards in the grid.
+
+- [ ] **A3 · Leads on the pattern** · `ready` · after A1
+  `getLeadsView({ q })`. The board stays a client section (`use()`), since
+  dragging needs it. Skeleton: the stage columns with two cards each.
+
+- [ ] **A4 · Money on the pattern** · `ready` · after A1
+  `getMoneyView({ month })`. The month nav is instant; the collected bar and
+  tables stream in. `loadBusiness` stays as the shared loader underneath.
+
+- [ ] **A5 · Dashboard in three sections** · `ready` · after A1
+  Stats, Snapshot + Needs attention, and Payments each get their own
+  boundary, so a slow part doesn't hold up the rest and a failed part
+  doesn't blank the page. Data that several sections need is loaded once
+  (React `cache`).
+
+- [ ] **A6 · Client detail, Life vest, Settings** · `ready` · after A1
+  Same pattern. Client detail uses slots like qrum's event page (header,
+  services, payments, activity) and calls `notFound()` for a missing client.
+
+---
+
 ## Foundations
 
 - [x] **F1 · Theme variables** · `ready`
