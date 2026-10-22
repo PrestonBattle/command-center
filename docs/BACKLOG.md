@@ -43,7 +43,7 @@ Preston.
   layout itself breaks. Both use glass, have one `<h1>`, and move focus to
   the heading. Today a server error shows Next's blank "Application error".
 
-- [ ] **R3 · Security headers** · `ready`
+- [x] **R3 · Security headers** · `ready`
   In `next.config.ts`:
   - `poweredByHeader: false`
   - `X-Frame-Options: DENY` and `frame-ancestors 'none'`, so no other site

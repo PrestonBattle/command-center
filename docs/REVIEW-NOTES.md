@@ -607,3 +607,21 @@ error page (navbar, one h1, focus on it, axe clean); Try again recovers
 once access is back. With the orgs table blocked, the app layout fails and
 the root error page shows. With the root layout forced to throw, the
 last-resort page renders.
+
+## 21. Security headers (R3)
+
+`next.config.ts` sends five headers on every response and stops sending
+`X-Powered-By: Next.js`:
+- `Content-Security-Policy: frame-ancestors 'none'` + `X-Frame-Options:
+  DENY` — no other site can show the app in a frame (clickjacking).
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin` — other sites never
+  see a path like `/clients/<id>`.
+- `Permissions-Policy` — camera, mic, location, ad topics off.
+
+The CSP is only the framing rule for now; a full script/style policy is R14.
+HSTS is left to the host.
+
+**Checked:** headers present on pages, redirects and unknown URLs; a page
+that frames the app gets "Refused to frame"; edge cases, leads 14/14 and
+tips 13/13 still pass.
