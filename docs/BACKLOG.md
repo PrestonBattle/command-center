@@ -188,7 +188,7 @@ numbers stream in.
   doesn't blank the page. Data that several sections need is loaded once
   (React `cache`).
 
-- [ ] **A6 · Client detail, Life vest, Settings** · `ready` · after A1
+- [x] **A6 · Client detail, Life vest, Settings** · `ready` · after A1
   Same pattern. Client detail uses slots like qrum's event page (header,
   services, payments, activity) and calls `notFound()` for a missing client.
 

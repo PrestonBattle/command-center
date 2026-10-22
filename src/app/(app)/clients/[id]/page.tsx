@@ -1,37 +1,33 @@
-import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { BackButton } from "@/global/components/back-button";
 import { PageHeader, StatusBadge } from "@/global/components/layout";
-import { getCurrentOrg, getDataLayer } from "@/global/data";
+import { SectionBoundary } from "@/global/components/section-boundary";
+import { SkeletonPanel } from "@/global/components/skeleton";
 import { clientStatusMeta } from "@/global/lib/client-status";
-import { formatShortDate, todayIso } from "@/global/lib/dates";
-import { clientIdSchema } from "../_lib/schemas";
+import { formatShortDate } from "@/global/lib/dates";
 import { ClientActions } from "./_components/client-actions";
-import { ContactsPanel } from "./_components/contacts-panel";
-import { PaymentsPanel } from "./_components/payments-panel";
-import { ServicesPanel } from "./_components/services-panel";
+import { ContactsSection } from "./_components/contacts-section";
+import { ReceivedSection } from "./_components/received-section";
+import { ServicesSection } from "./_components/services-section";
+import { WonFromLead } from "./_components/won-from-lead";
+import { getClient, getClientDetails, getWonFromLeadOn } from "./_server/queries";
 
 type Props = { params: Promise<{ id: string }> };
 
 /** One client: what they pay, who to talk to, and what they've paid. */
 export default async function ClientPage({ params }: Props) {
   const { id } = await params;
-  if (!clientIdSchema.safeParse(id).success) notFound();
-
-  const [org, dl] = await Promise.all([getCurrentOrg(), getDataLayer()]);
-  const client = await dl.clients.get(id);
-  if (!client) notFound();
-
-  const [contacts, services, payments, leads] = await Promise.all([
-    dl.contacts.list(),
-    dl.clientServices.list(),
-    dl.payments.list(),
-    dl.leads.list(),
-  ]);
-  // The lead this client was won from, if any: the board drops old wins, so
-  // this is where that history stays visible.
-  const fromLead = leads.find((l) => l.converted_client_id === id);
+  // Started first so they load while the client row is fetched.
+  const detailsPromise = getClientDetails(id);
+  // If the client turns out not to exist, nothing awaits this; the empty
+  // catch stops an unawaited failure being reported as unhandled. The
+  // sections still see the rejection.
+  detailsPromise.catch(() => {});
+  const wonOnPromise = getWonFromLeadOn(id).catch(() => null);
+  // The one awaited load: the name is the title, and a missing client is a
+  // 404 (see getClient).
+  const client = await getClient(id);
   const status = clientStatusMeta(client.status);
-  const today = todayIso(org.timezone);
 
   return (
     <>
@@ -42,15 +38,23 @@ export default async function ClientPage({ params }: Props) {
           <span className="flex flex-wrap items-center gap-2">
             <StatusBadge tone={status.tone}>{status.label}</StatusBadge>
             Client since {formatShortDate(client.signed_on)}
-            {fromLead && <span>· Won from a lead on {formatShortDate(fromLead.stage_changed_at.slice(0, 10))}</span>}
+            <Suspense fallback={null}>
+              <WonFromLead datePromise={wonOnPromise} />
+            </Suspense>
           </span>
         }
         actions={<ClientActions clientId={client.id} clientName={client.name} status={client.status} />}
       />
       <div className="grid items-start gap-6 lg:grid-cols-2">
-        <ServicesPanel clientId={client.id} services={services.filter((s) => s.client_id === id)} today={today} />
-        <ContactsPanel clientId={client.id} contacts={contacts.filter((c) => c.client_id === id)} />
-        <PaymentsPanel payments={payments.filter((p) => p.client_id === id && p.paid_on)} />
+        <SectionBoundary skeleton={<SkeletonPanel title="Services" label="services" />} errorMessage="Couldn't load their services.">
+          <ServicesSection clientId={client.id} detailsPromise={detailsPromise} />
+        </SectionBoundary>
+        <SectionBoundary skeleton={<SkeletonPanel title="Contacts" label="contacts" lines={2} />} errorMessage="Couldn't load their contacts.">
+          <ContactsSection clientId={client.id} detailsPromise={detailsPromise} />
+        </SectionBoundary>
+        <SectionBoundary skeleton={<SkeletonPanel title="Payments received" label="payments" />} errorMessage="Couldn't load their payments.">
+          <ReceivedSection detailsPromise={detailsPromise} />
+        </SectionBoundary>
       </div>
     </>
   );

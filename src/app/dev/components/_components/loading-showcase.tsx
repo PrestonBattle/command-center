@@ -4,7 +4,7 @@ import { Button } from "@mantine/core";
 import { use, useState } from "react";
 import { GlassPanel } from "@/global/components/glass/glass-panel";
 import { SectionBoundary } from "@/global/components/section-boundary";
-import { SkeletonCard, SkeletonLine, SkeletonRegion, SkeletonRows } from "@/global/components/skeleton";
+import { SkeletonCard, SkeletonLine, SkeletonPanel, SkeletonRegion, SkeletonRows } from "@/global/components/skeleton";
 
 /* Never settles, so the boundary stays on its skeleton for the demo. Only
    mounted after a click: rendered on the server it would hold the page's
@@ -35,6 +35,7 @@ export function LoadingShowcase() {
           <SkeletonLine width="w-2/3" />
         </GlassPanel>
       </div>
+      <SkeletonPanel title="SkeletonPanel" label="a sample panel" lines={2} />
       <SkeletonRegion label="sample rows">
         <SkeletonRows rows={3} />
       </SkeletonRegion>
