@@ -26,6 +26,16 @@ export class SectionErrorBoundary extends Component<Props, State> {
 
   reset = () => this.setState({ error: null });
 
+  // New content from the server (a refresh, or navigating to the same page
+  // with a different URL) clears the error. So one Try again, which
+  // refreshes the whole page, brings back every section that can now load,
+  // not just the one whose button was pressed. Children only change when the
+  // server sends something new, so a section that still fails isn't retried
+  // in a loop.
+  componentDidUpdate(prev: Props) {
+    if (this.state.error !== null && prev.children !== this.props.children) this.reset();
+  }
+
   render() {
     if (this.state.error !== null) {
       unstable_rethrow(this.state.error);

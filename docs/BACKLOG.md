@@ -182,7 +182,7 @@ numbers stream in.
   `getMoneyView({ month })`. The month nav is instant; the collected bar and
   tables stream in. `loadBusiness` stays as the shared loader underneath.
 
-- [ ] **A5 · Dashboard in three sections** · `ready` · after A1
+- [x] **A5 · Dashboard in three sections** · `ready` · after A1
   Stats, Snapshot + Needs attention, and Payments each get their own
   boundary, so a slow part doesn't hold up the rest and a failed part
   doesn't blank the page. Data that several sections need is loaded once
