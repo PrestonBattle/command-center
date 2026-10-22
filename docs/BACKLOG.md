@@ -23,7 +23,8 @@ These are the items between the app and charging for it, from the break-it
 pass on Oct 21 (dev server, local Supabase). The R items come first because
 the bot takes the first `ready` item in the file.
 
-Order: R1 → R2 → R3 → R4 → R5 (bot). The rest wait on Preston.
+Order: R1 → R2 → R3, then Data flow A1–A6, then R4 → R5. The rest wait on
+Preston.
 
 ### Bot can build
 
@@ -53,7 +54,7 @@ Order: R1 → R2 → R3 → R4 → R5 (bot). The rest wait on Preston.
   A full CSP is R14, because Mantine's inline styles need care. HSTS is set
   at the host.
 
-- [ ] **R4 · Page through Money and Clients** · `ready`
+- [ ] **R4 · Page through Money and Clients** · `ready` · after A2, A4
   With 400 clients, Money renders 1,600 rows (90,000px tall, 5.5s to load
   locally) and Clients renders 400 cards.
   - Clients: 50 per page, with `?page=` in the URL, working alongside
@@ -139,6 +140,55 @@ Order: R1 → R2 → R3 → R4 → R5 (bot). The rest wait on Preston.
   The forms cap text length but the tables don't, so a direct API call
   saved a 100,000-character name. Add `check (length(name) <= …)` to the
   text columns. That's a schema change, so it's Preston's.
+
+## Data flow
+
+Every page moves to the same shape, modelled on qrum's events pages:
+
+```
+_server/queries.ts   import "server-only"; fetch + map → a view object
+page.tsx             starts the promises (no await), renders the title at once
+<SectionBoundary>    error fallback with Try again + Suspense + skeleton
+section              unwraps the promise; picks the empty state or the content
+pieces               props in, markup out
+```
+
+Rule: a section that isn't interactive is an async server component that
+awaits its promise. One that is interactive (dragging, live controls) is a
+client component that calls `use()`. `SectionBoundary` takes `children`, so a
+server section stays server-side inside it. Page titles show at once and
+numbers stream in.
+
+- [ ] **A1 · SectionBoundary and skeletons** · `ready`
+  Add `global/components/section-boundary.tsx`: a client error boundary
+  (Callout in `--bad`, "Try again" re-renders just that section) wrapped
+  around `Suspense`. Add `global/components/skeleton/`: line, block, card and
+  table-row pieces in glass, with the pulse off under reduced motion and
+  `aria-busy` on the region. Write the rule above into CLAUDE.md ("Where
+  things go" gets `_server/`) and add the pieces to `/dev`.
+
+- [ ] **A2 · Clients on the pattern** · `ready` · after A1
+  `clients/_server/queries.ts` → `getClientsView({ q, status })`. Title
+  "Clients" and the Add button show at once; the count and recurring total,
+  toolbar results and grid stream in. Skeleton: six cards in the grid.
+
+- [ ] **A3 · Leads on the pattern** · `ready` · after A1
+  `getLeadsView({ q })`. The board stays a client section (`use()`), since
+  dragging needs it. Skeleton: the stage columns with two cards each.
+
+- [ ] **A4 · Money on the pattern** · `ready` · after A1
+  `getMoneyView({ month })`. The month nav is instant; the collected bar and
+  tables stream in. `loadBusiness` stays as the shared loader underneath.
+
+- [ ] **A5 · Dashboard in three sections** · `ready` · after A1
+  Stats, Snapshot + Needs attention, and Payments each get their own
+  boundary, so a slow part doesn't hold up the rest and a failed part
+  doesn't blank the page. Data that several sections need is loaded once
+  (React `cache`).
+
+- [ ] **A6 · Client detail, Life vest, Settings** · `ready` · after A1
+  Same pattern. Client detail uses slots like qrum's event page (header,
+  services, payments, activity) and calls `notFound()` for a missing client.
 
 ---
 
