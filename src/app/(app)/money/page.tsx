@@ -1,31 +1,31 @@
 import { PageHeader } from "@/global/components/layout";
-import { scheduleForMonth, scheduleTotals } from "@/global/lib/billing";
-import { formatMonth, monthParam, parseMonthParam } from "@/global/lib/dates";
-import { loadBusiness } from "../_lib/load-business";
-import { CollectionBar } from "./_components/collection-bar";
+import { SectionBoundary } from "@/global/components/section-boundary";
+import { formatMonth } from "@/global/lib/dates";
+import { MoneySection } from "./_components/money-section";
+import { MoneySkeleton } from "./_components/money-skeleton";
 import { MonthNav } from "./_components/month-nav";
-import { PaymentsTable } from "./_components/payments-table";
-import { earlierOverdue } from "../_lib/earlier-overdue";
+import { getMoneyMonth, getMoneyView } from "./_server/queries";
 
 type Props = { searchParams: Promise<{ month?: string }> };
 
 /** Money in for one month: what's expected, what's paid, what's late. ?month=YYYY-MM */
 export default async function MoneyPage({ searchParams }: Props) {
   const { month: param } = await searchParams;
-  const data = await loadBusiness();
-  const month = parseMonthParam(param, data.thisMonth);
-  const isCurrent = monthParam(month) === monthParam(data.thisMonth);
-
-  const scheduleInput = { today: data.today, clients: data.clients, services: data.services, payments: data.payments };
-  const rows = scheduleForMonth({ ...scheduleInput, month });
-  const earlier = isCurrent ? earlierOverdue(month, scheduleInput) : [];
+  // Which month (and so the title and month nav) is known at once; see
+  // getMoneyMonth for why awaiting it here is free. The money streams in.
+  const selected = await getMoneyMonth(param);
+  const viewPromise = getMoneyView(selected);
 
   return (
     <>
-      <PageHeader title="Money" description={`Cash in, ${formatMonth(month)}`} actions={<MonthNav month={month} isCurrent={isCurrent} />} />
-      <CollectionBar totals={scheduleTotals(rows)} floorCents={data.floorCents} />
-      {earlier.length > 0 && <PaymentsTable title="Still unpaid from earlier months" rows={earlier} />}
-      <PaymentsTable title={`${formatMonth(month)} payments`} rows={rows} emptyText="Nothing expected this month" />
+      <PageHeader
+        title="Money"
+        description={`Cash in, ${formatMonth(selected.month)}`}
+        actions={<MonthNav month={selected.month} isCurrent={selected.isCurrent} />}
+      />
+      <SectionBoundary skeleton={<MoneySkeleton />} errorMessage="Couldn't load your payments.">
+        <MoneySection viewPromise={viewPromise} month={selected.month} />
+      </SectionBoundary>
     </>
   );
 }

@@ -705,3 +705,23 @@ night); phone has no sideways scroll. Leads suites: 14/14, L1 14/14, L2
 5/5. L3 and L4 each have one check that also fails on `bot/dev` (a menu
 counted before it finishes opening; a column count that earlier test runs
 changed). Both behaviours were checked by hand and are right.
+
+## 25. Money on the data-flow pattern (A4)
+
+- `money/_server/queries.ts`:
+  - `getMoneyMonth(param)` → which month and whether it's this one. The
+    page awaits it because the title ("Cash in, October 2026") and the
+    month nav need it at once; it only reads the org, which the app layout
+    already loaded (cached per request), so it costs nothing.
+  - `getMoneyView(month)` → the month's schedule, totals, floor and (this
+    month only) older unpaid payments. `loadBusiness` stays underneath.
+- `MoneySection` (server) renders the collected bar and both tables;
+  `MoneySkeleton` is the bar card and a five-row table at their real sizes.
+
+**Checked:** 19/19: title and month, collected bar, table; Mark paid shows
+Undo and Undo brings Mark paid back (in this month's table: a paid row in
+"earlier months" leaves that table, as before); previous month; bad
+`?month=` values; with payments held 2.5s, title, month and nav first then
+the skeleton; with payments blocked, the section error under the title and
+nav, and Try again recovers; axe clean (Harbor, Harbor night); phone fits.
+Edge cases and R1 flows still pass.
