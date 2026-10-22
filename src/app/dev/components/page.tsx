@@ -8,6 +8,7 @@ import { GlassPanel } from "@/global/components/glass/glass-panel";
 import { InfoTip } from "@/global/components/info-tip";
 import { IntervalSelect, MoneyInput, PercentInput, SearchInput } from "@/global/components/inputs";
 import { Callout, EmptyState, FieldGrid, FormSection, PageHeader, Stat, StatusBadge } from "@/global/components/layout";
+import { Pager } from "@/global/components/pager";
 import { Stepper } from "@/global/components/stepper/stepper";
 import type { ActionResult } from "@/global/lib/action-result";
 import type { FloorFormValues } from "@/global/lib/schemas/floor";
@@ -80,6 +81,7 @@ export default function ComponentsShowcase() {
             <p className="text-sm text-[var(--text-muted)]">Sections group fields and can show a running total.</p>
           </FormSection>
           <EmptyState title="No clients yet" description="Add the people who pay you, and what they pay." action={<Button>Add client</Button>} />
+          <Pager page={2} pageCount={9} summary="51–100 of 403 clients" prevHref="/dev/components" nextHref="/dev/components" />
         </GlassPanel>
       </div>
 

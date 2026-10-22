@@ -778,3 +778,25 @@ reacts to its slider, saving the floor works; held and blocked states
 behave the same way. axe clean on both pages in Harbor and Harbor night.
 L2 5/5 and edge cases pass (two reload checks in older suites now wait for
 the streamed content).
+
+## 28. Paging for Money and Clients (R4)
+
+- **Clients:** 50 cards a page, `?page=` in the URL, with Previous / Next
+  and "Page 2 of 9 · 51–100 of 403 clients" under the grid. Links keep the
+  search and status. A page past the end shows the last page. Changing the
+  search or status goes back to page 1 (`useSetSearchParam` drops `?page=`
+  for any filter change).
+- **Money:** each table shows its first 25 rows (soonest due first), then
+  "Showing 25 of 403 · Show all 403" (`?all=1`). The totals in the
+  collected bar always count every payment. This is simpler than the
+  backlog's "group by status" idea: the rows you act on are the soonest
+  due, and Overdue/Expected are already badges on each row.
+- Pure helpers in `global/lib/paging.ts` (8 unit tests) and a shared
+  `Pager` (in CLAUDE.md and /dev).
+
+**Checked with 400 extra clients (removed afterwards):** Clients page
+21,438px → 2,934px; Money 90,838px / 26,727 elements / 5.5s → 3,400px /
+1,099 elements / 1.4s (dev server). 17/17: pager text, Previous/Next
+disabled at the ends, page past the end, search resets to page 1, links
+keep the filter, axe clean with the pager, Show all shows all 1,606 rows,
+totals identical either way.

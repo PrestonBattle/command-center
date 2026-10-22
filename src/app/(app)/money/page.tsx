@@ -6,11 +6,11 @@ import { MoneySkeleton } from "./_components/money-skeleton";
 import { MonthNav } from "./_components/month-nav";
 import { getMoneyMonth, getMoneyView } from "./_server/queries";
 
-type Props = { searchParams: Promise<{ month?: string }> };
+type Props = { searchParams: Promise<{ month?: string; all?: string }> };
 
 /** Money in for one month: what's expected, what's paid, what's late. ?month=YYYY-MM */
 export default async function MoneyPage({ searchParams }: Props) {
-  const { month: param } = await searchParams;
+  const { month: param, all } = await searchParams;
   // Which month (and so the title and month nav) is known at once; see
   // getMoneyMonth for why awaiting it here is free. The money streams in.
   const selected = await getMoneyMonth(param);
@@ -24,7 +24,7 @@ export default async function MoneyPage({ searchParams }: Props) {
         actions={<MonthNav month={selected.month} isCurrent={selected.isCurrent} />}
       />
       <SectionBoundary skeleton={<MoneySkeleton />} errorMessage="Couldn't load your payments.">
-        <MoneySection viewPromise={viewPromise} month={selected.month} />
+        <MoneySection viewPromise={viewPromise} month={selected.month} showAll={all === "1"} />
       </SectionBoundary>
     </>
   );
