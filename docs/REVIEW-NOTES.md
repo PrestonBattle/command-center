@@ -625,3 +625,36 @@ HSTS is left to the host.
 **Checked:** headers present on pages, redirects and unknown URLs; a page
 that frames the app gets "Refused to frame"; edge cases, leads 14/14 and
 tips 13/13 still pass.
+
+## 22. SectionBoundary and skeletons (A1)
+
+The groundwork for the Data flow items. No page uses it yet; A2–A6 move
+the pages over one at a time.
+
+- **`SectionBoundary`** (`global/components/section-boundary`): wraps one
+  section. While its promise is pending it shows the skeleton you pass; if
+  it fails, `SectionError` shows your message ("Couldn't load your
+  clients.") and Try again, and the rest of the page is untouched; when it
+  loads, the section. It's a client component that takes `children`, so a
+  server section passed into it stays a server section (no JS shipped).
+  Next's `notFound()`/`redirect()` pass through it untouched.
+- **Try again** refreshes the server render and then clears the error
+  (`useSectionRetry`). Clearing alone would re-throw the same failed promise.
+- **Skeletons** (`global/components/skeleton`): `SkeletonRegion` marks the
+  area busy and says "Loading clients…" once for screen readers; the
+  shapes themselves are hidden from them. `SkeletonLine`, `SkeletonCard`,
+  `SkeletonRows`. New `--skeleton` colour in light and dark theme blocks.
+  The pulse stops under reduced motion.
+- **CLAUDE.md** has the rule now ("Pages and data"): `_server/queries.ts`
+  with `import "server-only"`, pages start queries without awaiting, server
+  sections await, interactive sections `use()`, titles show at once.
+- **/dev/components** shows every piece, with buttons to show a loading and
+  a failed section. (Rendered straight away, a section that never resolves
+  holds the server stream open and the page never finishes loading.)
+- **Found on the way:** `variant="light" color="ink"` is light-on-light in
+  Harbor night. Nothing in the app used it (secondary buttons are
+  `subtle`); the new pieces use `subtle` too.
+
+**Checked:** loading skeleton, failed message + Try again, busy region with
+its status text; axe clean on /dev/components in all three themes; no pulse
+with reduced motion.

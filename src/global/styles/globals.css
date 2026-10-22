@@ -42,6 +42,8 @@
   /* Surfaces inside cards: hairline dividers and inset tiles. */
   --divider: rgb(28 49 66 / 0.12);
   --surface-inset: rgb(255 255 255 / 0.5);
+  /* Loading placeholders: visible on glass, quieter than any real text. */
+  --skeleton: rgb(28 49 66 / 0.09);
   --pill-shadow: 0 1px 3px rgb(28 49 66 / 0.15);
 
   /* Glass. Consumed by global/components/glass/style.css. */

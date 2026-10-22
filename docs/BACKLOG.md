@@ -161,7 +161,7 @@ client component that calls `use()`. `SectionBoundary` takes `children`, so a
 server section stays server-side inside it. Page titles show at once and
 numbers stream in.
 
-- [ ] **A1 · SectionBoundary and skeletons** · `ready`
+- [x] **A1 · SectionBoundary and skeletons** · `ready`
   Add `global/components/section-boundary.tsx`: a client error boundary
   (Callout in `--bad`, "Try again" re-renders just that section) wrapped
   around `Suspense`. Add `global/components/skeleton/`: line, block, card and

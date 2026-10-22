@@ -11,6 +11,7 @@ import { Callout, EmptyState, FieldGrid, FormSection, PageHeader, Stat, StatusBa
 import { Stepper } from "@/global/components/stepper/stepper";
 import type { ActionResult } from "@/global/lib/action-result";
 import type { FloorFormValues } from "@/global/lib/schemas/floor";
+import { LoadingShowcase } from "./_components/loading-showcase";
 
 /* Sample data only: /dev never touches the database. */
 const SAMPLE_FLOOR: FloorFormValues = {
@@ -81,6 +82,8 @@ export default function ComponentsShowcase() {
           <EmptyState title="No clients yet" description="Add the people who pay you, and what they pay." action={<Button>Add client</Button>} />
         </GlassPanel>
       </div>
+
+      <LoadingShowcase />
 
       <FloorForm
         header={<h2 className="font-display text-2xl font-bold">FloorForm (onboarding and Life vest)</h2>}
