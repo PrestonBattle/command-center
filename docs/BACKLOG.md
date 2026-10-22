@@ -23,7 +23,8 @@ These are the items between the app and charging for it, from the break-it
 pass on Oct 21 (dev server, local Supabase). The R items come first because
 the bot takes the first `ready` item in the file.
 
-Order: R1 → R2 → R3, then Data flow A1–A6, then R4 → R5. The rest wait on
+Order: R5 (Preston asked for it first), R1 → R2 → R3, then Data flow
+A1–A6, then R4. The rest wait on
 Preston.
 
 ### Bot can build
@@ -62,10 +63,11 @@ Preston.
   - Money: group by status, show the first 25 in each group with a "Show
     all", and keep totals counting everything.
 
-- [ ] **R5 · Lighter fonts** · `ready`
-  23 font files load today: 7 Bricolage files and 16 Reddit Sans files
-  (weights and styles). Keep only the weights the CSS uses, likely 3–4.
-  Check that headings and figures still look right in all three themes.
+- [ ] **R5 · Geist, one font file** · `ready`
+  Preston picked Geist (Oct 22) over the current Bricolage + Reddit Sans,
+  which load 23 font files. Use one variable-weight Geist file for both body
+  and headings, with equal-width numbers on figures so money columns line
+  up. Check all three themes.
 
 ### Preston's (auth, proxy, dependencies, schema)
 
