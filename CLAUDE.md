@@ -18,8 +18,9 @@ src/
   app/
     (app)/               signed-in app: layout = auth gate + navbar
       <feature>/
-        page.tsx         server component: load data, render
+        page.tsx         server component: start the queries, lay out sections
         actions.ts       "use server" mutations for this feature
+        _server/         queries.ts: import "server-only"; fetch + shape a view
         _components/     components only this feature uses
         _lib/            helpers only this feature uses
         _hooks/          client hooks only this feature uses
@@ -38,10 +39,36 @@ src/
 
 A thing lives in `global/` once a second feature needs it. Not before.
 
+## Pages and data
+
+Every page has the same layers (modelled on qrum's events pages):
+
+```
+_server/queries.ts   import "server-only" (never "use server", which would
+                     make each query a public endpoint); fetch through
+                     getDataLayer(), shape into a view object, return it
+page.tsx             starts the queries without awaiting them; renders the
+                     title and anything that needs no data straight away
+<SectionBoundary>    skeleton while loading, a message + retry if it fails
+section              receives the promise; picks the empty state or content
+pieces               props in, markup out
+```
+
+- A section that isn't interactive is an **async server component** that
+  awaits its promise (no JavaScript sent for it). One that is interactive
+  (dragging, live controls) is a **client component** that calls `use()`.
+  Same props either way, so switching is a one-line change.
+- Page titles show at once; counts and totals stream in with their section.
+- Never create the promise in a client component (it's remade every render).
+- Each section's skeleton is shaped like the real thing and starts with
+  `SkeletonRegion`, so nothing jumps and screen readers hear "Loading…".
+- A missing record is `notFound()` in the query, not an empty section.
+
 ## Size and separation
 
 - One component per file. Files stay under ~150 lines; split before that.
-- Pages compose; they don't contain logic. Data loading at the top, JSX below.
+- Pages compose: they start queries and lay out sections. No awaiting data
+  and no math in a page (see "Pages and data").
 - No inline `<style>` blocks. Use Tailwind utilities or a CSS module.
 - Presentational components take props and render. State, effects and
   submissions live in a hook (`use-<thing>.ts`), and the component calls it.
@@ -125,6 +152,12 @@ time, extract it instead. Known building blocks:
   action call. A thrown action (signed out, offline, server down) becomes a
   failed result with a plain message instead of a crashed page. The form
   hooks use it; call it yourself only outside them.
+- `global/components/section-boundary` — `SectionBoundary`: skeleton while
+  a section loads, `SectionError` (message + Try again) if it fails, the
+  section once it's in. Takes `children`, so server sections stay server.
+- `global/components/skeleton` — `SkeletonRegion` (busy + "Loading…" for
+  screen readers), `SkeletonLine`, `SkeletonCard`, `SkeletonRows`. Colour is
+  `--skeleton`; the pulse stops under reduced motion.
 - `getDataLayer()` — all reads and writes.
 
 ## Data and actions
