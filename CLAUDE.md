@@ -116,6 +116,10 @@ time, extract it instead. Known building blocks:
 - `global/lib/action-result.ts` — `ActionResult`, `invalid()`, `toFieldErrors()`.
 - `global/lib/attempt.ts` — `attempt(label, work)`: the write step of every
   action, turning `DbError`s into a friendly `formError`.
+- `global/lib/safe-action.ts` — `safeAction(call)`: the browser side of an
+  action call. A thrown action (signed out, offline, server down) becomes a
+  failed result with a plain message instead of a crashed page. The form
+  hooks use it; call it yourself only outside them.
 - `getDataLayer()` — all reads and writes.
 
 ## Data and actions

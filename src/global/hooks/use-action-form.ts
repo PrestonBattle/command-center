@@ -5,6 +5,7 @@ import { useForm, type UseFormReturnType } from "@mantine/form";
 import { zod4Resolver } from "mantine-form-zod-resolver";
 import type { z } from "zod";
 import type { ActionResult } from "@/global/lib/action-result";
+import { safeAction } from "@/global/lib/safe-action";
 
 type Options<V> = {
   /** The same schema the server action uses. */
@@ -24,6 +25,7 @@ type Options<V> = {
  * - sends the raw values to the action, which validates again
  * - puts server field errors back on the matching inputs
  * - tracks pending state (including while the action redirects)
+ * - shows a form error, not a crash, when the action throws
  */
 export function useActionForm<V extends Record<string, unknown>>({
   schema,
@@ -54,7 +56,9 @@ export function useActionForm<V extends Record<string, unknown>>({
     (values) => {
       setFormError(null);
       startTransition(async () => {
-        const result = await action(values);
+        // safeAction turns a thrown action (signed out, offline, server
+        // down) into a message on the form instead of a crashed page.
+        const result = await safeAction(() => action(values));
         // A redirect never returns, so there's nothing to handle.
         if (!result) return;
         if (result.ok) {

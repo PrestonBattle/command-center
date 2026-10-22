@@ -1,8 +1,10 @@
 "use client";
 
 import { notifications } from "@mantine/notifications";
+import { unstable_rethrow } from "next/navigation";
 import { useOptimistic, useState, useTransition } from "react";
 import { useSensor, useSensors, type DragEndEvent, type DragStartEvent } from "@dnd-kit/core";
+import { thrownActionMessage } from "@/global/lib/safe-action";
 import type { LeadRow, LeadStage } from "@/global/types/supabase/types";
 import { moveLead } from "../actions";
 import { moveInColumns, type BoardColumn } from "../_lib/board";
@@ -47,10 +49,11 @@ export function useLeadBoard(columns: BoardColumn[]) {
       try {
         const result = await moveLead({ leadId, stage: to });
         if (!result.ok) failed(result.formError);
-      } catch {
+      } catch (error) {
+        unstable_rethrow(error);
         // Offline or the server didn't answer: the action threw instead of
         // returning a result. Same outcome: the card snaps back.
-        failed("Couldn't reach the server, so it's back where it was. Check your connection and try again.");
+        failed(`It's back where it was. ${thrownActionMessage()}`);
       }
     });
   }
