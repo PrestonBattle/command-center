@@ -681,3 +681,27 @@ show first and the header doesn't move; with clients blocked, the section
 error shows under an intact header and toolbar, and Try again recovers;
 axe clean in all three themes; no sideways scroll on a phone. Edge cases
 and the R1 flows still pass.
+
+## 24. Leads on the data-flow pattern (A3)
+
+- `leads/_server/queries.ts` → `getLeadsView({ q })` returns the open
+  count, the "if they all close" total, the board's columns, the match
+  count and today. Plain data, so it can go to the client board.
+- `LeadsSection` is the first **client** section: the board is
+  interactive (dragging, menus, the phone stage picker), so it unwraps the
+  promise with `use()` and renders `LeadBoard`, keyed on the search as before.
+- The title, Add lead and the search box render at once. The header line
+  and "3 leads match" (in the toolbar's live region) stream in from a copy
+  of the promise that never rejects, so a failure shows once, in the board's
+  boundary. `LeadsToolbar` now takes a `matches` slot instead of a number.
+- `LeadsSkeleton` shows the real stage names with two placeholder cards
+  each, at the board's height; on a phone, the picker and one column.
+
+**Checked:** 15/15: summary, five columns, match count in the live region,
+"No matches"; with leads held 2.5s, title + search + skeleton first and the
+header doesn't move; with leads blocked, the section error under an intact
+header and search, and Try again recovers; axe clean (Harbor, Harbor
+night); phone has no sideways scroll. Leads suites: 14/14, L1 14/14, L2
+5/5. L3 and L4 each have one check that also fails on `bot/dev` (a menu
+counted before it finishes opening; a column count that earlier test runs
+changed). Both behaviours were checked by hand and are right.

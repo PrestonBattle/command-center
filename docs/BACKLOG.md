@@ -174,7 +174,7 @@ numbers stream in.
   "Clients" and the Add button show at once; the count and recurring total,
   toolbar results and grid stream in. Skeleton: six cards in the grid.
 
-- [ ] **A3 · Leads on the pattern** · `ready` · after A1
+- [x] **A3 · Leads on the pattern** · `ready` · after A1
   `getLeadsView({ q })`. The board stays a client section (`use()`), since
   dragging needs it. Skeleton: the stage columns with two cards each.
 
