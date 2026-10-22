@@ -169,7 +169,7 @@ numbers stream in.
   `aria-busy` on the region. Write the rule above into CLAUDE.md ("Where
   things go" gets `_server/`) and add the pieces to `/dev`.
 
-- [ ] **A2 · Clients on the pattern** · `ready` · after A1
+- [x] **A2 · Clients on the pattern** · `ready` · after A1
   `clients/_server/queries.ts` → `getClientsView({ q, status })`. Title
   "Clients" and the Add button show at once; the count and recurring total,
   toolbar results and grid stream in. Skeleton: six cards in the grid.
