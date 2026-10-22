@@ -725,3 +725,28 @@ Undo and Undo brings Mark paid back (in this month's table: a paid row in
 the skeleton; with payments blocked, the section error under the title and
 nav, and Try again recovers; axe clean (Harbor, Harbor night); phone fits.
 Edge cases and R1 flows still pass.
+
+## 26. Dashboard on the data-flow pattern (A5)
+
+- `(app)/_server/queries.ts`: two loads, started together and shared:
+  `getBusinessView()` (this month's schedule, overdue, upcoming, floor, the
+  Snapshot's inputs) and `getPipelineView()` (open leads, pipeline value,
+  stale leads). `getGreetingTitle()` is awaited for the heading; it reads
+  only the cached org and member.
+- **Four sections, four boundaries:** stats, Snapshot, Needs attention and
+  Payments, each with a skeleton of its own shape. If leads fail, the stats
+  and Needs attention say so while the Snapshot and Payments still show.
+  The Snapshot and Needs attention skeletons keep the row's equal heights.
+- **One Try again brings back every section (change to A1's boundary):**
+  `SectionErrorBoundary` clears its error when the server sends it new
+  content. Try again refreshes the whole page, so every section that can
+  now load comes back, not just the one whose button was pressed. A
+  section that still fails shows its error again after one fetch (checked:
+  no retry loop).
+
+**Checked:** 15/15: greeting first and four skeletons with their
+"Loading…" text; Snapshot and attention skeletons 288px each; with leads
+blocked, stats + attention fail and Snapshot + Payments show; one Try again
+restores all; axe clean (Harbor, Harbor night). Dashboard layout 18/19
+(the calm account's bills fell due on Oct 21; known). Clients, Leads and
+Money data-flow tests re-run after the boundary change: 21/21, 15/15, 19/19.
