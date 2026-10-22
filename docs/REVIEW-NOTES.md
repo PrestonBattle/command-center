@@ -586,3 +586,24 @@ issue).
 message (no crash overlay), Mark paid shows it, a lead move snaps back with
 it; offline submit says offline; a normal submit still redirects. Unit tests
 for safeAction (5).
+
+## 20. Error pages (R2)
+
+- **`app/(app)/error.tsx`**: a signed-in page threw. Shown inside the app
+  shell (navbar stays): "Something went wrong", Try again, Back to
+  dashboard, and a reference code for the server logs.
+- **`app/error.tsx`**: onboarding, auth, or the app layout itself threw.
+  Same panel, no navbar, "Go home".
+- **`app/global-error.tsx`**: the root layout failed. Plain markup on the
+  default Harbor colors, since there's no Mantine provider or saved theme
+  at that point; Try again reloads the page.
+- **Try again really retries:** `reset()` alone only re-renders on the
+  client, which shows the same error when a server query failed.
+  `useErrorRecovery` refreshes the server render too. Focus moves to the
+  heading on arrival.
+
+**Checked:** with the clients table blocked, /clients shows the in-shell
+error page (navbar, one h1, focus on it, axe clean); Try again recovers
+once access is back. With the orgs table blocked, the app layout fails and
+the root error page shows. With the root layout forced to throw, the
+last-resort page renders.

@@ -37,7 +37,7 @@ Preston.
   was received from the server." R7 removes the cause; R1 makes the next
   surprise fail softly.
 
-- [ ] **R2 · Error pages** · `ready` · after R1
+- [x] **R2 · Error pages** · `ready` · after R1
   Add `app/(app)/error.tsx` inside the app shell: what happened, Try again,
   and Back to dashboard. Add a bare `app/global-error.tsx` for when the
   layout itself breaks. Both use glass, have one `<h1>`, and move focus to

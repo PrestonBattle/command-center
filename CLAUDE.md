@@ -101,6 +101,11 @@ time, extract it instead. Known building blocks:
 - `global/components/not-found-panel.tsx` — `NotFoundPanel`, the 404 body
   used by `app/not-found.tsx` and `app/(app)/not-found.tsx`. Not in `/dev`:
   it renders the page's `<h1>`. See it at any bad URL.
+- `global/components/error-panel.tsx` + `global/hooks/use-error-recovery.ts`
+  — `ErrorPanel` and `useErrorRecovery`, the body of `app/error.tsx` and
+  `app/(app)/error.tsx`: plain words, Try again (refreshes the server
+  render), a way home, focus on the heading. Not in `/dev` for the same
+  reason as `NotFoundPanel`. `app/global-error.tsx` is the bare last resort.
 - `global/styles/controls.module.css` — button touch targets and the
   segmented filter, applied through the theme. Secondary buttons use
   `color="ink"` (warm brown), never Mantine's `"dark"`.
