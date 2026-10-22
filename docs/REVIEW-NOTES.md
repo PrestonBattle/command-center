@@ -658,3 +658,26 @@ the pages over one at a time.
 **Checked:** loading skeleton, failed message + Try again, busy region with
 its status text; axe clean on /dev/components in all three themes; no pulse
 with reduced motion.
+
+## 23. Clients on the data-flow pattern (A2)
+
+- `clients/_server/queries.ts` → `getClientsView({ q, status })` returns
+  `{ total, recurringCents, shown }`. The page awaits only the URL, starts
+  the query, and renders the title, Add client and the toolbar at once.
+- `ClientsSection` (server) awaits the view and picks the grid, "No clients
+  yet" or "No clients match". `ClientsSkeleton` is six cards shaped like
+  the real ones (avatar, name, badge, amount, email).
+- The header line ("3 clients · $4,600/mo recurring") streams in on its
+  own. It gets `viewPromise.catch(() => null)`, so a failure shows once (in
+  the grid's boundary) and the line stays blank, not doubled.
+- The header keeps its height in all three states (loading, loaded,
+  failed), so Add client doesn't jump.
+- Test hook (not in the repo): the local gateway can hold chosen database
+  calls for a few seconds, which is how the loading state was checked.
+
+**Checked:** 21/21: title, summary, cards, search, status filter, no-match;
+with clients held 2.5s, title + toolbar + skeleton ("Loading clients…")
+show first and the header doesn't move; with clients blocked, the section
+error shows under an intact header and toolbar, and Try again recovers;
+axe clean in all three themes; no sideways scroll on a phone. Edge cases
+and the R1 flows still pass.
