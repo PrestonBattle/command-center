@@ -546,3 +546,23 @@ axe clean with the explainer open in all three themes; edge 27/27.
 inner scroll + fade, keyboard End clears the fade, all-clear, empty
 Snapshot, phone stacking, no sideways scroll); tips 13/13; explainer
 16/16; edge; axe clean in all three themes.
+
+## 18. Geist (R5)
+
+- **One typeface:** Geist for body and headings, one variable-weight file
+  instead of 23 (Bricolage Grotesque + Reddit Sans). `fonts.ts` exports
+  `geist`; `--font-display` still exists as its own token in case headings
+  ever get a different face.
+- **Bug fixed along the way:** body text was never in the brand font.
+  next/font put its variable on `<body>`, but Mantine and Tailwind resolve
+  their font variables on `<html>`, so everything outside a heading fell
+  back to the system font. The class now goes on `<html>`, and the body and
+  Mantine theme name `--font-geist` directly (with `@theme inline`,
+  `--font-sans` only exists inside Tailwind's utilities).
+- Money columns already use `tabular-nums`, so digits line up.
+
+**Checked:** every element on login, dashboard, clients, money, leads, life
+vest and settings computes to Geist; screenshots in all three themes; axe
+clean in all three; tips 13/13; dashboard 18/19 (the calm account's bills
+fell due on Oct 21, so its "all clear" case no longer applies; not a font
+issue).

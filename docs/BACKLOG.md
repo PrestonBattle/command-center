@@ -63,7 +63,7 @@ Preston.
   - Money: group by status, show the first 25 in each group with a "Show
     all", and keep totals counting everything.
 
-- [ ] **R5 · Geist, one font file** · `ready`
+- [x] **R5 · Geist, one font file** · `ready`
   Preston picked Geist (Oct 22) over the current Bricolage + Reddit Sans,
   which load 23 font files. Use one variable-weight Geist file for both body
   and headings, with equal-width numbers on figures so money columns line

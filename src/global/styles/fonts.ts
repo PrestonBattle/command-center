@@ -1,20 +1,14 @@
-import {
-  Bricolage_Grotesque,
-  Reddit_Sans,
-} from "next/font/google";
+import { Geist } from "next/font/google";
 
-export const bricolageGrotesque = Bricolage_Grotesque({
+/**
+ * The app's one typeface, for body text and headings alike. Geist is a
+ * variable font, so every weight comes from a single file (the old
+ * Bricolage + Reddit Sans pair loaded 23). Its figures are clean at small
+ * sizes, which matters in a money app; columns of amounts use
+ * `tabular-nums` so the digits line up.
+ */
+export const geist = Geist({
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
-  variable: "--font-bricolage-grotesque",
+  variable: "--font-geist",
   display: "swap",
-});
-
-export const redditSans = Reddit_Sans({
-  subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
-  style: ["normal", "italic"],
-  variable: "--font-reddit-sans",
-  display: "swap",
-  adjustFontFallback: false
 });
