@@ -3,7 +3,7 @@ import { Notifications } from "@mantine/notifications";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Background } from "@/global/components/background";
-import { bricolageGrotesque, redditSans } from "@/global/styles/fonts";
+import { geist } from "@/global/styles/fonts";
 import "@/global/styles/globals.css";
 import { THEME_COOKIE, toThemeId } from "@/global/lib/themes";
 import { theme } from "@/global/styles/mantine-theme";
@@ -29,8 +29,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     // already sets data-mantine-color-scheme="light" on the server. The script
     // only matters for user-chosen schemes, and React 19 warns about it
     // whenever the root layout re-renders on the client (e.g. a 404).
-    <html lang="en" data-theme={colorTheme} {...mantineHtmlProps}>
-      <body className={`${bricolageGrotesque.variable} ${redditSans.variable}`}>
+    // The font variable goes on <html>, not <body>: Mantine and Tailwind
+    // define their font variables on :root, and a variable set lower down
+    // isn't visible there, which left body text in the system font.
+    <html lang="en" data-theme={colorTheme} className={geist.variable} {...mantineHtmlProps}>
+      <body>
         <MantineProvider theme={theme} forceColorScheme="light">
           <Notifications position="top-right" />
           <Background />

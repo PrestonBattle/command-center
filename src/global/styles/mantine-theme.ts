@@ -66,7 +66,9 @@ export const theme = createTheme({
   primaryShade: 8,
   variantColorResolver,
   defaultRadius: "md",
-  fontFamily: "var(--font-sans)",
+  // next/font's variable rather than Tailwind's --font-sans: with
+  // `@theme inline`, --font-sans only exists inside Tailwind's utilities.
+  fontFamily: "var(--font-geist), system-ui, sans-serif",
   headings: { fontFamily: "var(--font-display)" },
   components: {
     Button: Button.extend({ classNames: { root: controls.touchTarget } }),

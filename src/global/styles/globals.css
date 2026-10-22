@@ -69,10 +69,13 @@
 }
 
 @theme inline {
-  /* next/font sets these variables on <body>; Tailwind's font-sans and
+  /* next/font sets --font-geist on <html>; Tailwind's font-sans and
      font-display utilities read them. */
-  --font-sans: var(--font-reddit-sans), system-ui, sans-serif;
-  --font-display: var(--font-bricolage-grotesque), var(--font-reddit-sans), sans-serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  /* Same family as the body since the switch to Geist; kept as its own
+     token so headings can get their own face later without touching
+     every component. */
+  --font-display: var(--font-geist), system-ui, sans-serif;
 }
 
 html {
@@ -87,7 +90,9 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
-  font-family: var(--font-sans);
+  /* Not var(--font-sans): with `@theme inline` that name only exists inside
+     Tailwind's utilities, and here it would be Tailwind's default stack. */
+  font-family: var(--font-geist), system-ui, sans-serif;
   color: var(--text);
   background: var(--bg-base);
 }
