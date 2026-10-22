@@ -800,3 +800,32 @@ the streamed content).
 disabled at the ends, page past the end, search resets to page 1, links
 keep the filter, axe clean with the pager, Show all shows all 1,606 rows,
 totals identical either way.
+
+## 29. Business and profile settings (S1)
+
+- **Business panel:** business name, type (the onboarding list) and
+  timezone (every zone, grouped by region, searchable, "New York (GMT-4)",
+  plus "Use this device's timezone"). Saving revalidates the whole app,
+  since the timezone decides "today", due and overdue dates and the greeting.
+- **Your profile:** first and last name, and phone (optional; blank clears
+  it). Shown as "(904) 555-0100" and saved as digits, the same rule as
+  signup. Email is shown locked: it's the login, which is auth's (yours).
+- Each panel saves on its own, with a "Saved" notice. Both are client
+  sections on the data-flow pattern, with skeletons shaped like the forms.
+- **Moved to `global/`** because Settings is the second feature to need
+  them: business types (`global/lib/business-types.ts`) and the business
+  name/type rules (`global/lib/schemas/business.ts`). Onboarding uses them
+  from there.
+- **Timezones are checked by asking `Intl`**, not against a list: browsers
+  and Node list some zones under different names, and a list check could
+  reject a zone the other side accepts. A saved zone missing from the
+  server's list is still added to the picker.
+
+**Checked:** 20/20: values load (the timezone shows its label); a blank
+business name and a bad phone are rejected; saving business writes name +
+timezone; the device-timezone button fills it in; saving the profile with a
+blank phone clears it, and the dashboard greets the new name; a formatted
+phone saves as digits; skeletons show while loading; axe clean in all three
+themes; phone has no sideways scroll, and buttons are 44px on touch.
+Onboarding still passes (edge cases). Unit tests for timezones and
+phone formatting.

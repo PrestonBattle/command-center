@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { Callout, FormActions } from "@/global/components/layout";
 import { useActionForm } from "@/global/hooks/use-action-form";
 import { saveBusiness } from "../../actions";
-import { BUSINESS_TYPE_OPTIONS } from "../../_lib/constants";
+import { BUSINESS_TYPE_OPTIONS } from "@/global/lib/business-types";
 import { businessSchema } from "../../_lib/schemas";
 
 type Props = {

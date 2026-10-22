@@ -168,6 +168,14 @@ Preston.
   saved a 100,000-character name. Add `check (length(name) <= …)` to the
   text columns. That's a schema change, so it's Preston's.
 
+## Settings
+
+- [x] **S1 · Business and profile settings** · `ready`
+  Business (name, type, timezone with a "use this device's" shortcut) and
+  Your profile (first and last name, phone; email shown locked, since it's
+  the login) on Settings, each with its own Save and a "Saved" notice.
+  Same rules as onboarding. Tax rate stays on Life vest.
+
 ## Data flow
 
 Every page moves to the same shape, modelled on qrum's events pages:

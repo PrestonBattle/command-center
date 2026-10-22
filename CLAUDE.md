@@ -109,8 +109,13 @@ time, extract it instead. Known building blocks:
   actions (Skip, Finish, Mark paid, Delete).
 - `global/lib/schemas/fields.ts` — shared zod fields (`money`,
   `positiveMoney`, `requiredText`, `optionalEmail`, `intervalMonths`, …).
-- `global/lib/schemas/floor.ts`, `schemas/client.ts` — schemas used by more
-  than one feature.
+- `global/lib/schemas/floor.ts`, `schemas/client.ts`, `schemas/business.ts`
+  (`businessFields`, `timezoneField`) — schemas used by more than one feature.
+  `fields.ts` also has `optionalPhone` (stored as digits, signup's rule).
+- `global/lib/business-types.ts` — `BUSINESS_TYPES`, `BUSINESS_TYPE_OPTIONS`
+  (onboarding and Settings).
+- `global/lib/timezones.ts` — `timezoneOptions()` (every zone, grouped by
+  region, with its GMT offset; build it on the server) and `utcOffsetLabel`.
 - `global/components/floor/` — `FloorForm` (expenses + live floor summary),
   used by onboarding and Life vest.
 - `global/lib/save-floor.ts`, `create-clients.ts` — server-only writes

@@ -1,19 +1,16 @@
 import { z } from "zod";
 import { clientRowSchema } from "@/global/lib/schemas/client";
-import { BUSINESS_TYPES, type BusinessTypeKey } from "./constants";
-import { blankToUndefined, requiredText } from "@/global/lib/schemas/fields";
+import { businessFields } from "@/global/lib/schemas/business";
+import { blankToUndefined } from "@/global/lib/schemas/fields";
 
 /*
  * Onboarding schemas. The floor step uses the shared floorSchema
  * (global/lib/schemas/floor.ts), since the Life vest page edits the same data.
  */
 
-const businessTypeKeys = BUSINESS_TYPES.map((t) => t.key) as [BusinessTypeKey, ...BusinessTypeKey[]];
-
 /** Step 1: name, type and timezone. */
 export const businessSchema = z.object({
-  name: requiredText(100),
-  business_type: z.enum(businessTypeKeys, { error: "Pick a business type" }),
+  ...businessFields,
   /** Filled in from the browser. */
   timezone: z.preprocess(blankToUndefined, z.string().default("America/New_York")),
 });

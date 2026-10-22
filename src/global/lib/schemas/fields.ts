@@ -60,3 +60,18 @@ export const intervalMonths = z.preprocess(
 
 /** A "YYYY-MM-DD" date. */
 export const isoDateField = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Pick a date");
+
+/**
+ * A phone number stored as digits (a leading + allowed), or undefined when
+ * blank. Same rule as signup, so "(904) 555-0100" and "9045550100" are the
+ * same number. (Signup keeps its own copy: the auth folder is Preston's.)
+ */
+export const optionalPhone = z.preprocess(
+  blankToUndefined,
+  z
+    .string()
+    .trim()
+    .transform((v) => v.replace(/[^\d+]/g, ""))
+    .pipe(z.string().min(10, "Enter a valid phone number").max(16, "Enter a valid phone number").regex(/^\+?\d+$/, "Enter a valid phone number"))
+    .optional(),
+);
