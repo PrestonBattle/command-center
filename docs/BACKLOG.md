@@ -178,7 +178,7 @@ numbers stream in.
   `getLeadsView({ q })`. The board stays a client section (`use()`), since
   dragging needs it. Skeleton: the stage columns with two cards each.
 
-- [ ] **A4 · Money on the pattern** · `ready` · after A1
+- [x] **A4 · Money on the pattern** · `ready` · after A1
   `getMoneyView({ month })`. The month nav is instant; the collected bar and
   tables stream in. `loadBusiness` stays as the shared loader underneath.
 
