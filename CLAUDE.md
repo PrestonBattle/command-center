@@ -167,6 +167,12 @@ time, extract it instead. Known building blocks:
   screen readers), `SkeletonLine`, `SkeletonCard`, `SkeletonRows`,
   `SkeletonPanel` (a panel's real title + placeholder lines or shapes). Colour is
   `--skeleton`; the pulse stops under reduced motion.
+- `global/lib/log/` — `logError(label, error, context)` and `logWarn`
+  (server-only): one JSON line per event for the host's logs. Never call
+  `console.error` directly. `sendClientError(where, error)` gets a browser
+  error into the same logs (error pages and `SectionBoundary` already do).
+  `src/instrumentation.ts` logs every uncaught server error under the
+  digest people see as "Reference". Not in `/dev`: nothing to see.
 - `getDataLayer()` — all reads and writes.
 
 ## Data and actions
