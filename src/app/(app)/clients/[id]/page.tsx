@@ -5,6 +5,7 @@ import { SectionBoundary } from "@/global/components/section-boundary";
 import { SkeletonPanel } from "@/global/components/skeleton";
 import { clientStatusMeta } from "@/global/lib/client-status";
 import { formatShortDate } from "@/global/lib/dates";
+import { ClientAbout } from "./_components/client-about";
 import { ClientActions } from "./_components/client-actions";
 import { ContactsSection } from "./_components/contacts-section";
 import { ReceivedSection } from "./_components/received-section";
@@ -43,8 +44,9 @@ export default async function ClientPage({ params }: Props) {
             </Suspense>
           </span>
         }
-        actions={<ClientActions clientId={client.id} clientName={client.name} status={client.status} />}
+        actions={<ClientActions client={client} />}
       />
+      <ClientAbout client={client} />
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <SectionBoundary skeleton={<SkeletonPanel title="Services" label="services" />} errorMessage="Couldn't load their services.">
           <ServicesSection clientId={client.id} detailsPromise={detailsPromise} />

@@ -8,7 +8,7 @@ import { attempt } from "@/global/lib/attempt";
 import { createClientsWithServices } from "@/global/lib/create-clients";
 import { todayIso } from "@/global/lib/dates";
 import { clientRowSchema } from "@/global/lib/schemas/client";
-import { clientIdSchema, contactSchema, serviceSchema, statusSchema } from "./_lib/schemas";
+import { clientDetailsSchema, clientIdSchema, contactSchema, serviceSchema, statusSchema } from "./_lib/schemas";
 
 /** Re-renders the list and the client's page after a change. */
 function refresh(clientId?: string) {
@@ -29,6 +29,20 @@ export async function createClient(input: unknown): Promise<ActionResult> {
   if (failed) return failed;
   refresh();
   redirect(`/clients/${id}`);
+}
+
+/** Saves a client's name, website, start date and notes. */
+export async function updateClient(input: unknown): Promise<ActionResult> {
+  const parsed = clientDetailsSchema.safeParse(input);
+  if (!parsed.success) return invalid(parsed.error);
+  const { clientId, name, website, signed_on, notes } = parsed.data;
+  const failed = await attempt("clients:update", async () => {
+    // Blank fields are saved as null so clearing a website or note sticks.
+    await (await getDataLayer()).clients.update(clientId, { name, website: website ?? null, signed_on, notes: notes ?? null });
+  });
+  if (failed) return failed;
+  refresh(clientId);
+  return { ok: true };
 }
 
 /** Changes a client's status (active, paused, …). */

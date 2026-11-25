@@ -344,6 +344,11 @@ numbers stream in.
 - [x] **P3 · Add / edit client** · `ready` · after P1
   Form + actions for client, primary contact, first service.
 
+- [x] **P3a · Edit client details** · `ready` · after P3
+  "Edit details" on the client page: name, website, client since and notes,
+  in a dialog. Website and notes show under the header. Status keeps its
+  own picker.
+
 - [x] **P4 · Leads board** · `ready` · after O1
   Kanban by stage, move stage via action (keyboard-accessible move, not
   drag-only).
