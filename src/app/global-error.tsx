@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { sendClientError } from "@/global/lib/log/send-client-error";
 import { geist } from "@/global/styles/fonts";
 import "@/global/styles/globals.css";
 import "@/global/components/glass/style.css";
@@ -13,6 +15,7 @@ type Props = { error: Error & { digest?: string }; reset: () => void };
  * button reloads the whole page, since there's no layout to re-render into.
  */
 export default function GlobalError({ error }: Props) {
+  useEffect(() => sendClientError("client:root", error), [error]);
   return (
     // data-mantine-color-scheme is what the theme's color variables key on.
     <html lang="en" data-theme="harbor" data-mantine-color-scheme="light" className={geist.variable}>

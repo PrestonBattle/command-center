@@ -276,6 +276,12 @@ numbers stream in.
   Dev-only exception in the proxy plus `dev/layout.tsx` with `notFound()` in
   production. (Touches auth middleware.)
 
+- [x] **F11 · Error logging** · `ready`
+  One JSON log line per error (`global/lib/log/`), `onRequestError` in
+  `instrumentation.ts` for every uncaught server error, and browser errors
+  from error pages and sections sent to the same logs. No new dependency;
+  Sentry can plug into the one `write` function later (R13).
+
 ## Cleanup
 
 - [x] **C1 · Dashboard layout** · `ready` · after F2

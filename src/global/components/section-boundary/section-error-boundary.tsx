@@ -1,7 +1,8 @@
 "use client";
 
 import { unstable_rethrow } from "next/navigation";
-import { Component, type ReactNode } from "react";
+import { Component, type ErrorInfo, type ReactNode } from "react";
+import { sendClientError } from "@/global/lib/log/send-client-error";
 
 type Props = {
   /** Gets a `reset` that clears the error and renders the children again. */
@@ -10,6 +11,11 @@ type Props = {
 };
 
 type State = { error: unknown };
+
+/** Next's notFound() and redirect() throw errors whose digest starts "NEXT_". */
+function isNavigation(error: Error): boolean {
+  return "digest" in error && String(error.digest).startsWith("NEXT_");
+}
 
 /**
  * Catches a section that failed to load so only that section shows an
@@ -22,6 +28,13 @@ export class SectionErrorBoundary extends Component<Props, State> {
 
   static getDerivedStateFromError(error: unknown): State {
     return { error };
+  }
+
+  // Navigation (notFound, redirect) isn't a failure, so it's never reported.
+  componentDidCatch(error: unknown, info: ErrorInfo) {
+    if (!(error instanceof Error) || isNavigation(error)) return;
+    if (info.componentStack) error.stack = `${error.stack ?? ""}\n${info.componentStack}`;
+    sendClientError("client:section", error);
   }
 
   reset = () => this.setState({ error: null });
