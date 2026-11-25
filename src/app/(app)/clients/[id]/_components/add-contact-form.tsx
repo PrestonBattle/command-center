@@ -1,12 +1,13 @@
 "use client";
 
-import { Button, TextInput } from "@mantine/core";
+import { Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
-import { Callout, FieldGrid, FormActions } from "@/global/components/layout";
+import { Callout, FormActions } from "@/global/components/layout";
 import { useActionForm } from "@/global/hooks/use-action-form";
 import { addContact } from "../../actions";
 import { contactSchema, type ContactFormValues } from "../../_lib/schemas";
+import { ContactFields } from "./contact-fields";
 
 /** "Add a contact": collapsed to a button until needed. */
 export function AddContactForm({ clientId }: { clientId: string }) {
@@ -31,12 +32,7 @@ export function AddContactForm({ clientId }: { clientId: string }) {
 
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4 rounded-2xl bg-[var(--surface-inset)] p-4">
-      <FieldGrid cols={2}>
-        <TextInput label="Name" withAsterisk autoComplete="name" key={form.key("name")} {...form.getInputProps("name")} />
-        <TextInput label="Role (optional)" placeholder="Office manager" key={form.key("role")} {...form.getInputProps("role")} />
-        <TextInput label="Email (optional)" type="email" autoComplete="email" key={form.key("email")} {...form.getInputProps("email")} />
-        <TextInput label="Phone (optional)" type="tel" autoComplete="tel" key={form.key("phone")} {...form.getInputProps("phone")} />
-      </FieldGrid>
+      <ContactFields form={form} />
       {formError && <Callout tone="bad" role="alert" title={formError} />}
       <FormActions submitLabel="Add contact" pending={pending} back={<Button variant="subtle" color="ink" onClick={close}>Cancel</Button>} />
     </form>
