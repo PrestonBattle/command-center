@@ -5,13 +5,15 @@ import { IconTrash } from "@tabler/icons-react";
 import { ConfirmButton } from "@/global/components/confirm-button";
 import { useActionButton } from "@/global/hooks/use-action-button";
 import { CLIENT_STATUSES } from "@/global/lib/client-status";
-import type { ClientStatus } from "@/global/types/supabase/types";
+import type { ClientRow } from "@/global/types/supabase/types";
 import { deleteClient, updateClientStatus } from "../../actions";
+import { EditClientButton } from "./edit-client-button";
 
-type Props = { clientId: string; clientName: string; status: ClientStatus };
+type Props = { client: Pick<ClientRow, "id" | "name" | "status" | "website" | "signed_on" | "notes"> };
 
-/** Status picker and Delete, in the page header. */
-export function ClientActions({ clientId, clientName, status }: Props) {
+/** Status picker, Edit details and Delete, in the page header. */
+export function ClientActions({ client }: Props) {
+  const { id: clientId, name: clientName, status } = client;
   const update = useActionButton(updateClientStatus);
 
   return (
@@ -26,6 +28,7 @@ export function ClientActions({ clientId, clientName, status }: Props) {
         onChange={(v) => v && update.run({ clientId, status: v })}
         className="w-40"
       />
+      <EditClientButton client={client} />
       <ConfirmButton
         danger
         title={`Delete ${clientName}?`}
