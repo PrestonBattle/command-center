@@ -341,6 +341,11 @@ numbers stream in.
 - [x] **P2 · Client detail** · `ready` · after P1
   Contacts, services, tags, activity timeline. Edit via actions.
 
+- [x] **P2a · Edit and remove contacts** · `ready` · after P2
+  A "⋯" menu on each contact: Edit (same fields as Add), Make primary, and
+  Remove (with an are-you-sure). Removing the primary hands it to the next
+  contact.
+
 - [x] **P3 · Add / edit client** · `ready` · after P1
   Form + actions for client, primary contact, first service.
 

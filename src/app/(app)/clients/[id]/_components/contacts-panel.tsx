@@ -2,6 +2,7 @@ import { GlassPanel } from "@/global/components/glass/glass-panel";
 import { EmptyState, StatusBadge } from "@/global/components/layout";
 import type { ContactRow } from "@/global/types/supabase/types";
 import { AddContactForm } from "./add-contact-form";
+import { ContactMenu } from "./contact-menu";
 
 /** People at the client. The primary contact is listed first. */
 export function ContactsPanel({ clientId, contacts }: { clientId: string; contacts: ContactRow[] }) {
@@ -25,6 +26,7 @@ export function ContactsPanel({ clientId, contacts }: { clientId: string; contac
                 </div>
               </div>
               {c.is_primary && <StatusBadge tone="neutral">Primary</StatusBadge>}
+              <ContactMenu contact={c} />
             </li>
           ))}
         </ul>
