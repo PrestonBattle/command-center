@@ -176,6 +176,11 @@ Preston.
   the login) on Settings, each with its own Save and a "Saved" notice.
   Same rules as onboarding. Tax rate stays on Life vest.
 
+- [x] **S2 · Export my data** · `ready`
+  "Your data" on Settings: one CSV download each for clients, contacts,
+  services, payments and leads. The bot-buildable half of R12; account
+  deletion stays Preston's.
+
 ## Data flow
 
 Every page moves to the same shape, modelled on qrum's events pages:
